@@ -37,9 +37,10 @@
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
   
-  /* Previne o scroll quando o modal está aberto */
-  body[data-state="open"] {
-    @apply overflow-hidden pr-[var(--removed-scroll-width,0px)];
+  /* Previne o scroll e mantém a largura quando o modal está aberto */
+  .modal-open {
+    overflow: hidden;
+    padding-right: 17px; /* Largura padrão da scrollbar */
   }
 }
 

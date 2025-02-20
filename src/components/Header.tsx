@@ -1,12 +1,10 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogOverlay,
-  DialogPortal,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Menu } from "lucide-react";
@@ -14,6 +12,15 @@ import { X, Menu } from "lucide-react";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+
+  // Gerencia a classe do body quando o modal é aberto/fechado
+  useEffect(() => {
+    if (isContactOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+  }, [isContactOpen]);
 
   const menuItems = [
     { label: "Início", href: "#inicio" },
