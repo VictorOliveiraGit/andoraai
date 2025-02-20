@@ -1,6 +1,11 @@
 
 import { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Menu } from "lucide-react";
 
@@ -69,48 +74,40 @@ const Header = () => {
 
       {/* Contact Modal */}
       <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Entre em Contato</h2>
-              <button
-                onClick={() => setIsContactOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X size={24} />
-              </button>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Entre em Contato</DialogTitle>
+          </DialogHeader>
+          <form className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Nome</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md"
+                placeholder="Seu nome"
+              />
             </div>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Nome</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  placeholder="Seu nome"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
-                <input
-                  type="email"
-                  className="w-full p-2 border rounded-md"
-                  placeholder="seu@email.com"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Mensagem</label>
-                <textarea
-                  className="w-full p-2 border rounded-md"
-                  rows={4}
-                  placeholder="Sua mensagem..."
-                />
-              </div>
-              <Button className="w-full" type="submit">
-                Enviar Mensagem
-              </Button>
-            </form>
-          </div>
-        </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Email</label>
+              <input
+                type="email"
+                className="w-full p-2 border rounded-md"
+                placeholder="seu@email.com"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Mensagem</label>
+              <textarea
+                className="w-full p-2 border rounded-md"
+                rows={4}
+                placeholder="Sua mensagem..."
+              />
+            </div>
+            <Button className="w-full" type="submit">
+              Enviar Mensagem
+            </Button>
+          </form>
+        </DialogContent>
       </Dialog>
     </header>
   );
