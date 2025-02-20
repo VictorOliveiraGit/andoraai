@@ -5,6 +5,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogOverlay,
+  DialogPortal,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Menu } from "lucide-react";
@@ -74,7 +76,7 @@ const Header = () => {
 
       {/* Contact Modal */}
       <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Entre em Contato</DialogTitle>
           </DialogHeader>
