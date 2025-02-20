@@ -36,6 +36,11 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
+  
+  /* Previne o scroll quando o modal está aberto */
+  body[data-state="open"] {
+    @apply overflow-hidden pr-[var(--removed-scroll-width,0px)];
+  }
 }
 
 .glass {
