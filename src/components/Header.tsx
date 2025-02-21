@@ -7,26 +7,35 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Menu } from "lucide-react";
+import { X, Menu, LogIn } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   // Gerencia a classe do body quando o modal é aberto/fechado
   useEffect(() => {
-    if (isContactOpen) {
+    if (isContactOpen || isLoginOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
     }
-  }, [isContactOpen]);
+  }, [isContactOpen, isLoginOpen]);
 
   const menuItems = [
     { label: "Início", href: "#inicio" },
     { label: "Recursos", href: "#recursos" },
     { label: "Depoimentos", href: "#depoimentos" },
     { label: "Contato", href: "#contato" },
+  ];
+
+  const sourceOptions = [
+    "Google",
+    "Redes Sociais",
+    "Indicação",
+    "Email Marketing",
+    "Outro"
   ];
 
   return (
@@ -49,6 +58,14 @@ const Header = () => {
               </a>
             ))}
             <Button onClick={() => setIsContactOpen(true)}>Contato</Button>
+            <Button 
+              variant="outline"
+              onClick={() => setIsLoginOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <LogIn size={18} />
+              Login
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -76,6 +93,14 @@ const Header = () => {
                 </a>
               ))}
               <Button onClick={() => setIsContactOpen(true)}>Contato</Button>
+              <Button 
+                variant="outline"
+                onClick={() => setIsLoginOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <LogIn size={18} />
+                Login
+              </Button>
             </div>
           </div>
         )}
@@ -105,6 +130,17 @@ const Header = () => {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium mb-1">Onde nos conheceu?</label>
+              <select className="w-full p-2 border rounded-md">
+                <option value="">Selecione uma opção</option>
+                {sourceOptions.map((option) => (
+                  <option key={option} value={option.toLowerCase()}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="block text-sm font-medium mb-1">Mensagem</label>
               <textarea
                 className="w-full p-2 border rounded-md"
@@ -114,6 +150,52 @@ const Header = () => {
             </div>
             <Button className="w-full" type="submit">
               Enviar Mensagem
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Login Modal */}
+      <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="text-center">
+            <div className="mx-auto mb-4">
+              <img 
+                src="/placeholder.svg" 
+                alt="Logo" 
+                className="w-16 h-16 mx-auto"
+              />
+            </div>
+            <DialogTitle className="text-xl">Faça seu login</DialogTitle>
+          </DialogHeader>
+          <form className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Usuário</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md"
+                placeholder="Digite seu usuário"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Senha</label>
+              <input
+                type="password"
+                className="w-full p-2 border rounded-md"
+                placeholder="Digite sua senha"
+              />
+            </div>
+            <div className="text-right">
+              <Button 
+                variant="link" 
+                className="text-sm text-primary hover:text-primary/80"
+                type="button"
+              >
+                Esqueci minha senha
+              </Button>
+            </div>
+            <Button className="w-full" type="submit">
+              Entrar
             </Button>
           </form>
         </DialogContent>
