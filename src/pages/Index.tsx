@@ -205,16 +205,16 @@ const Index = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-6 animate-on-scroll">
+              <Card key={index} className="p-8 animate-on-scroll">
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="text-primary" size={16} fill="#C6BA77" />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-4">"{testimonial.comment}"</p>
+                <p className="text-muted-foreground mb-6 text-base leading-relaxed">"{testimonial.comment}"</p>
                 <div>
-                  <p className="font-codec text-secondary">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  <p className="font-codec text-secondary text-lg">{testimonial.name}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{testimonial.role}</p>
                 </div>
               </Card>
             ))}
