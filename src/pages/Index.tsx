@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Check, Star } from "lucide-react";
 
 const Index = () => {
   useEffect(() => {
@@ -29,20 +29,64 @@ const Index = () => {
 
   const features = [
     {
-      title: "Inovação Constante",
-      description: "Sempre à frente com as últimas tecnologias e tendências do mercado.",
+      title: "Solução Completa",
+      description: "Tudo que você precisa para crescer seu negócio.",
     },
     {
-      title: "Suporte Premium",
-      description: "Equipe dedicada para ajudar você em cada etapa do processo.",
+      title: "Suporte 24/7",
+      description: "Estamos aqui para ajudar você em qualquer momento.",
     },
     {
-      title: "Design Intuitivo",
-      description: "Interface pensada para proporcionar a melhor experiência possível.",
+      title: "Integração Fácil",
+      description: "Configure em minutos e comece a usar.",
     },
     {
-      title: "Resultados Reais",
-      description: "Soluções que geram impacto positivo no seu negócio.",
+      title: "Resultados Garantidos",
+      description: "Satisfação garantida ou seu dinheiro de volta.",
+    },
+  ];
+
+  const plans = [
+    {
+      name: "Starter",
+      price: "R$ 49",
+      period: "/mês",
+      description: "Perfeito para começar",
+      features: [
+        "Até 1.000 usuários",
+        "Suporte básico",
+        "Atualizações gratuitas",
+        "API limitada",
+      ],
+      highlighted: false,
+    },
+    {
+      name: "Pro",
+      price: "R$ 99",
+      period: "/mês",
+      description: "Para negócios em crescimento",
+      features: [
+        "Até 10.000 usuários",
+        "Suporte prioritário",
+        "Atualizações premium",
+        "API completa",
+        "Dashboard avançado",
+      ],
+      highlighted: true,
+    },
+    {
+      name: "Enterprise",
+      price: "R$ 249",
+      period: "/mês",
+      description: "Para grandes empresas",
+      features: [
+        "Usuários ilimitados",
+        "Suporte dedicado 24/7",
+        "Customizações exclusivas",
+        "API ilimitada",
+        "Recursos enterprise",
+      ],
+      highlighted: false,
     },
   ];
 
@@ -50,7 +94,7 @@ const Index = () => {
     {
       name: "Ana Silva",
       role: "CEO",
-      comment: "Transformou completamente nossa forma de trabalhar.",
+      comment: "A melhor decisão que tomamos para nossa empresa.",
     },
     {
       name: "Carlos Santos",
@@ -60,29 +104,29 @@ const Index = () => {
     {
       name: "Maria Oliveira",
       role: "Gerente de Projetos",
-      comment: "A melhor decisão que tomamos para nossa empresa.",
+      comment: "Superou todas as nossas expectativas.",
     },
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen font-glacial">
       <Header />
       
       {/* Hero Section */}
-      <section id="inicio" className="pt-32 pb-20 px-6">
+      <section id="inicio" className="pt-32 pb-20 px-6 bg-secondary text-white">
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">
-            Transforme Sua Visão em Realidade
+          <h1 className="text-4xl md:text-6xl font-codec-bold mb-6 animate-fadeIn">
+            Transforme Seu Negócio Hoje
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 animate-fadeIn">
-            Soluções inovadoras para impulsionar seu negócio ao próximo nível
+          <p className="text-lg md:text-xl mb-8 animate-fadeIn font-codec">
+            A solução completa para impulsionar seus resultados
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center animate-fadeIn">
-            <Button size="lg">
+            <Button size="lg" className="bg-primary text-secondary hover:bg-primary/90">
               Comece Agora
               <ArrowRight className="ml-2" size={16} />
             </Button>
-            <Button variant="outline" size="lg">
+            <Button variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
               Saiba Mais
             </Button>
           </div>
@@ -90,16 +134,63 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section id="recursos" className="py-20 px-6 bg-secondary">
+      <section id="recursos" className="py-20 px-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 animate-on-scroll">
-            Recursos Principais
+          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll text-secondary">
+            Por Que Escolher Nossa Solução
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="p-6 animate-on-scroll">
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <h3 className="text-xl font-codec mb-3 text-secondary">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="planos" className="py-20 px-6 bg-secondary text-white">
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
+            Escolha o Plano Ideal
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {plans.map((plan, index) => (
+              <Card 
+                key={index} 
+                className={`p-6 animate-on-scroll ${
+                  plan.highlighted 
+                    ? "border-primary bg-white text-secondary transform scale-105" 
+                    : "bg-white/5 text-white"
+                }`}
+              >
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-codec-bold mb-2">{plan.name}</h3>
+                  <div className="text-3xl font-codec mb-2">
+                    {plan.price}
+                    <span className="text-sm">{plan.period}</span>
+                  </div>
+                  <p className="text-sm opacity-80">{plan.description}</p>
+                </div>
+                <ul className="space-y-4 mb-6">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center">
+                      <Check size={20} className="mr-2 text-primary" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className={`w-full ${
+                    plan.highlighted 
+                      ? "bg-primary text-secondary hover:bg-primary/90" 
+                      : "bg-white/10 hover:bg-white/20"
+                  }`}
+                >
+                  Começar Agora
+                </Button>
               </Card>
             ))}
           </div>
@@ -109,7 +200,7 @@ const Index = () => {
       {/* Testimonials Section */}
       <section id="depoimentos" className="py-20 px-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 animate-on-scroll">
+          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll text-secondary">
             O Que Nossos Clientes Dizem
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -117,12 +208,12 @@ const Index = () => {
               <Card key={index} className="p-6 animate-on-scroll">
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="text-yellow-400" size={16} />
+                    <Star key={i} className="text-primary" size={16} fill="#C6BA77" />
                   ))}
                 </div>
                 <p className="text-muted-foreground mb-4">"{testimonial.comment}"</p>
                 <div>
-                  <p className="font-semibold">{testimonial.name}</p>
+                  <p className="font-codec text-secondary">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                 </div>
               </Card>
@@ -132,18 +223,17 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-primary text-primary-foreground">
+      <section className="py-20 px-6 bg-secondary text-white">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6 animate-on-scroll">
+          <h2 className="text-3xl font-codec-bold mb-6 animate-on-scroll">
             Pronto para Começar?
           </h2>
-          <p className="text-lg mb-8 animate-on-scroll">
+          <p className="text-lg mb-8 animate-on-scroll font-codec">
             Junte-se a milhares de clientes satisfeitos e transforme seu negócio hoje
           </p>
           <Button
             size="lg"
-            variant="secondary"
-            className="animate-on-scroll"
+            className="animate-on-scroll bg-primary text-secondary hover:bg-primary/90"
           >
             Comece Gratuitamente
           </Button>
