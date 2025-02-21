@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   Dialog,
@@ -8,6 +7,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Menu, LogIn } from "lucide-react";
+import logo from '../../public/logo-andora.svg'
+
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,7 +44,7 @@ const Header = () => {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <a href="/" className="text-2xl font-bold animate-fadeIn">
-            Logo
+            <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
           </a>
 
           {/* Desktop Menu */}
@@ -161,12 +162,12 @@ const Header = () => {
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
-                src="/placeholder.svg" 
+                src="/logo-andora.svg" 
                 alt="Logo" 
                 className="w-16 h-16 mx-auto"
               />
             </div>
-            <DialogTitle className="text-xl">Faça seu login</DialogTitle>
+            <DialogTitle className="text-xl text-center">Faça seu login</DialogTitle>
           </DialogHeader>
           <form className="space-y-4">
             <div>

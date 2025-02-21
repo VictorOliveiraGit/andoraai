@@ -126,7 +126,7 @@ const Index = () => {
               Comece Agora
               <ArrowRight className="ml-2" size={16} />
             </Button>
-            <Button variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
+            <Button variant="outline" size="lg" className="text-[#150640] border-white hover:bg-white/10">
               Saiba Mais
             </Button>
           </div>
@@ -162,7 +162,7 @@ const Index = () => {
                 key={index} 
                 className={`p-6 animate-on-scroll ${
                   plan.highlighted 
-                    ? "border-primary bg-white text-secondary transform scale-105" 
+                    ? "border-primary bg-white text-secondary transform scale-105 border-secondary" 
                     : "bg-white/5 text-white"
                 }`}
               >
@@ -185,8 +185,8 @@ const Index = () => {
                 <Button 
                   className={`w-full ${
                     plan.highlighted 
-                      ? "bg-primary text-secondary hover:bg-primary/90" 
-                      : "bg-white/10 hover:bg-white/20"
+                      ? "bg-primary text-secondary hover:bg-primary/90"
+                      : "bg-primary text-secondary hover:bg-primary/90"
                   }`}
                 >
                   Começar Agora
