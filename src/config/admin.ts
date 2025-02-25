@@ -1,10 +1,11 @@
 
-import { LayoutDashboard, Users, FileText, Settings } from "lucide-react";
+import { LayoutDashboard, Users, FileText, Settings, CreditCard } from "lucide-react";
 
 export const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "users", label: "Usuários", icon: Users },
   { id: "reports", label: "Relatórios", icon: FileText },
+  { id: "subscription", label: "Assinatura", icon: CreditCard },
   { id: "settings", label: "Configurações", icon: Settings },
 ];
 
