@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Menu, LogIn } from "lucide-react";
+import { X, Menu, LogIn, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 
 const Header = () => {
@@ -15,16 +15,23 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [registerData, setRegisterData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
 
   useEffect(() => {
-    if (isContactOpen || isLoginOpen) {
+    if (isContactOpen || isLoginOpen || isRegisterOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
     }
-  }, [isContactOpen, isLoginOpen]);
+  }, [isContactOpen, isLoginOpen, isRegisterOpen]);
 
   const menuItems = [
     { label: "Início", href: "#inicio" },
@@ -50,6 +57,17 @@ const Header = () => {
     } else {
       toast.error("Usuário ou senha inválidos");
     }
+  };
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (registerData.password !== registerData.confirmPassword) {
+      toast.error("As senhas não coincidem!");
+      return;
+    }
+    toast.success("Conta criada com sucesso! Faça login para continuar.");
+    setIsRegisterOpen(false);
+    setIsLoginOpen(true);
   };
 
   return (
@@ -78,6 +96,13 @@ const Header = () => {
             >
               <LogIn size={18} />
               Login
+            </Button>
+            <Button 
+              onClick={() => setIsRegisterOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <UserPlus size={18} />
+              Criar Conta
             </Button>
           </div>
 
@@ -111,6 +136,13 @@ const Header = () => {
               >
                 <LogIn size={18} />
                 Login
+              </Button>
+              <Button 
+                onClick={() => setIsRegisterOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <UserPlus size={18} />
+                Criar Conta
               </Button>
             </div>
           </div>
@@ -210,6 +242,83 @@ const Header = () => {
             <Button className="w-full" type="submit">
               Entrar
             </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="text-center">
+            <div className="mx-auto mb-4">
+              <img 
+                src="/placeholder.svg" 
+                alt="Logo" 
+                className="w-16 h-16 mx-auto"
+              />
+            </div>
+            <DialogTitle className="text-xl">Criar Conta</DialogTitle>
+          </DialogHeader>
+          <form className="space-y-4" onSubmit={handleRegister}>
+            <div>
+              <label className="block text-sm font-medium mb-1">Nome</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md"
+                placeholder="Seu nome completo"
+                value={registerData.name}
+                onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Email</label>
+              <input
+                type="email"
+                className="w-full p-2 border rounded-md"
+                placeholder="seu@email.com"
+                value={registerData.email}
+                onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Senha</label>
+              <input
+                type="password"
+                className="w-full p-2 border rounded-md"
+                placeholder="Digite sua senha"
+                value={registerData.password}
+                onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
+              <input
+                type="password"
+                className="w-full p-2 border rounded-md"
+                placeholder="Confirme sua senha"
+                value={registerData.confirmPassword}
+                onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
+                required
+              />
+            </div>
+            <Button className="w-full" type="submit">
+              Criar Conta
+            </Button>
+            <p className="text-center text-sm text-gray-500">
+              Já tem uma conta?{" "}
+              <Button 
+                variant="link" 
+                className="p-0 h-auto"
+                onClick={() => {
+                  setIsRegisterOpen(false);
+                  setIsLoginOpen(true);
+                }}
+              >
+                Faça login
+              </Button>
+            </p>
           </form>
         </DialogContent>
       </Dialog>
