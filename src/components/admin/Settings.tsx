@@ -84,13 +84,12 @@ export const Settings = ({
       
       // Calculate the crop area based on the container dimensions
       const containerSize = container.offsetWidth;
-      const scale = containerSize / size;
       
       // Draw the image with the current position
       ctx.drawImage(
         img,
-        cropPosition.x / scale, cropPosition.y / scale, // Source position
-        containerSize / scale, containerSize / scale, // Source dimensions
+        cropPosition.x, cropPosition.y, // Source position
+        containerSize, containerSize, // Source dimensions
         0, 0, // Destination position
         size, size // Destination dimensions
       );
@@ -242,50 +241,34 @@ export const Settings = ({
               onMouseLeave={handleDragEnd}
             >
               {tempImage && (
-                <div 
-                  style={{ 
+                <img
+                  ref={imageRef}
+                  src={tempImage}
+                  alt="Imagem para recorte"
+                  className="max-w-none"
+                  style={{
                     transform: `translate(${-cropPosition.x}px, ${-cropPosition.y}px)`,
                     position: 'absolute',
-                    width: '100%',
-                    height: '100%',
                   }}
-                >
-                  <img
-                    ref={imageRef}
-                    src={tempImage}
-                    alt="Imagem para recorte"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                    draggable="false"
-                    onLoad={(e) => {
-                      if (containerRef.current) {
-                        const img = e.currentTarget;
-                        const container = containerRef.current;
-                        
-                        // Ajusta a posição inicial para centralizar a imagem
-                        const containerSize = container.offsetWidth;
-                        const imgAspectRatio = img.naturalWidth / img.naturalHeight;
-                        
-                        let initialWidth = containerSize;
-                        let initialHeight = containerSize;
-                        
-                        if (imgAspectRatio > 1) {
-                          initialHeight = containerSize / imgAspectRatio;
-                        } else {
-                          initialWidth = containerSize * imgAspectRatio;
-                        }
-                        
-                        const initialX = (containerSize - initialWidth) / 2;
-                        const initialY = (containerSize - initialHeight) / 2;
-                        
-                        setCropPosition({ x: initialX, y: initialY });
-                      }
-                    }}
-                  />
-                </div>
+                  draggable="false"
+                  onLoad={(e) => {
+                    if (containerRef.current) {
+                      const img = e.currentTarget;
+                      const container = containerRef.current;
+                      
+                      // Center image initially
+                      const containerSize = container.offsetWidth;
+                      const initialX = (img.naturalWidth - containerSize) / 2;
+                      const initialY = (img.naturalHeight - containerSize) / 2;
+                      
+                      // Ensure initialX and initialY are not negative
+                      setCropPosition({ 
+                        x: Math.max(0, initialX), 
+                        y: Math.max(0, initialY)
+                      });
+                    }
+                  }}
+                />
               )}
             </div>
             
