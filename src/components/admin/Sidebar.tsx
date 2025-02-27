@@ -105,7 +105,7 @@ export const Sidebar = ({
             <span className="text-xl font-bold">{name}</span>
           </div>
           
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {menuItems.map((item) => (
               <Button
                 key={item.id}
@@ -120,12 +120,15 @@ export const Sidebar = ({
                 <span>{item.label}</span>
               </Button>
             ))}
+          </div>
+          
+          <div className="mt-4 border-t pt-4">
             <Button 
               variant="ghost" 
-              className="flex flex-col items-center justify-center h-20 text-xs px-2 text-red-600"
+              className="flex items-center justify-start w-full text-red-600"
               onClick={handleLogout}
             >
-              <LogOut className="mb-1" size={24} />
+              <LogOut className="mr-2" size={20} />
               <span>Sair</span>
             </Button>
           </div>
