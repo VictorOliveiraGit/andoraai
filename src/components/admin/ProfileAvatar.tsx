@@ -5,6 +5,12 @@ import { Upload, Trash, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { ImageCropper } from "./ImageCropper";
 import { ImageViewer } from "./ImageViewer";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ProfileAvatarProps {
   avatar: string;
@@ -45,7 +51,7 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
   };
 
   return (
-    <>
+    <TooltipProvider>
       <div className="flex items-center gap-4">
         <div className="relative group">
           <img 
@@ -55,22 +61,37 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
           />
           {avatar !== "/placeholder.svg" && (
             <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
-                onClick={() => setIsViewModalOpen(true)}
-              >
-                <Eye size={16} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
-                onClick={handleDeleteAvatar}
-              >
-                <Trash size={16} />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
+                    onClick={() => setIsViewModalOpen(true)}
+                  >
+                    <Eye size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Visualizar</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
+                    onClick={handleDeleteAvatar}
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Excluir</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           )}
         </div>
@@ -100,6 +121,6 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
         onClose={() => setIsViewModalOpen(false)}
         imageSrc={avatar}
       />
-    </>
+    </TooltipProvider>
   );
 };
