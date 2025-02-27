@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Phone, Upload, Trash } from "lucide-react";
@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 interface SettingsProps {
@@ -35,11 +36,19 @@ export const Settings = ({
 }: SettingsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
-  const [cropPosition, setCropPosition] = useState({ y: 0 });
+  const [cropPosition, setCropPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
-  const startYRef = useRef(0);
-  const startOffsetRef = useRef(0);
+  const startPosRef = useRef({ x: 0, y: 0 });
+  const startOffsetRef = useRef({ x: 0, y: 0 });
+
+  // Reset image when opening modal
+  useEffect(() => {
+    if (isModalOpen && tempImage) {
+      setCropPosition({ x: 0, y: 0 });
+    }
+  }, [isModalOpen, tempImage]);
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,7 +57,7 @@ export const Settings = ({
       reader.onloadend = () => {
         setTempImage(reader.result as string);
         setIsModalOpen(true);
-        setCropPosition({ y: 0 });
+        setCropPosition({ x: 0, y: 0 });
       };
       reader.readAsDataURL(file);
     }
@@ -60,7 +69,7 @@ export const Settings = ({
   };
 
   const handleSaveCrop = () => {
-    if (!imageRef.current || !tempImage) return;
+    if (!imageRef.current || !tempImage || !containerRef.current) return;
     
     try {
       const canvas = document.createElement("canvas");
@@ -68,17 +77,22 @@ export const Settings = ({
       if (!ctx) return;
       
       const img = imageRef.current;
-      const size = 150;
+      const container = containerRef.current;
+      const size = 150; // final size
       
       canvas.width = size;
       canvas.height = size;
       
+      // Calculate the crop area based on the container dimensions
+      const containerSize = container.offsetWidth;
+      
+      // Draw the image with the current position
       ctx.drawImage(
-        img, 
-        0, cropPosition.y,
-        img.naturalWidth, img.naturalWidth,
-        0, 0,
-        size, size
+        img,
+        -cropPosition.x, -cropPosition.y, // Source position
+        containerSize, containerSize, // Source dimensions (square crop)
+        0, 0, // Destination position
+        size, size // Destination dimensions
       );
       
       const croppedImageDataUrl = canvas.toDataURL("image/jpeg");
@@ -94,18 +108,22 @@ export const Settings = ({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDraggingRef.current = true;
-    startYRef.current = e.clientY;
-    startOffsetRef.current = cropPosition.y;
+    startPosRef.current = { x: e.clientX, y: e.clientY };
+    startOffsetRef.current = { ...cropPosition };
     e.preventDefault();
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDraggingRef.current) return;
     
-    const deltaY = startYRef.current - e.clientY;
-    const newY = startOffsetRef.current + deltaY;
+    const deltaX = e.clientX - startPosRef.current.x;
+    const deltaY = e.clientY - startPosRef.current.y;
     
-    setCropPosition({ y: newY });
+    setCropPosition({
+      x: startOffsetRef.current.x - deltaX,
+      y: startOffsetRef.current.y - deltaY
+    });
+    
     e.preventDefault();
   };
 
@@ -113,7 +131,6 @@ export const Settings = ({
     isDraggingRef.current = false;
   };
 
-  // Cleanup function to remove event listeners
   const handleDragEnd = () => {
     isDraggingRef.current = false;
   };
@@ -205,15 +222,19 @@ export const Settings = ({
         </div>
       </Card>
 
-      {/* Image Crop Modal with Mouse Drag */}
+      {/* Improved Image Crop Modal with 2D Mouse Drag */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Ajuste seu Avatar</DialogTitle>
+            <DialogDescription>
+              Clique e arraste para posicionar a imagem no formato que desejar.
+            </DialogDescription>
           </DialogHeader>
           
           <div className="flex flex-col items-center space-y-4">
             <div 
+              ref={containerRef}
               className="relative w-[200px] h-[200px] border-2 border-primary rounded-full overflow-hidden cursor-move"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
@@ -223,10 +244,10 @@ export const Settings = ({
               {tempImage && (
                 <div 
                   style={{ 
-                    transform: `translateY(${-cropPosition.y}px)`,
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative'
+                    transform: `translate(${-cropPosition.x}px, ${-cropPosition.y}px)`,
+                    position: 'absolute',
+                    width: 'auto',
+                    height: 'auto',
                   }}
                 >
                   <img
@@ -234,14 +255,25 @@ export const Settings = ({
                     src={tempImage}
                     alt="Imagem para recorte"
                     className="max-w-none"
+                    style={{ display: 'block' }}
                     draggable="false"
+                    onLoad={(e) => {
+                      // Centralize imagem quando carregar
+                      if (containerRef.current) {
+                        const img = e.currentTarget;
+                        const container = containerRef.current;
+                        const initialX = (img.naturalWidth - container.offsetWidth) / 2;
+                        const initialY = (img.naturalHeight - container.offsetHeight) / 2;
+                        setCropPosition({ x: initialX, y: initialY });
+                      }
+                    }}
                   />
                 </div>
               )}
             </div>
             
-            <p className="text-sm text-gray-500 text-center">
-              Clique e arraste para ajustar a posição da imagem
+            <p className="text-sm text-gray-500">
+              Arraste a imagem para ajustar a posição
             </p>
           </div>
           
