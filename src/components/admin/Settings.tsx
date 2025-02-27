@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Phone, Upload, Trash } from "lucide-react";
+import { User, Mail, Phone, Upload, Trash, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -35,8 +35,7 @@ export const Settings = ({
 }: SettingsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
-  const [cropPosition, setCropPosition] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [cropPosition, setCropPosition] = useState({ y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,8 +46,7 @@ export const Settings = ({
         setTempImage(reader.result as string);
         setIsModalOpen(true);
         // Reset crop values
-        setCropPosition({ x: 0, y: 0 });
-        setZoom(1);
+        setCropPosition({ y: 0 });
       };
       reader.readAsDataURL(file);
     }
@@ -68,18 +66,21 @@ export const Settings = ({
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
       
-      // We'll create a simple crop by drawing the image with translation
-      // For a more sophisticated crop, you might need a dedicated library
+      // Simple vertical positioning crop
       const img = imageRef.current;
       const size = 150; // final size
       
       canvas.width = size;
       canvas.height = size;
       
-      // Draw the image with the crop position and zoom
-      ctx.translate(-cropPosition.x, -cropPosition.y);
-      ctx.scale(zoom, zoom);
-      ctx.drawImage(img, 0, 0);
+      // Draw the image with vertical translation only
+      ctx.drawImage(
+        img, 
+        0, cropPosition.y,  // Source x, y
+        img.naturalWidth, img.naturalWidth, // Source width, height (square crop)
+        0, 0,               // Destination x, y
+        size, size          // Destination width, height
+      );
       
       // Get the output
       const croppedImageDataUrl = canvas.toDataURL("image/jpeg");
@@ -93,22 +94,11 @@ export const Settings = ({
     }
   };
 
-  const handleMove = (direction: "up" | "down" | "left" | "right") => {
+  const handleMoveVertical = (direction: "up" | "down") => {
     const step = 10;
-    setCropPosition(prev => {
-      switch (direction) {
-        case "up":
-          return { ...prev, y: prev.y - step };
-        case "down":
-          return { ...prev, y: prev.y + step };
-        case "left":
-          return { ...prev, x: prev.x - step };
-        case "right":
-          return { ...prev, x: prev.x + step };
-        default:
-          return prev;
-      }
-    });
+    setCropPosition(prev => ({
+      y: direction === "up" ? prev.y - step : prev.y + step
+    }));
   };
 
   return (
@@ -198,7 +188,7 @@ export const Settings = ({
         </div>
       </Card>
 
-      {/* Image Crop Modal */}
+      {/* Simplified Image Crop Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -210,7 +200,7 @@ export const Settings = ({
               {tempImage && (
                 <div 
                   style={{ 
-                    transform: `translate(${-cropPosition.x}px, ${-cropPosition.y}px) scale(${zoom})`,
+                    transform: `translateY(${-cropPosition.y}px)`,
                     width: '100%',
                     height: '100%',
                     position: 'relative'
@@ -221,52 +211,26 @@ export const Settings = ({
                     src={tempImage}
                     alt="Imagem para recorte"
                     className="max-w-none"
-                    style={{
-                      transformOrigin: 'top left',
-                    }}
                   />
                 </div>
               )}
             </div>
             
-            <div className="space-y-2 w-full">
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Zoom:</span>
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setZoom(prev => Math.max(0.5, prev - 0.1))}
-                  >
-                    -
-                  </Button>
-                  <span>{zoom.toFixed(1)}x</span>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setZoom(prev => Math.min(3, prev + 0.1))}
-                  >
-                    +
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-2">
-                <Button variant="outline" onClick={() => handleMove("left")}>
-                  ←
-                </Button>
-                <div className="grid grid-rows-2 gap-2">
-                  <Button variant="outline" onClick={() => handleMove("up")}>
-                    ↑
-                  </Button>
-                  <Button variant="outline" onClick={() => handleMove("down")}>
-                    ↓
-                  </Button>
-                </div>
-                <Button variant="outline" onClick={() => handleMove("right")}>
-                  →
-                </Button>
-              </div>
+            <div className="flex justify-center gap-4">
+              <Button 
+                variant="outline"
+                size="icon"
+                onClick={() => handleMoveVertical("up")}
+              >
+                <ArrowUp />
+              </Button>
+              <Button 
+                variant="outline"
+                size="icon"
+                onClick={() => handleMoveVertical("down")}
+              >
+                <ArrowDown />
+              </Button>
             </div>
           </div>
           
