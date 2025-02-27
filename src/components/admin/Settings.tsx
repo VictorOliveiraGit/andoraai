@@ -1,8 +1,7 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Phone, Upload, Trash } from "lucide-react";
+import { User, Mail, Phone, Upload, Trash, Eye } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -35,6 +34,7 @@ export const Settings = ({
   setPhone,
 }: SettingsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
   const [cropPosition, setCropPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
@@ -140,21 +140,31 @@ export const Settings = ({
       <Card className="p-6">
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative group">
               <img 
                 src={avatar} 
                 alt="Avatar" 
                 className="w-24 h-24 rounded-full object-cover"
               />
               {avatar !== "/placeholder.svg" && (
-                <Button 
-                  variant="destructive" 
-                  size="icon" 
-                  className="absolute -top-2 -right-2 h-8 w-8 rounded-full"
-                  onClick={handleDeleteAvatar}
-                >
-                  <Trash size={16} />
-                </Button>
+                <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
+                    onClick={() => setIsViewModalOpen(true)}
+                  >
+                    <Eye size={16} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
+                    onClick={handleDeleteAvatar}
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </div>
               )}
             </div>
             <div>
@@ -289,6 +299,32 @@ export const Settings = ({
             </Button>
             <Button onClick={handleSaveCrop}>
               Salvar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Image Modal */}
+      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Visualizar Avatar</DialogTitle>
+          </DialogHeader>
+          
+          <div className="flex items-center justify-center">
+            <img 
+              src={avatar} 
+              alt="Avatar" 
+              className="max-w-full max-h-[500px] rounded-lg object-contain"
+            />
+          </div>
+          
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsViewModalOpen(false)}
+            >
+              Fechar
             </Button>
           </DialogFooter>
         </DialogContent>
