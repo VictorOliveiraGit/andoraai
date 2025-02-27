@@ -51,8 +51,8 @@ const AdminDashboard = () => {
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
       />
-      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'} sm:ml-64`}>
-        <div className="p-4 sm:p-8">
+      <div className="flex-1 sm:ml-64">
+        <div className="p-4 sm:p-8 pb-24 sm:pb-8">
           {renderContent()}
         </div>
       </div>
