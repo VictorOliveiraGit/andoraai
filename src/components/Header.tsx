@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { X, Menu, LogIn, UserPlus } from "lucide-react";
 import { toast } from "sonner";
-
+import logo from '../../public/logo-andora.svg'
 const Header = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
