@@ -43,7 +43,6 @@ export const Settings = ({
   const startPosRef = useRef({ x: 0, y: 0 });
   const startOffsetRef = useRef({ x: 0, y: 0 });
 
-  // Reset image when opening modal
   useEffect(() => {
     if (isModalOpen && tempImage) {
       setCropPosition({ x: 0, y: 0 });
@@ -78,24 +77,25 @@ export const Settings = ({
       
       const img = imageRef.current;
       const container = containerRef.current;
-      const size = 150; // final size
+      const size = 300; // final size
       
       canvas.width = size;
       canvas.height = size;
       
       // Calculate the crop area based on the container dimensions
       const containerSize = container.offsetWidth;
+      const scale = containerSize / size;
       
       // Draw the image with the current position
       ctx.drawImage(
         img,
-        -cropPosition.x, -cropPosition.y, // Source position
-        containerSize, containerSize, // Source dimensions (square crop)
+        cropPosition.x / scale, cropPosition.y / scale, // Source position
+        containerSize / scale, containerSize / scale, // Source dimensions
         0, 0, // Destination position
         size, size // Destination dimensions
       );
       
-      const croppedImageDataUrl = canvas.toDataURL("image/jpeg");
+      const croppedImageDataUrl = canvas.toDataURL("image/jpeg", 0.9);
       setAvatar(croppedImageDataUrl);
       setIsModalOpen(false);
       setTempImage(null);
@@ -224,7 +224,7 @@ export const Settings = ({
 
       {/* Improved Image Crop Modal with 2D Mouse Drag */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-xl">
           <DialogHeader>
             <DialogTitle>Ajuste seu Avatar</DialogTitle>
             <DialogDescription>
@@ -235,7 +235,7 @@ export const Settings = ({
           <div className="flex flex-col items-center space-y-4">
             <div 
               ref={containerRef}
-              className="relative w-[200px] h-[200px] border-2 border-primary rounded-full overflow-hidden cursor-move"
+              className="relative w-[400px] h-[400px] border-2 border-primary rounded-full overflow-hidden cursor-move"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -246,24 +246,41 @@ export const Settings = ({
                   style={{ 
                     transform: `translate(${-cropPosition.x}px, ${-cropPosition.y}px)`,
                     position: 'absolute',
-                    width: 'auto',
-                    height: 'auto',
+                    width: '100%',
+                    height: '100%',
                   }}
                 >
                   <img
                     ref={imageRef}
                     src={tempImage}
                     alt="Imagem para recorte"
-                    className="max-w-none"
-                    style={{ display: 'block' }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
                     draggable="false"
                     onLoad={(e) => {
-                      // Centralize imagem quando carregar
                       if (containerRef.current) {
                         const img = e.currentTarget;
                         const container = containerRef.current;
-                        const initialX = (img.naturalWidth - container.offsetWidth) / 2;
-                        const initialY = (img.naturalHeight - container.offsetHeight) / 2;
+                        
+                        // Ajusta a posição inicial para centralizar a imagem
+                        const containerSize = container.offsetWidth;
+                        const imgAspectRatio = img.naturalWidth / img.naturalHeight;
+                        
+                        let initialWidth = containerSize;
+                        let initialHeight = containerSize;
+                        
+                        if (imgAspectRatio > 1) {
+                          initialHeight = containerSize / imgAspectRatio;
+                        } else {
+                          initialWidth = containerSize * imgAspectRatio;
+                        }
+                        
+                        const initialX = (containerSize - initialWidth) / 2;
+                        const initialY = (containerSize - initialHeight) / 2;
+                        
                         setCropPosition({ x: initialX, y: initialY });
                       }
                     }}
