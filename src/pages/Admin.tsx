@@ -13,6 +13,7 @@ const AdminDashboard = () => {
   const [name, setName] = useState("Admin User");
   const [email, setEmail] = useState("admin@example.com");
   const [phone, setPhone] = useState("(00) 00000-0000");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -41,15 +42,19 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex">
       <Sidebar
         avatar={avatar}
         name={name}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
       />
-      <div className="ml-64 p-8">
-        {renderContent()}
+      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'} sm:ml-64`}>
+        <div className="p-4 sm:p-8">
+          {renderContent()}
+        </div>
       </div>
     </div>
   );
