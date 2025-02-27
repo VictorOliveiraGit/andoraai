@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Phone, Upload, Trash, ArrowUp, ArrowDown } from "lucide-react";
+import { User, Mail, Phone, Upload, Trash } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -37,6 +37,9 @@ export const Settings = ({
   const [tempImage, setTempImage] = useState<string | null>(null);
   const [cropPosition, setCropPosition] = useState({ y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
+  const isDraggingRef = useRef(false);
+  const startYRef = useRef(0);
+  const startOffsetRef = useRef(0);
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -45,7 +48,6 @@ export const Settings = ({
       reader.onloadend = () => {
         setTempImage(reader.result as string);
         setIsModalOpen(true);
-        // Reset crop values
         setCropPosition({ y: 0 });
       };
       reader.readAsDataURL(file);
@@ -61,28 +63,24 @@ export const Settings = ({
     if (!imageRef.current || !tempImage) return;
     
     try {
-      // Apply cropping
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
       
-      // Simple vertical positioning crop
       const img = imageRef.current;
-      const size = 150; // final size
+      const size = 150;
       
       canvas.width = size;
       canvas.height = size;
       
-      // Draw the image with vertical translation only
       ctx.drawImage(
         img, 
-        0, cropPosition.y,  // Source x, y
-        img.naturalWidth, img.naturalWidth, // Source width, height (square crop)
-        0, 0,               // Destination x, y
-        size, size          // Destination width, height
+        0, cropPosition.y,
+        img.naturalWidth, img.naturalWidth,
+        0, 0,
+        size, size
       );
       
-      // Get the output
       const croppedImageDataUrl = canvas.toDataURL("image/jpeg");
       setAvatar(croppedImageDataUrl);
       setIsModalOpen(false);
@@ -94,11 +92,30 @@ export const Settings = ({
     }
   };
 
-  const handleMoveVertical = (direction: "up" | "down") => {
-    const step = 10;
-    setCropPosition(prev => ({
-      y: direction === "up" ? prev.y - step : prev.y + step
-    }));
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDraggingRef.current = true;
+    startYRef.current = e.clientY;
+    startOffsetRef.current = cropPosition.y;
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    
+    const deltaY = startYRef.current - e.clientY;
+    const newY = startOffsetRef.current + deltaY;
+    
+    setCropPosition({ y: newY });
+    e.preventDefault();
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  // Cleanup function to remove event listeners
+  const handleDragEnd = () => {
+    isDraggingRef.current = false;
   };
 
   return (
@@ -188,7 +205,7 @@ export const Settings = ({
         </div>
       </Card>
 
-      {/* Simplified Image Crop Modal */}
+      {/* Image Crop Modal with Mouse Drag */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -196,7 +213,13 @@ export const Settings = ({
           </DialogHeader>
           
           <div className="flex flex-col items-center space-y-4">
-            <div className="relative w-[200px] h-[200px] border-2 border-primary rounded-full overflow-hidden">
+            <div 
+              className="relative w-[200px] h-[200px] border-2 border-primary rounded-full overflow-hidden cursor-move"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleDragEnd}
+            >
               {tempImage && (
                 <div 
                   style={{ 
@@ -211,27 +234,15 @@ export const Settings = ({
                     src={tempImage}
                     alt="Imagem para recorte"
                     className="max-w-none"
+                    draggable="false"
                   />
                 </div>
               )}
             </div>
             
-            <div className="flex justify-center gap-4">
-              <Button 
-                variant="outline"
-                size="icon"
-                onClick={() => handleMoveVertical("up")}
-              >
-                <ArrowUp />
-              </Button>
-              <Button 
-                variant="outline"
-                size="icon"
-                onClick={() => handleMoveVertical("down")}
-              >
-                <ArrowDown />
-              </Button>
-            </div>
+            <p className="text-sm text-gray-500 text-center">
+              Clique e arraste para ajustar a posição da imagem
+            </p>
           </div>
           
           <DialogFooter>
