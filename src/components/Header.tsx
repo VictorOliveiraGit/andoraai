@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -6,23 +7,31 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Menu, LogIn } from "lucide-react";
-import logo from '../../public/logo-andora.svg'
-
+import { X, Menu, LogIn, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [registerData, setRegisterData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
 
-  // Gerencia a classe do body quando o modal é aberto/fechado
   useEffect(() => {
-    if (isContactOpen || isLoginOpen) {
+    if (isContactOpen || isLoginOpen || isRegisterOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
     }
-  }, [isContactOpen, isLoginOpen]);
+  }, [isContactOpen, isLoginOpen, isRegisterOpen]);
 
   const menuItems = [
     { label: "Início", href: "#inicio" },
@@ -39,6 +48,28 @@ const Header = () => {
     "Outro"
   ];
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === "admin" && password === "admin") {
+      setIsLoginOpen(false);
+      toast.success("Login realizado com sucesso!");
+      navigate("/admin");
+    } else {
+      toast.error("Usuário ou senha inválidos");
+    }
+  };
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (registerData.password !== registerData.confirmPassword) {
+      toast.error("As senhas não coincidem!");
+      return;
+    }
+    toast.success("Conta criada com sucesso! Faça login para continuar.");
+    setIsRegisterOpen(false);
+    setIsLoginOpen(true);
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <nav className="container mx-auto px-6 py-4">
@@ -47,7 +78,6 @@ const Header = () => {
             <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
           </a>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {menuItems.map((item) => (
               <a
@@ -67,9 +97,15 @@ const Header = () => {
               <LogIn size={18} />
               Login
             </Button>
+            <Button 
+              onClick={() => setIsRegisterOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <UserPlus size={18} />
+              Criar Conta
+            </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -79,7 +115,6 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden py-4">
             <div className="flex flex-col space-y-4">
@@ -102,12 +137,18 @@ const Header = () => {
                 <LogIn size={18} />
                 Login
               </Button>
+              <Button 
+                onClick={() => setIsRegisterOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <UserPlus size={18} />
+                Criar Conta
+              </Button>
             </div>
           </div>
         )}
       </nav>
 
-      {/* Contact Modal */}
       <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -156,7 +197,6 @@ const Header = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Login Modal */}
       <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader className="text-center">
@@ -169,13 +209,15 @@ const Header = () => {
             </div>
             <DialogTitle className="text-xl text-center">Faça seu login</DialogTitle>
           </DialogHeader>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleLogin}>
             <div>
               <label className="block text-sm font-medium mb-1">Usuário</label>
               <input
                 type="text"
                 className="w-full p-2 border rounded-md"
                 placeholder="Digite seu usuário"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
@@ -184,6 +226,8 @@ const Header = () => {
                 type="password"
                 className="w-full p-2 border rounded-md"
                 placeholder="Digite sua senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="text-right">
@@ -198,6 +242,83 @@ const Header = () => {
             <Button className="w-full" type="submit">
               Entrar
             </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="text-center">
+            <div className="mx-auto mb-4">
+              <img 
+                src="/placeholder.svg" 
+                alt="Logo" 
+                className="w-16 h-16 mx-auto"
+              />
+            </div>
+            <DialogTitle className="text-xl">Criar Conta</DialogTitle>
+          </DialogHeader>
+          <form className="space-y-4" onSubmit={handleRegister}>
+            <div>
+              <label className="block text-sm font-medium mb-1">Nome</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md"
+                placeholder="Seu nome completo"
+                value={registerData.name}
+                onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Email</label>
+              <input
+                type="email"
+                className="w-full p-2 border rounded-md"
+                placeholder="seu@email.com"
+                value={registerData.email}
+                onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Senha</label>
+              <input
+                type="password"
+                className="w-full p-2 border rounded-md"
+                placeholder="Digite sua senha"
+                value={registerData.password}
+                onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
+              <input
+                type="password"
+                className="w-full p-2 border rounded-md"
+                placeholder="Confirme sua senha"
+                value={registerData.confirmPassword}
+                onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
+                required
+              />
+            </div>
+            <Button className="w-full" type="submit">
+              Criar Conta
+            </Button>
+            <p className="text-center text-sm text-gray-500">
+              Já tem uma conta?{" "}
+              <Button 
+                variant="link" 
+                className="p-0 h-auto"
+                onClick={() => {
+                  setIsRegisterOpen(false);
+                  setIsLoginOpen(true);
+                }}
+              >
+                Faça login
+              </Button>
+            </p>
           </form>
         </DialogContent>
       </Dialog>
