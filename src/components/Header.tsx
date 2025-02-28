@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -7,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Menu, LogIn, UserPlus } from "lucide-react";
+import { X, Menu, LogIn, UserPlus, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import logo from '../../public/logo-andora.svg'
 const Header = () => {
@@ -24,6 +25,7 @@ const Header = () => {
     password: "",
     confirmPassword: ""
   });
+  const [activeDropdown, setActiveDropdown] = useState("");
 
   useEffect(() => {
     if (isContactOpen || isLoginOpen || isRegisterOpen) {
@@ -48,6 +50,21 @@ const Header = () => {
     "Outro"
   ];
 
+  const dropdownMenus = {
+    produtos: [
+      { title: "Payments", description: "Pagamentos online" },
+      { title: "Terminal", description: "Pagamentos presenciais" },
+      { title: "Connect", description: "Pagamentos para marketplaces" },
+      { title: "Billing", description: "Assinaturas e cobranças" },
+    ],
+    solucoes: [
+      { title: "E-commerce", description: "Para lojas online" },
+      { title: "Marketplace", description: "Plataformas multivendedor" },
+      { title: "SaaS", description: "Para empresas de software" },
+      { title: "Financeiro", description: "Soluções para bancos" },
+    ],
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === "admin" && password === "admin") {
@@ -70,46 +87,90 @@ const Header = () => {
     setIsLoginOpen(true);
   };
 
+  const toggleDropdown = (dropdown: string) => {
+    if (activeDropdown === dropdown) {
+      setActiveDropdown("");
+    } else {
+      setActiveDropdown(dropdown);
+    }
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-700 via-purple-500 to-orange-400">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <a href="/" className="text-2xl font-bold animate-fadeIn">
-            <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
-          </a>
+          <div className="flex items-center space-x-8">
+            <a href="/" className="text-2xl font-bold text-white">
+              <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
+            </a>
 
-          <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-sm font-medium hover:text-primary/80 transition-colors"
-              >
-                {item.label}
+            <div className="hidden md:flex items-center space-x-8">
+              <div className="relative">
+                <button 
+                  className="text-white flex items-center gap-1 hover:opacity-80 transition-colors"
+                  onClick={() => toggleDropdown("produtos")}
+                >
+                  Produtos <ChevronDown size={16} />
+                </button>
+                {activeDropdown === "produtos" && (
+                  <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg p-4 z-50">
+                    {dropdownMenus.produtos.map((item, idx) => (
+                      <a key={idx} href="#" className="block p-2 hover:bg-gray-50 rounded-md">
+                        <p className="font-medium text-gray-900">{item.title}</p>
+                        <p className="text-sm text-gray-500">{item.description}</p>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button 
+                  className="text-white flex items-center gap-1 hover:opacity-80 transition-colors"
+                  onClick={() => toggleDropdown("solucoes")}
+                >
+                  Soluções <ChevronDown size={16} />
+                </button>
+                {activeDropdown === "solucoes" && (
+                  <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg p-4 z-50">
+                    {dropdownMenus.solucoes.map((item, idx) => (
+                      <a key={idx} href="#" className="block p-2 hover:bg-gray-50 rounded-md">
+                        <p className="font-medium text-gray-900">{item.title}</p>
+                        <p className="text-sm text-gray-500">{item.description}</p>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <a href="#recursos" className="text-white hover:opacity-80 transition-colors">
+                Recursos
               </a>
-            ))}
-            <Button onClick={() => setIsContactOpen(true)}>Contato</Button>
+              <a href="#precos" className="text-white hover:opacity-80 transition-colors">
+                Preços
+              </a>
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center space-x-4">
             <Button 
-              variant="outline"
+              variant="ghost" 
               onClick={() => setIsLoginOpen(true)}
-              className="flex items-center gap-2"
+              className="text-white hover:bg-white/10"
             >
-              <LogIn size={18} />
-              Login
+              Entrar
             </Button>
             <Button 
-              onClick={() => setIsRegisterOpen(true)}
-              className="flex items-center gap-2"
+              onClick={() => setIsContactOpen(true)}
+              className="bg-white text-purple-600 hover:bg-white/90"
             >
-              <UserPlus size={18} />
-              Criar Conta
+              Fale com nossa equipe
             </Button>
           </div>
 
           <button
-            className="md:hidden"
+            className="md:hidden text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Menu"
           >
             {isMenuOpen ? <X /> : <Menu />}
           </button>
@@ -118,31 +179,68 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4">
             <div className="flex flex-col space-y-4">
-              {menuItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="text-sm font-medium hover:text-primary/80 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
+              <div className="py-2 border-b border-white/20">
+                <button 
+                  className="flex items-center justify-between w-full text-white"
+                  onClick={() => toggleDropdown("produtos")}
                 >
-                  {item.label}
-                </a>
-              ))}
-              <Button onClick={() => setIsContactOpen(true)}>Contato</Button>
+                  <span>Produtos</span>
+                  <ChevronDown size={16} />
+                </button>
+                {activeDropdown === "produtos" && (
+                  <div className="mt-2 pl-4 space-y-2">
+                    {dropdownMenus.produtos.map((item, idx) => (
+                      <a key={idx} href="#" className="block text-white/80 hover:text-white">
+                        {item.title}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="py-2 border-b border-white/20">
+                <button 
+                  className="flex items-center justify-between w-full text-white"
+                  onClick={() => toggleDropdown("solucoes")}
+                >
+                  <span>Soluções</span>
+                  <ChevronDown size={16} />
+                </button>
+                {activeDropdown === "solucoes" && (
+                  <div className="mt-2 pl-4 space-y-2">
+                    {dropdownMenus.solucoes.map((item, idx) => (
+                      <a key={idx} href="#" className="block text-white/80 hover:text-white">
+                        {item.title}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <a href="#recursos" className="text-white hover:text-white/80 py-2 border-b border-white/20">
+                Recursos
+              </a>
+              <a href="#precos" className="text-white hover:text-white/80 py-2 border-b border-white/20">
+                Preços
+              </a>
               <Button 
-                variant="outline"
-                onClick={() => setIsLoginOpen(true)}
-                className="flex items-center gap-2"
+                variant="ghost" 
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setIsLoginOpen(true);
+                }}
+                className="text-white hover:bg-white/10"
               >
-                <LogIn size={18} />
-                Login
+                Entrar
               </Button>
               <Button 
-                onClick={() => setIsRegisterOpen(true)}
-                className="flex items-center gap-2"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setIsContactOpen(true);
+                }}
+                className="bg-white text-purple-600 hover:bg-white/90"
               >
-                <UserPlus size={18} />
-                Criar Conta
+                Fale com nossa equipe
               </Button>
             </div>
           </div>
@@ -251,7 +349,7 @@ const Header = () => {
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
-                src="/placeholder.svg" 
+                src="/logo-andora.svg" 
                 alt="Logo" 
                 className="w-16 h-16 mx-auto"
               />

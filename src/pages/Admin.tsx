@@ -6,6 +6,9 @@ import { UserManagement } from "@/components/admin/UserManagement";
 import { Reports } from "@/components/admin/Reports";
 import { Settings } from "@/components/admin/Settings";
 import { Subscription } from "@/components/admin/Subscription";
+import { Sales } from "@/components/admin/Sales";
+import { Products } from "@/components/admin/Products";
+import { Customers } from "@/components/admin/Customers";
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -23,6 +26,12 @@ const AdminDashboard = () => {
         return <Reports />;
       case "subscription":
         return <Subscription />;
+      case "sales":
+        return <Sales />;
+      case "products":
+        return <Products />;
+      case "customers":
+        return <Customers />;
       case "settings":
         return (
           <Settings
