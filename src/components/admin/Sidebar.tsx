@@ -5,6 +5,13 @@ import { X, Menu } from "lucide-react";
 import { menuItems } from "@/config/admin";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -56,7 +63,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
   // Create overlay when sidebar is open on mobile
   const renderOverlay = () => {
-    if (isMobile && isOpen) {
+    if (isMobile && isOpen && !isMobileSheetMode()) {
       return (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-20"
@@ -67,38 +74,15 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     return null;
   };
 
-  return (
-    <>
-      {renderOverlay()}
-      
-      {/* Mobile menu button */}
-      <Button
-        onClick={toggleSidebar}
-        className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
-        variant="secondary"
-        size="icon"
-        aria-label="Toggle menu"
-      >
-        <Menu size={24} />
-      </Button>
+  // Check if we should use the mobile sheet mode (for devices below certain width)
+  const isMobileSheetMode = () => {
+    return isMobile && window.innerWidth < 640;
+  };
 
-      {/* Sidebar */}
-      <div
-        ref={sidebarRef}
-        className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out shadow-md md:shadow-none z-30 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 ${isMobile ? "z-40" : ""}`}
-      >
-        {isMobile && (
-          <button
-            onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 p-1 text-gray-500 hover:text-gray-700"
-            aria-label="Close menu"
-          >
-            <X size={20} />
-          </button>
-        )}
-
+  // Render the sidebar content (used in both desktop sidebar and mobile sheet)
+  const renderSidebarContent = () => {
+    return (
+      <>
         <div className="p-6 border-b">
           <div className="flex items-center mb-4">
             <img
@@ -138,7 +122,81 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             })}
           </ul>
         </nav>
-      </div>
+      </>
+    );
+  };
+
+  // Render normal sidebar for desktop and larger tablets
+  const renderDesktopSidebar = () => {
+    return (
+      <>
+        {renderOverlay()}
+        
+        {/* Sidebar */}
+        <div
+          ref={sidebarRef}
+          className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out shadow-md md:shadow-none z-30 ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0 ${isMobile ? "z-40" : ""}`}
+        >
+          {isMobile && (
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 p-1 text-gray-500 hover:text-gray-700"
+              aria-label="Close menu"
+            >
+              <X size={20} />
+            </button>
+          )}
+
+          {renderSidebarContent()}
+        </div>
+      </>
+    );
+  };
+
+  // Render the bottom sheet for small mobile devices
+  const renderMobileSheet = () => {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button
+            className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
+            variant="secondary"
+            size="icon"
+            aria-label="Open menu"
+          >
+            <Menu size={24} />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="h-[80vh] overflow-y-auto">
+          <SheetHeader className="text-left">
+            <SheetTitle>Menu</SheetTitle>
+          </SheetHeader>
+          {renderSidebarContent()}
+        </SheetContent>
+      </Sheet>
+    );
+  };
+
+  return isMobileSheetMode() ? (
+    renderMobileSheet()
+  ) : (
+    <>
+      {renderDesktopSidebar()}
+      
+      {/* Mobile menu button (for tablet size) */}
+      {isMobile && !isMobileSheetMode() && (
+        <Button
+          onClick={toggleSidebar}
+          className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
+          variant="secondary"
+          size="icon"
+          aria-label="Toggle menu"
+        >
+          <Menu size={24} />
+        </Button>
+      )}
     </>
   );
 };
