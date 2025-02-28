@@ -70,6 +70,13 @@
   animation: gradientAnimation 15s ease infinite;
 }
 
+/* Plans section gradient background */
+.gradient-plans {
+  background: linear-gradient(135deg, hsl(var(--secondary)/0.1) 0%, hsl(var(--primary)/0.15) 100%);
+  background-size: 200% 200%;
+  animation: gradientAnimation 20s ease infinite;
+}
+
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;

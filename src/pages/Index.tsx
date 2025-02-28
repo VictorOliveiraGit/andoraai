@@ -352,7 +352,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="precos" className="py-20 px-6 bg-muted">
+      <section id="precos" className="py-20 px-6 gradient-plans relative">
         <div className="container mx-auto">
           <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
             Escolha o Plano Ideal
