@@ -13,11 +13,14 @@ import {
   DollarSign, 
   BarChart, 
   LineChart, 
-  Search
+  Search,
+  Shield,
+  Zap
 } from "lucide-react";
 
 const Index = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState("");
+  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   
   useEffect(() => {
     const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -62,50 +65,6 @@ const Index = () => {
     },
   ];
 
-  const plans = [
-    {
-      name: "Starter",
-      price: "R$ 49",
-      period: "/mês",
-      description: "Perfeito para começar",
-      features: [
-        "Até 1.000 usuários",
-        "Suporte básico",
-        "Atualizações gratuitas",
-        "API limitada",
-      ],
-      highlighted: false,
-    },
-    {
-      name: "Pro",
-      price: "R$ 99",
-      period: "/mês",
-      description: "Para negócios em crescimento",
-      features: [
-        "Até 10.000 usuários",
-        "Suporte prioritário",
-        "Atualizações premium",
-        "API completa",
-        "Dashboard avançado",
-      ],
-      highlighted: true,
-    },
-    {
-      name: "Enterprise",
-      price: "R$ 249",
-      period: "/mês",
-      description: "Para grandes empresas",
-      features: [
-        "Usuários ilimitados",
-        "Suporte dedicado 24/7",
-        "Customizações exclusivas",
-        "API ilimitada",
-        "Recursos enterprise",
-      ],
-      highlighted: false,
-    },
-  ];
-
   const testimonials = [
     {
       name: "Ana Silva",
@@ -146,7 +105,19 @@ const Index = () => {
     { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-primary" /> },
   ];
 
-  // Removing the partners array that was causing the Stripe images to appear
+  // Handler para simular o subscrine de um plano
+  const handleSubscribe = (planType: string) => {
+    toast.info(`Redirecionando para o checkout do plano ${planType}...`);
+  };
+
+  // Funções para gerenciar o hover nos planos (efeito de escalada)
+  const handleMouseEnter = (planType: string) => {
+    setHoveredPlan(planType);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredPlan(null);
+  };
 
   return (
     <div className="min-h-screen font-glacial">
@@ -245,45 +216,162 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Pricing Section - Updated to match Admin Subscription styling */}
       <section id="precos" className="py-20 px-6 gradient-plans relative">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
-            Escolha o Plano Ideal
-          </h2>
+        <div className="container mx-auto space-y-10">
+          <h2 className="text-3xl font-bold text-primary text-center">Planos de Assinatura</h2>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`p-6 animate-on-scroll ${
-                  plan.highlighted 
-                    ? "border-primary bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg transform scale-105" 
-                    : "bg-white border border-primary/10"
-                }`}
-              >
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-codec-bold mb-2">{plan.name}</h3>
-                  <div className="text-3xl font-codec mb-2">
-                    {plan.price}
-                    <span className="text-sm">{plan.period}</span>
+            {/* Plano Básico */}
+            <Card 
+              className={`p-6 space-y-6 border border-primary/20 transition-all duration-300 hover:shadow-lg ${
+                hoveredPlan === 'basic' ? 'transform scale-105' : ''
+              }`}
+              onMouseEnter={() => handleMouseEnter('basic')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="relative overflow-hidden">
+                <div className="flex items-center gap-2 z-10 relative">
+                  <div className="p-2 bg-primary/10 rounded-full">
+                    <CreditCard className="w-6 h-6 text-primary" />
                   </div>
-                  <p className="text-sm opacity-80">{plan.description}</p>
+                  <h3 className="text-xl font-semibold text-primary">Básico</h3>
                 </div>
-                <ul className="space-y-4 mb-6">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center">
-                      <Check size={20} className={`mr-2 ${plan.highlighted ? 'text-secondary' : 'text-primary'}`} />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Button 
-                  className={`w-full ${plan.highlighted ? "bg-secondary text-primary hover:bg-secondary/90" : "bg-white text-primary hover:bg-primary/5 border border-primary/20"}`}
-                >
-                  Começar Agora
-                </Button>
-              </Card>
-            ))}
+              </div>
+              
+              <div className="space-y-1">
+                <p className="text-4xl font-bold text-primary">R$ 29<span className="text-sm font-normal text-gray-500">/mês</span></p>
+                <p className="text-sm text-gray-500">Ideal para pequenos negócios</p>
+              </div>
+              
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Até 100 usuários</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Relatórios básicos</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Suporte por email</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+                onClick={() => handleSubscribe('basic')}
+              >
+                Assinar Plano Básico
+              </Button>
+            </Card>
+
+            {/* Plano Pro */}
+            <Card 
+              className={`p-6 space-y-6 border-2 border-secondary bg-gradient-to-b from-primary to-primary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl ${
+                hoveredPlan === 'pro' ? 'transform scale-105' : ''
+              }`}
+              onMouseEnter={() => handleMouseEnter('pro')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="absolute -top-4 right-4 bg-secondary text-primary font-bold text-xs px-3 py-1 rounded-full">
+                POPULAR
+              </div>
+              
+              <div className="relative overflow-hidden">
+                <div className="flex items-center gap-2 z-10 relative">
+                  <div className="p-2 bg-secondary/20 rounded-full">
+                    <Shield className="w-6 h-6 text-secondary" />
+                  </div>
+                  <h3 className="text-xl font-semibold">Pro</h3>
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                <p className="text-4xl font-bold">R$ 59<span className="text-sm font-normal text-white/70">/mês</span></p>
+                <p className="text-sm text-white/70">Para negócios em crescimento</p>
+              </div>
+              
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Até 1000 usuários</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Relatórios avançados</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Suporte prioritário</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>API access</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full bg-secondary hover:bg-secondary/90 text-primary"
+                onClick={() => handleSubscribe('pro')}
+              >
+                Assinar Plano Pro
+              </Button>
+            </Card>
+
+            {/* Plano Enterprise */}
+            <Card 
+              className={`p-6 space-y-6 border border-primary/20 transition-all duration-300 hover:shadow-lg ${
+                hoveredPlan === 'enterprise' ? 'transform scale-105' : ''
+              }`}
+              onMouseEnter={() => handleMouseEnter('enterprise')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="relative overflow-hidden">
+                <div className="flex items-center gap-2 z-10 relative">
+                  <div className="p-2 bg-primary/10 rounded-full">
+                    <Zap className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-primary">Enterprise</h3>
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                <p className="text-4xl font-bold text-primary">R$ 99<span className="text-sm font-normal text-gray-500">/mês</span></p>
+                <p className="text-sm text-gray-500">Para grandes empresas</p>
+              </div>
+              
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Usuários ilimitados</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Relatórios personalizados</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Suporte 24/7</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>API dedicated</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-secondary" />
+                  <span>Setup personalizado</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+                onClick={() => handleSubscribe('enterprise')}
+              >
+                Assinar Plano Enterprise
+              </Button>
+            </Card>
           </div>
         </div>
       </section>
@@ -312,8 +400,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Removed Partners Section that was showing the Stripe images */}
 
       {/* CTA Section */}
       <section className="py-20 px-6 gradient-wave text-white">
