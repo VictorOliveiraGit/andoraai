@@ -43,22 +43,22 @@ const Index = () => {
     {
       title: "Solução Completa",
       description: "Tudo que você precisa para crescer seu negócio.",
-      icon: <Check className="text-secondary" />
+      icon: <Check className="text-primary" />
     },
     {
       title: "Suporte 24/7",
       description: "Estamos aqui para ajudar você em qualquer momento.",
-      icon: <Check className="text-secondary" />
+      icon: <Check className="text-primary" />
     },
     {
       title: "Integração Fácil",
       description: "Configure em minutos e comece a usar.",
-      icon: <Check className="text-secondary" />
+      icon: <Check className="text-primary" />
     },
     {
       title: "Resultados Garantidos",
       description: "Satisfação garantida ou seu dinheiro de volta.",
-      icon: <Check className="text-secondary" />
+      icon: <Check className="text-primary" />
     },
   ];
 
@@ -133,17 +133,17 @@ const Index = () => {
   };
 
   const productDropdownItems = [
-    { title: "Payments", description: "Pagamentos online", icon: <CreditCard className="w-6 h-6 text-secondary" /> },
-    { title: "Terminal", description: "Pagamentos presenciais", icon: <CreditCard className="w-6 h-6 text-secondary" /> },
-    { title: "Connect", description: "Pagamentos para plataformas", icon: <CreditCard className="w-6 h-6 text-secondary" /> },
-    { title: "Billing", description: "Assinaturas e pagamentos por uso", icon: <CreditCard className="w-6 h-6 text-secondary" /> },
+    { title: "Payments", description: "Pagamentos online", icon: <CreditCard className="w-6 h-6 text-primary" /> },
+    { title: "Terminal", description: "Pagamentos presenciais", icon: <CreditCard className="w-6 h-6 text-primary" /> },
+    { title: "Connect", description: "Pagamentos para plataformas", icon: <CreditCard className="w-6 h-6 text-primary" /> },
+    { title: "Billing", description: "Assinaturas e pagamentos por uso", icon: <CreditCard className="w-6 h-6 text-primary" /> },
   ];
 
   const solutionsDropdownItems = [
-    { title: "Comércio eletrônico", description: "Soluções para e-commerce", icon: <DollarSign className="w-6 h-6 text-secondary" /> },
-    { title: "Marketplace", description: "Plataformas multivendedor", icon: <DollarSign className="w-6 h-6 text-secondary" /> },
-    { title: "SaaS", description: "Para empresas de software", icon: <BarChart className="w-6 h-6 text-secondary" /> },
-    { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-secondary" /> },
+    { title: "Comércio eletrônico", description: "Soluções para e-commerce", icon: <DollarSign className="w-6 h-6 text-primary" /> },
+    { title: "Marketplace", description: "Plataformas multivendedor", icon: <DollarSign className="w-6 h-6 text-primary" /> },
+    { title: "SaaS", description: "Para empresas de software", icon: <BarChart className="w-6 h-6 text-primary" /> },
+    { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-primary" /> },
   ];
 
   const partners = [
@@ -153,19 +153,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen font-glacial">
-      {/* Header com dropdown menus inspirado na imagem do Stripe */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-primary to-secondary">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
         <nav className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-10">
-              <a href="/" className="text-2xl font-bold text-white">
+              <a href="/" className="text-2xl font-bold text-primary">
                 Andora
               </a>
 
               <div className="hidden lg:flex items-center space-x-8">
                 <div className="relative">
                   <button 
-                    className="text-white flex items-center gap-1 hover:opacity-80 transition-colors"
+                    className="text-gray-700 flex items-center gap-1 hover:text-primary transition-colors"
                     onClick={() => handleDropdownToggle("produtos")}
                   >
                     Produtos <ChevronDown size={16} />
@@ -187,7 +187,7 @@ const Index = () => {
 
                 <div className="relative">
                   <button 
-                    className="text-white flex items-center gap-1 hover:opacity-80 transition-colors"
+                    className="text-gray-700 flex items-center gap-1 hover:text-primary transition-colors"
                     onClick={() => handleDropdownToggle("solucoes")}
                   >
                     Soluções <ChevronDown size={16} />
@@ -207,15 +207,15 @@ const Index = () => {
                   )}
                 </div>
 
-                <a href="#" className="text-white hover:opacity-80 transition-colors">
+                <a href="#" className="text-gray-700 hover:text-primary transition-colors">
                   Desenvolvedores
                 </a>
 
-                <a href="#" className="text-white hover:opacity-80 transition-colors">
+                <a href="#" className="text-gray-700 hover:text-primary transition-colors">
                   Recursos
                 </a>
 
-                <a href="#precos" className="text-white hover:opacity-80 transition-colors">
+                <a href="#precos" className="text-gray-700 hover:text-primary transition-colors">
                   Preços
                 </a>
               </div>
@@ -224,17 +224,17 @@ const Index = () => {
             <div className="hidden lg:flex items-center space-x-4">
               <a 
                 href="/admin" 
-                className="text-white hover:opacity-80 transition-colors flex items-center gap-1"
+                className="text-gray-700 hover:text-primary transition-colors flex items-center gap-1"
               >
                 Entrar <ArrowRight size={16} />
               </a>
-              <Button className="bg-white text-primary hover:bg-white/90">
+              <Button>
                 Fale com nossa equipe
               </Button>
             </div>
 
             <button
-              className="lg:hidden text-white"
+              className="lg:hidden text-gray-700"
               onClick={() => setIsDropdownOpen(isDropdownOpen ? "" : "mobile")}
             >
               {isDropdownOpen ? <span>✕</span> : <span>☰</span>}
@@ -244,13 +244,13 @@ const Index = () => {
           {isDropdownOpen === "mobile" && (
             <div className="lg:hidden py-4">
               <div className="flex flex-col space-y-4">
-                <a href="#" className="text-white">Produtos</a>
-                <a href="#" className="text-white">Soluções</a>
-                <a href="#" className="text-white">Desenvolvedores</a>
-                <a href="#" className="text-white">Recursos</a>
-                <a href="#precos" className="text-white">Preços</a>
-                <a href="/admin" className="text-white">Entrar</a>
-                <Button className="bg-white text-primary hover:bg-white/90 w-full">
+                <a href="#" className="text-gray-700">Produtos</a>
+                <a href="#" className="text-gray-700">Soluções</a>
+                <a href="#" className="text-gray-700">Desenvolvedores</a>
+                <a href="#" className="text-gray-700">Recursos</a>
+                <a href="#precos" className="text-gray-700">Preços</a>
+                <a href="/admin" className="text-gray-700">Entrar</a>
+                <Button className="w-full">
                   Fale com nossa equipe
                 </Button>
               </div>
@@ -259,8 +259,8 @@ const Index = () => {
         </nav>
       </header>
       
-      {/* Hero Section - Inspirado na imagem do Stripe */}
-      <section id="inicio" className="pt-32 pb-20 px-6 bg-gradient-to-r from-primary to-secondary text-white relative overflow-hidden">
+      {/* Hero Section */}
+      <section id="inicio" className="pt-32 pb-20 px-6 bg-background text-foreground relative overflow-hidden">
         <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div className="text-left relative z-10">
             <h1 className="text-4xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight">
@@ -277,10 +277,10 @@ const Index = () => {
                 <input 
                   type="email" 
                   placeholder="Seu e-mail"
-                  className="px-4 py-3 rounded-md w-full sm:w-64 text-gray-800"
+                  className="px-4 py-3 rounded-md w-full sm:w-64 text-gray-800 border border-gray-300"
                 />
               </div>
-              <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90">
+              <Button size="lg">
                 Comece agora
                 <ArrowRight className="ml-2" size={16} />
               </Button>
@@ -305,7 +305,7 @@ const Index = () => {
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg h-24 flex items-center justify-center">
                   <div className="w-full h-12 bg-white rounded-lg relative overflow-hidden">
-                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-r from-primary/30 to-secondary/70 rounded-b-lg"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-r from-blue-200 to-blue-300 rounded-b-lg"></div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -335,14 +335,14 @@ const Index = () => {
       {/* Features Section */}
       <section id="recursos" className="py-20 px-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll text-primary">
+          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
             Por Que Escolher Nossa Solução
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow border border-secondary/20">
+              <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow">
                 <div className="mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-codec mb-3 text-primary">{feature.title}</h3>
+                <h3 className="text-xl font-codec mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </Card>
             ))}
@@ -351,7 +351,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="precos" className="py-20 px-6 bg-gradient-to-r from-primary to-secondary text-white">
+      <section id="precos" className="py-20 px-6 bg-muted">
         <div className="container mx-auto">
           <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
             Escolha o Plano Ideal
@@ -362,8 +362,8 @@ const Index = () => {
                 key={index} 
                 className={`p-6 animate-on-scroll ${
                   plan.highlighted 
-                    ? "border-secondary bg-white text-primary transform scale-105" 
-                    : "bg-white/5 text-white"
+                    ? "border-primary bg-white shadow-lg transform scale-105" 
+                    : "bg-white"
                 }`}
               >
                 <div className="text-center mb-6">
@@ -377,17 +377,13 @@ const Index = () => {
                 <ul className="space-y-4 mb-6">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-center">
-                      <Check size={20} className="mr-2 text-secondary" />
+                      <Check size={20} className="mr-2 text-primary" />
                       {feature}
                     </li>
                   ))}
                 </ul>
                 <Button 
-                  className={`w-full ${
-                    plan.highlighted 
-                      ? "bg-secondary text-primary hover:bg-secondary/90"
-                      : "bg-secondary text-primary hover:bg-secondary/90"
-                  }`}
+                  className={`w-full ${plan.highlighted ? "" : "variant-outline"}`}
                 >
                   Começar Agora
                 </Button>
@@ -400,20 +396,20 @@ const Index = () => {
       {/* Testimonials Section */}
       <section id="depoimentos" className="py-20 px-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll text-primary">
+          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
             O Que Nossos Clientes Dizem
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow border border-secondary/20">
+              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow">
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="text-secondary" size={16} fill="#C6BA77" />
+                    <Star key={i} className="text-yellow-400" size={16} fill="#EAB308" />
                   ))}
                 </div>
                 <p className="text-muted-foreground mb-6 text-base leading-relaxed">"{testimonial.comment}"</p>
                 <div>
-                  <p className="font-codec text-primary text-lg">{testimonial.name}</p>
+                  <p className="font-codec text-lg">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground mt-1">{testimonial.role}</p>
                 </div>
               </Card>
@@ -439,7 +435,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-primary to-secondary text-white">
+      <section className="py-20 px-6 bg-primary text-primary-foreground">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-codec-bold mb-6 animate-on-scroll">
             Pronto para Começar?
@@ -450,14 +446,14 @@ const Index = () => {
           <div className="flex justify-center gap-4">
             <Button
               size="lg"
-              className="animate-on-scroll bg-white text-primary hover:bg-white/90"
+              className="animate-on-scroll bg-white text-primary-foreground hover:bg-white/90"
             >
               Comece Gratuitamente
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="animate-on-scroll border-white text-white hover:bg-white/10"
+              className="animate-on-scroll"
             >
               Saiba mais
             </Button>
