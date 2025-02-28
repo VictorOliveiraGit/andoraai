@@ -102,18 +102,18 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-700 via-purple-500 to-orange-400">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <a href="/" className="text-2xl font-bold text-white">
+            <a href="/" className="text-2xl font-bold text-gray-700">
               <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
             </a>
 
             <div className="hidden md:flex items-center space-x-8">
               <div className="relative">
                 <button 
-                  className="text-white flex items-center gap-1 hover:opacity-80 transition-colors"
+                  className="text-gray-700 flex items-center gap-1 hover:opacity-80 transition-colors"
                   onClick={() => toggleDropdown("produtos")}
                 >
                   Produtos <ChevronDown size={16} />
@@ -132,7 +132,7 @@ const Header = () => {
 
               <div className="relative">
                 <button 
-                  className="text-white flex items-center gap-1 hover:opacity-80 transition-colors"
+                  className="text-gray-700 flex items-center gap-1 hover:opacity-80 transition-colors"
                   onClick={() => toggleDropdown("solucoes")}
                 >
                   Soluções <ChevronDown size={16} />
@@ -149,10 +149,10 @@ const Header = () => {
                 )}
               </div>
 
-              <a href="#recursos" className="text-white hover:opacity-80 transition-colors">
+              <a href="#recursos" className="text-gray-700 hover:opacity-80 transition-colors">
                 Recursos
               </a>
-              <a href="#precos" className="text-white hover:opacity-80 transition-colors">
+              <a href="#precos" className="text-gray-700 hover:opacity-80 transition-colors">
                 Preços
               </a>
             </div>
@@ -162,20 +162,20 @@ const Header = () => {
             <Button 
               variant="ghost" 
               onClick={() => setIsLoginOpen(true)}
-              className="text-white hover:bg-white/10"
+              className="text-gray-700 hover:bg-gray-100"
             >
               Entrar
             </Button>
             <Button 
               onClick={() => setIsContactOpen(true)}
-              className="bg-white text-purple-600 hover:bg-white/90"
+              className="bg-primary text-white hover:bg-primary/90"
             >
               Fale com nossa equipe
             </Button>
           </div>
 
           <button
-            className="md:hidden text-white"
+            className="md:hidden text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X /> : <Menu />}
@@ -185,9 +185,9 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4">
             <div className="flex flex-col space-y-4">
-              <div className="py-2 border-b border-white/20">
+              <div className="py-2 border-b border-gray-200">
                 <button 
-                  className="flex items-center justify-between w-full text-white"
+                  className="flex items-center justify-between w-full text-gray-700"
                   onClick={() => toggleDropdown("produtos")}
                 >
                   <span>Produtos</span>
@@ -196,7 +196,7 @@ const Header = () => {
                 {activeDropdown === "produtos" && (
                   <div className="mt-2 pl-4 space-y-2">
                     {dropdownMenus.produtos.map((item, idx) => (
-                      <a key={idx} href="#" className="block text-white/80 hover:text-white">
+                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900">
                         {item.title}
                       </a>
                     ))}
@@ -204,9 +204,9 @@ const Header = () => {
                 )}
               </div>
 
-              <div className="py-2 border-b border-white/20">
+              <div className="py-2 border-b border-gray-200">
                 <button 
-                  className="flex items-center justify-between w-full text-white"
+                  className="flex items-center justify-between w-full text-gray-700"
                   onClick={() => toggleDropdown("solucoes")}
                 >
                   <span>Soluções</span>
@@ -215,7 +215,7 @@ const Header = () => {
                 {activeDropdown === "solucoes" && (
                   <div className="mt-2 pl-4 space-y-2">
                     {dropdownMenus.solucoes.map((item, idx) => (
-                      <a key={idx} href="#" className="block text-white/80 hover:text-white">
+                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900">
                         {item.title}
                       </a>
                     ))}
@@ -223,10 +223,10 @@ const Header = () => {
                 )}
               </div>
 
-              <a href="#recursos" className="text-white hover:text-white/80 py-2 border-b border-white/20">
+              <a href="#recursos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
                 Recursos
               </a>
-              <a href="#precos" className="text-white hover:text-white/80 py-2 border-b border-white/20">
+              <a href="#precos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
                 Preços
               </a>
               <Button 
@@ -235,7 +235,7 @@ const Header = () => {
                   setIsMenuOpen(false);
                   setIsLoginOpen(true);
                 }}
-                className="text-white hover:bg-white/10"
+                className="text-gray-700 hover:bg-gray-100"
               >
                 Entrar
               </Button>
@@ -244,7 +244,7 @@ const Header = () => {
                   setIsMenuOpen(false);
                   setIsContactOpen(true);
                 }}
-                className="bg-white text-purple-600 hover:bg-white/90"
+                className="bg-primary text-white hover:bg-primary/90"
               >
                 Fale com nossa equipe
               </Button>
