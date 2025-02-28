@@ -72,7 +72,7 @@ const AdminContent = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar Component */}
       <Sidebar
         isOpen={isSidebarOpen}
@@ -81,13 +81,13 @@ const AdminContent = () => {
       
       {/* Main Content Area */}
       <div 
-        className={`flex-1 flex flex-col transition-all duration-300 ${
+        className={`flex-1 flex flex-col transition-all duration-300 h-full overflow-hidden ${
           isSidebarOpen ? "md:ml-64" : "md:ml-0"
         }`}
       >
         {/* Content Container with scrollable area */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-8">
+          <div className="p-4 md:p-8 pt-16 md:pt-8">
             {/* Logout Button */}
             <div className="flex justify-end mb-6">
               <Button 

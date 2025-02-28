@@ -135,9 +135,9 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         {/* Sidebar */}
         <div
           ref={sidebarRef}
-          className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out shadow-md md:shadow-none z-30 ${
+          className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto z-30 shadow-md md:shadow-none transition-transform duration-300 ease-in-out ${
             isOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 ${isMobile ? "z-40" : ""}`}
+          } md:translate-x-0 md:relative`}
         >
           {isMobile && (
             <button
@@ -169,10 +169,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             <Menu size={24} />
           </Button>
         </SheetTrigger>
-        <SheetContent side="bottom" className="h-[80vh] overflow-y-auto">
-          <SheetHeader className="text-left">
-            <SheetTitle>Menu</SheetTitle>
-          </SheetHeader>
+        <SheetContent side="left" className="w-[280px] overflow-y-auto p-0">
           {renderSidebarContent()}
         </SheetContent>
       </Sheet>
