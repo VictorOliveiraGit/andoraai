@@ -254,7 +254,7 @@ const Header = () => {
       </nav>
 
       <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto">
           <DialogHeader>
             <DialogTitle>Entre em Contato</DialogTitle>
           </DialogHeader>
@@ -302,7 +302,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -316,7 +316,7 @@ const Header = () => {
           
           <div className="space-y-4">
             {/* Opções de Login Social */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2"
@@ -373,7 +373,7 @@ const Header = () => {
               <div className="text-right">
                 <Button 
                   variant="link" 
-                  className="text-sm text-primary hover:text-primary/80"
+                  className="text-sm text-primary hover:text-primary/80 p-0 h-auto"
                   type="button"
                 >
                   Esqueci minha senha
@@ -402,7 +402,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -416,7 +416,7 @@ const Header = () => {
           
           <div className="space-y-4">
             {/* Opções de Registro Social */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2"
