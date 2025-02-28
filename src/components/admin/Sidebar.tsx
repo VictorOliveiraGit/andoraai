@@ -2,8 +2,8 @@
 import { useEffect, useRef } from "react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { X, Menu } from "lucide-react";
-import { adminConfig } from "@/config/admin";
-import { useMobile } from "@/hooks/use-mobile";
+import { menuItems } from "@/config/admin";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,7 +13,7 @@ interface SidebarProps {
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const { activeSection, setActiveSection, avatar, name } = useAdmin();
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
@@ -85,7 +85,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
         <nav className="p-4">
           <ul className="space-y-1">
-            {adminConfig.mainNav.map((item) => (
+            {menuItems.map((item) => (
               <li key={item.id}>
                 <button
                   className={`w-full text-left flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
@@ -98,8 +98,8 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                     if (isMobile) setIsOpen(false);
                   }}
                 >
-                  {item.icon}
-                  <span>{item.title}</span>
+                  <item.icon className="w-5 h-5 mr-2" />
+                  <span>{item.label}</span>
                 </button>
               </li>
             ))}
