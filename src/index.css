@@ -58,3 +58,18 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Responsive utility classes */
+@layer utilities {
+  .responsive-container {
+    @apply w-full px-4 md:px-6 lg:px-8 mx-auto;
+  }
+  
+  .responsive-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4;
+  }
+  
+  .responsive-flex {
+    @apply flex flex-col sm:flex-row items-start sm:items-center;
+  }
+}

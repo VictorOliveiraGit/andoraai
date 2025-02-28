@@ -29,14 +29,24 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     };
   }, [isMobile, isOpen, setIsOpen]);
 
-  // Handle sidebar visibility on mobile
+  // Handle sidebar visibility on resize
   useEffect(() => {
-    if (!isMobile && !isOpen) {
-      setIsOpen(true);
-    } else if (isMobile && isOpen) {
-      setIsOpen(false);
-    }
-  }, [isMobile, setIsOpen, isOpen]);
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && !isOpen) {
+        setIsOpen(true);
+      } else if (window.innerWidth < 768 && isOpen && isMobile) {
+        setIsOpen(false);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isMobile, isOpen, setIsOpen]);
 
   // Toggle sidebar on menu button click
   const toggleSidebar = () => {
@@ -48,15 +58,16 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       {/* Mobile menu button */}
       <button
         onClick={toggleSidebar}
-        className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white sm:hidden"
+        className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
+        aria-label="Toggle menu"
       >
-        <Menu />
+        <Menu size={24} />
       </button>
 
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out transform z-30 shadow-md sm:translate-x-0 sm:static ${
+        className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out transform z-30 shadow-md md:translate-x-0 md:relative ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -64,6 +75,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <button
             onClick={() => setIsOpen(false)}
             className="absolute top-4 right-4 p-1 text-gray-500 hover:text-gray-700"
+            aria-label="Close menu"
           >
             <X size={20} />
           </button>
@@ -90,7 +102,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               return (
                 <li key={item.id}>
                   <button
-                    className={`w-full text-left flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
+                    className={`w-full text-left flex items-center px-3 py-2 rounded-md transition-colors ${
                       activeSection === item.id
                         ? "bg-gray-100 text-secondary"
                         : "text-gray-700 hover:bg-gray-100"

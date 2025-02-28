@@ -39,13 +39,13 @@ const AdminContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row overflow-hidden">
       <Sidebar
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
       />
-      <div className="flex-1 sm:ml-64">
-        <div className="p-4 sm:p-8 pb-24 sm:pb-8">
+      <div className="flex-1 md:ml-64 w-full overflow-y-auto">
+        <div className="p-4 md:p-8 pb-24 md:pb-8">
           {renderContent()}
         </div>
       </div>
