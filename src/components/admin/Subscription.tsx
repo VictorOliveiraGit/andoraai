@@ -24,7 +24,7 @@ export const Subscription = () => {
     <div className="space-y-10 gradient-plans p-4 md:p-10 rounded-xl">
       <h2 className="text-2xl md:text-3xl font-bold text-primary">Planos de Assinatura</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Plano Básico */}
         <Card 
           className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
