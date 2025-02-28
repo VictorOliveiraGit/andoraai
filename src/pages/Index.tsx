@@ -260,13 +260,13 @@ const Index = () => {
       </header>
       
       {/* Hero Section */}
-      <section id="inicio" className="pt-32 pb-20 px-6 bg-background text-foreground relative overflow-hidden">
+      <section id="inicio" className="pt-32 pb-20 px-6 gradient-wave text-foreground relative overflow-hidden">
         <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div className="text-left relative z-10">
-            <h1 className="text-4xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight">
+            <h1 className="text-4xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight text-white">
               Infraestrutura financeira para a internet
             </h1>
-            <p className="text-lg md:text-xl mb-8 animate-fadeIn font-codec opacity-90 max-w-lg">
+            <p className="text-lg md:text-xl mb-8 animate-fadeIn font-codec text-white/90 max-w-lg">
               Faça como os milhões de empresas que confiam na Andora
               para receber pagamentos online e presenciais, oferecer
               serviços financeiros integrados, capacitar modelos de
@@ -280,7 +280,7 @@ const Index = () => {
                   className="px-4 py-3 rounded-md w-full sm:w-64 text-gray-800 border border-gray-300"
                 />
               </div>
-              <Button size="lg">
+              <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90">
                 Comece agora
                 <ArrowRight className="ml-2" size={16} />
               </Button>
@@ -305,7 +305,7 @@ const Index = () => {
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg h-24 flex items-center justify-center">
                   <div className="w-full h-12 bg-white rounded-lg relative overflow-hidden">
-                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-r from-blue-200 to-blue-300 rounded-b-lg"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-r from-primary/20 to-secondary/50 rounded-b-lg"></div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -330,17 +330,18 @@ const Index = () => {
             </div>
           </div>
         </div>
+        <div className="absolute -bottom-24 left-0 right-0 h-24 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSIxMDAiIHZpZXdCb3g9IjAgMCAxNDQwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwQzEyMCAyMCAyNDAgMjAgMzYwIDIwQzQ4MCAyMCA2MDAgNDAgNzIwIDUwQzg0MCA2MCA5NjAgNjAgMTA4MCA2MEMxMjAwIDYwIDEzMjAgNDAgMTQ0MCAwVjEwMEgwVjBaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==')]"></div>
       </section>
 
       {/* Features Section */}
-      <section id="recursos" className="py-20 px-6">
+      <section id="recursos" className="py-20 px-6 mt-16">
         <div className="container mx-auto">
           <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
             Por Que Escolher Nossa Solução
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow">
+              <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/10">
                 <div className="mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-codec mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
@@ -362,8 +363,8 @@ const Index = () => {
                 key={index} 
                 className={`p-6 animate-on-scroll ${
                   plan.highlighted 
-                    ? "border-primary bg-white shadow-lg transform scale-105" 
-                    : "bg-white"
+                    ? "border-primary bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg transform scale-105" 
+                    : "bg-white border border-primary/10"
                 }`}
               >
                 <div className="text-center mb-6">
@@ -377,13 +378,13 @@ const Index = () => {
                 <ul className="space-y-4 mb-6">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-center">
-                      <Check size={20} className="mr-2 text-primary" />
+                      <Check size={20} className={`mr-2 ${plan.highlighted ? 'text-secondary' : 'text-primary'}`} />
                       {feature}
                     </li>
                   ))}
                 </ul>
                 <Button 
-                  className={`w-full ${plan.highlighted ? "" : "variant-outline"}`}
+                  className={`w-full ${plan.highlighted ? "bg-secondary text-primary hover:bg-secondary/90" : "bg-white text-primary hover:bg-primary/5 border border-primary/20"}`}
                 >
                   Começar Agora
                 </Button>
@@ -401,10 +402,10 @@ const Index = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow">
+              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/10">
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="text-yellow-400" size={16} fill="#EAB308" />
+                    <Star key={i} className="text-secondary" size={16} fill="hsl(var(--secondary))" />
                   ))}
                 </div>
                 <p className="text-muted-foreground mb-6 text-base leading-relaxed">"{testimonial.comment}"</p>
@@ -435,7 +436,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-primary text-primary-foreground">
+      <section className="py-20 px-6 gradient-wave text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-codec-bold mb-6 animate-on-scroll">
             Pronto para Começar?
@@ -446,14 +447,14 @@ const Index = () => {
           <div className="flex justify-center gap-4">
             <Button
               size="lg"
-              className="animate-on-scroll bg-white text-primary-foreground hover:bg-white/90"
+              className="animate-on-scroll bg-secondary text-primary hover:bg-secondary/90"
             >
               Comece Gratuitamente
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="animate-on-scroll"
+              className="animate-on-scroll bg-transparent border border-white/30 text-white hover:bg-white/10"
             >
               Saiba mais
             </Button>
