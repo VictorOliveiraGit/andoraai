@@ -27,7 +27,7 @@ export const Subscription = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Plano Básico */}
         <Card 
-          className={`p-6 space-y-6 border border-primary/20 transition-all duration-300 hover:shadow-lg ${
+          className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
             hoveredPlan === 'basic' ? 'transform scale-105' : ''
           }`}
           onMouseEnter={() => handleMouseEnter('basic')}
@@ -42,12 +42,12 @@ export const Subscription = () => {
             </div>
           </div>
           
-          <div className="space-y-1">
+          <div className="space-y-1 mt-6">
             <p className="text-4xl font-bold text-primary">R$ 29<span className="text-sm font-normal text-gray-500">/mês</span></p>
             <p className="text-sm text-gray-500">Ideal para pequenos negócios</p>
           </div>
           
-          <ul className="space-y-3">
+          <ul className="space-y-3 mt-6 flex-grow">
             <li className="flex items-center gap-2">
               <Check className="w-5 h-5 text-secondary" />
               <span>Até 100 usuários</span>
@@ -63,7 +63,7 @@ export const Subscription = () => {
           </ul>
           
           <Button 
-            className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+            className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20 mt-6"
             onClick={() => handleSubscribe('basic')}
           >
             Assinar Plano Básico
@@ -72,7 +72,7 @@ export const Subscription = () => {
 
         {/* Plano Pro */}
         <Card 
-          className={`p-6 space-y-6 border-2 border-secondary bg-gradient-to-b from-primary to-primary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl ${
+          className={`p-6 flex flex-col h-full border-2 border-secondary bg-gradient-to-b from-primary to-primary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl ${
             hoveredPlan === 'pro' ? 'transform scale-105' : ''
           }`}
           onMouseEnter={() => handleMouseEnter('pro')}
@@ -87,12 +87,12 @@ export const Subscription = () => {
             </div>
           </div>
           
-          <div className="space-y-1">
+          <div className="space-y-1 mt-6">
             <p className="text-4xl font-bold">R$ 59<span className="text-sm font-normal text-white/70">/mês</span></p>
             <p className="text-sm text-white/70">Para negócios em crescimento</p>
           </div>
           
-          <ul className="space-y-3">
+          <ul className="space-y-3 mt-6 flex-grow">
             <li className="flex items-center gap-2">
               <Check className="w-5 h-5 text-secondary" />
               <span>Até 1000 usuários</span>
@@ -112,7 +112,7 @@ export const Subscription = () => {
           </ul>
           
           <Button 
-            className="w-full bg-secondary hover:bg-secondary/90 text-primary"
+            className="w-full bg-secondary hover:bg-secondary/90 text-primary mt-6"
             onClick={() => handleSubscribe('pro')}
           >
             Assinar Plano Pro
@@ -121,7 +121,7 @@ export const Subscription = () => {
 
         {/* Plano Enterprise */}
         <Card 
-          className={`p-6 space-y-6 border border-primary/20 transition-all duration-300 hover:shadow-lg ${
+          className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
             hoveredPlan === 'enterprise' ? 'transform scale-105' : ''
           }`}
           onMouseEnter={() => handleMouseEnter('enterprise')}
@@ -136,12 +136,12 @@ export const Subscription = () => {
             </div>
           </div>
           
-          <div className="space-y-1">
+          <div className="space-y-1 mt-6">
             <p className="text-4xl font-bold text-primary">R$ 99<span className="text-sm font-normal text-gray-500">/mês</span></p>
             <p className="text-sm text-gray-500">Para grandes empresas</p>
           </div>
           
-          <ul className="space-y-3">
+          <ul className="space-y-3 mt-6 flex-grow">
             <li className="flex items-center gap-2">
               <Check className="w-5 h-5 text-secondary" />
               <span>Usuários ilimitados</span>
@@ -165,7 +165,7 @@ export const Subscription = () => {
           </ul>
           
           <Button 
-            className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+            className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20 mt-6"
             onClick={() => handleSubscribe('enterprise')}
           >
             Assinar Plano Enterprise
