@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Sidebar } from "@/components/admin/Sidebar";
 import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagement";
@@ -9,14 +8,14 @@ import { Subscription } from "@/components/admin/Subscription";
 import { Sales } from "@/components/admin/Sales";
 import { Products } from "@/components/admin/Products";
 import { Customers } from "@/components/admin/Customers";
+import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
 
-const AdminDashboard = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
-  const [avatar, setAvatar] = useState("/placeholder.svg");
-  const [name, setName] = useState("Admin User");
-  const [email, setEmail] = useState("admin@example.com");
-  const [phone, setPhone] = useState("(00) 00000-0000");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const AdminContent = () => {
+  const { 
+    activeSection, 
+    isSidebarOpen, 
+    setIsSidebarOpen 
+  } = useAdmin();
 
   const renderContent = () => {
     switch (activeSection) {
@@ -33,18 +32,7 @@ const AdminDashboard = () => {
       case "customers":
         return <Customers />;
       case "settings":
-        return (
-          <Settings
-            avatar={avatar}
-            setAvatar={setAvatar}
-            name={name}
-            setName={setName}
-            email={email}
-            setEmail={setEmail}
-            phone={phone}
-            setPhone={setPhone}
-          />
-        );
+        return <Settings />;
       default:
         return <Dashboard />;
     }
@@ -53,10 +41,6 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <Sidebar
-        avatar={avatar}
-        name={name}
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
       />
@@ -66,6 +50,14 @@ const AdminDashboard = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const AdminDashboard = () => {
+  return (
+    <AdminProvider>
+      <AdminContent />
+    </AdminProvider>
   );
 };
 

@@ -2,28 +2,20 @@
 import { Card } from "@/components/ui/card";
 import { ProfileAvatar } from "./ProfileAvatar";
 import { ProfileForm } from "./ProfileForm";
+import { useAdmin } from "@/contexts/AdminContext";
 
-interface SettingsProps {
-  avatar: string;
-  setAvatar: (avatar: string) => void;
-  name: string;
-  setName: (name: string) => void;
-  email: string;
-  setEmail: (email: string) => void;
-  phone: string;
-  setPhone: (phone: string) => void;
-}
-
-export const Settings = ({
-  avatar,
-  setAvatar,
-  name,
-  setName,
-  email,
-  setEmail,
-  phone,
-  setPhone,
-}: SettingsProps) => {
+export const Settings = () => {
+  const { 
+    avatar, 
+    setAvatar, 
+    name, 
+    setName, 
+    email, 
+    setEmail, 
+    phone, 
+    setPhone 
+  } = useAdmin();
+  
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Configurações da Conta</h2>

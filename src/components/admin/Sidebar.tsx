@@ -1,138 +1,110 @@
 
-import { Button } from "@/components/ui/button";
-import { LogOut, Menu, X } from "lucide-react";
-import { menuItems } from "@/config/admin";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
+import { useAdmin } from "@/contexts/AdminContext";
+import { X, Menu } from "lucide-react";
+import { adminConfig } from "@/config/admin";
+import { useMobile } from "@/hooks/use-mobile";
 
 interface SidebarProps {
-  avatar: string;
-  name: string;
-  activeSection: string;
-  setActiveSection: (section: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export const Sidebar = ({ 
-  avatar, 
-  name, 
-  activeSection, 
-  setActiveSection,
-  isOpen,
-  setIsOpen
-}: SidebarProps) => {
-  const navigate = useNavigate();
+export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+  const { activeSection, setActiveSection, avatar, name } = useAdmin();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMobile();
 
-  const handleLogout = () => {
-    toast.success("Logout realizado com sucesso!");
-    navigate("/");
-  };
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobile && isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobile, isOpen, setIsOpen]);
+
+  // Handle sidebar visibility on mobile
+  useEffect(() => {
+    if (!isMobile && !isOpen) {
+      setIsOpen(true);
+    } else if (isMobile && isOpen) {
+      setIsOpen(false);
+    }
+  }, [isMobile, setIsOpen, isOpen]);
+
+  // Toggle sidebar on menu button click
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <>
-      {/* Menu Toggle Button - Visible only on mobile */}
-      <Button
-        variant="secondary"
-        size="icon"
-        className="fixed bottom-4 right-4 z-50 sm:hidden rounded-full shadow-lg h-12 w-12"
+      {/* Mobile menu button */}
+      <button
         onClick={toggleSidebar}
+        className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white sm:hidden"
       >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </Button>
+        <Menu />
+      </button>
 
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 sm:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Sidebar for Desktop - Left side */}
-      <div className={`
-        fixed left-0 top-0 h-full bg-white shadow-lg z-40 w-64
-        hidden sm:block
-      `}>
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-8">
-            <img src={avatar} alt="Logo" className="w-8 h-8 rounded-full" />
-            <span className="text-xl font-bold">{name}</span>
-          </div>
-          
-          <nav className="space-y-2">
-            {menuItems.map((item) => (
-              <Button
-                key={item.id}
-                variant={activeSection === item.id ? "secondary" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => setActiveSection(item.id)}
-              >
-                <item.icon className="mr-2" size={20} />
-                {item.label}
-              </Button>
-            ))}
-          </nav>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 p-6">
-          <Button 
-            variant="outline" 
-            className="w-full justify-start text-red-600 hover:text-red-700"
-            onClick={handleLogout}
+      {/* Sidebar */}
+      <div
+        ref={sidebarRef}
+        className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out transform z-30 shadow-md sm:translate-x-0 sm:static ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {isMobile && (
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-4 right-4 p-1 text-gray-500 hover:text-gray-700"
           >
-            <LogOut className="mr-2" size={20} />
-            Sair
-          </Button>
-        </div>
-      </div>
+            <X size={20} />
+          </button>
+        )}
 
-      {/* Mobile Navigation Drawer - Bottom */}
-      <div className={cn(
-        "fixed bottom-0 left-0 right-0 bg-white z-40 sm:hidden rounded-t-xl shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)] transition-transform duration-300",
-        isOpen ? "translate-y-0" : "translate-y-full"
-      )}>
-        <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto my-2"></div>
-        
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-4 p-2">
-            <img src={avatar} alt="Logo" className="w-8 h-8 rounded-full" />
-            <span className="text-xl font-bold">{name}</span>
-          </div>
-          
-          <div className="grid grid-cols-4 gap-2">
-            {menuItems.map((item) => (
-              <Button
-                key={item.id}
-                variant={activeSection === item.id ? "secondary" : "ghost"}
-                className="flex flex-col items-center justify-center h-20 text-xs px-2"
-                onClick={() => {
-                  setActiveSection(item.id);
-                  setIsOpen(false);
-                }}
-              >
-                <item.icon className="mb-1" size={24} />
-                <span>{item.label}</span>
-              </Button>
-            ))}
-          </div>
-          
-          <div className="mt-4 border-t pt-4">
-            <Button 
-              variant="ghost" 
-              className="flex items-center justify-start w-full text-red-600"
-              onClick={handleLogout}
-            >
-              <LogOut className="mr-2" size={20} />
-              <span>Sair</span>
-            </Button>
+        <div className="p-6 border-b">
+          <div className="flex items-center mb-4">
+            <img
+              src={avatar}
+              alt="Profile"
+              className="w-12 h-12 rounded-full mr-3 object-cover"
+            />
+            <div>
+              <h2 className="font-semibold truncate">{name}</h2>
+              <p className="text-xs text-gray-500">Administrador</p>
+            </div>
           </div>
         </div>
+
+        <nav className="p-4">
+          <ul className="space-y-1">
+            {adminConfig.mainNav.map((item) => (
+              <li key={item.id}>
+                <button
+                  className={`w-full text-left flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
+                    activeSection === item.id
+                      ? "bg-gray-100 text-secondary"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    if (isMobile) setIsOpen(false);
+                  }}
+                >
+                  {item.icon}
+                  <span>{item.title}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </>
   );
