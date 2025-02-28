@@ -42,7 +42,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsOpen(true);
-      } else if (window.innerWidth < 768 && isOpen && !isMobile) {
+      } else if (window.innerWidth < 768 && isOpen) {
         setIsOpen(false);
       }
     };
@@ -54,7 +54,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isOpen, setIsOpen, isMobile]);
+  }, [isOpen, setIsOpen]);
 
   // Toggle sidebar on menu button click
   const toggleSidebar = () => {
@@ -183,7 +183,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       {renderDesktopSidebar()}
       
       {/* Mobile menu button (for tablet size) */}
-      {isMobile && !isMobileSheetMode() && (
+      {isMobile && !isMobileSheetMode() && !isOpen && (
         <Button
           onClick={toggleSidebar}
           className="fixed top-4 left-4 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"

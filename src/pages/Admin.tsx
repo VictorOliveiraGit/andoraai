@@ -81,7 +81,7 @@ const AdminContent = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 overflow-hidden">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-gray-100 overflow-hidden">
       {/* Sidebar Component */}
       <Sidebar
         isOpen={isSidebarOpen}
@@ -90,12 +90,12 @@ const AdminContent = () => {
       
       {/* Main Content Area */}
       <div 
-        className={`flex-1 flex flex-col transition-all duration-300 min-h-screen md:min-h-full w-full ${
+        className={`flex-1 flex flex-col transition-all duration-300 h-full w-full ${
           isSidebarOpen && !isMobile ? "md:ml-64" : "md:ml-0"
         }`}
       >
         {/* Mobile Header with menu toggle and logout */}
-        <div className="sticky top-0 z-10 bg-white p-4 md:hidden flex justify-between items-center shadow-sm">
+        <div className="sticky top-0 z-30 bg-white p-4 md:hidden flex justify-between items-center shadow-sm">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -117,7 +117,7 @@ const AdminContent = () => {
 
         {/* Content Container with scrollable area */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-8 pt-4 md:pt-8">
+          <div className="p-4 md:p-6 lg:p-8">
             {/* Desktop Logout Button (hidden on mobile) */}
             <div className="hidden md:flex justify-end mb-6">
               <Button 
