@@ -85,24 +85,27 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
         <nav className="p-4">
           <ul className="space-y-1">
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  className={`w-full text-left flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                    activeSection === item.id
-                      ? "bg-gray-100 text-secondary"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                  onClick={() => {
-                    setActiveSection(item.id);
-                    if (isMobile) setIsOpen(false);
-                  }}
-                >
-                  <item.icon className="w-5 h-5 mr-2" />
-                  <span>{item.label}</span>
-                </button>
-              </li>
-            ))}
+            {menuItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <li key={item.id}>
+                  <button
+                    className={`w-full text-left flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
+                      activeSection === item.id
+                        ? "bg-gray-100 text-secondary"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`}
+                    onClick={() => {
+                      setActiveSection(item.id);
+                      if (isMobile) setIsOpen(false);
+                    }}
+                  >
+                    <IconComponent className="w-5 h-5 mr-2" />
+                    <span>{item.label}</span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
