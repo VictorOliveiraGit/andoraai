@@ -8,9 +8,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Menu, LogIn, UserPlus, ChevronDown } from "lucide-react";
+import { X, Menu, LogIn, UserPlus, ChevronDown, Apple } from "lucide-react";
 import { toast } from "sonner";
 import logo from '../../public/logo-andora.svg'
+
 const Header = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -74,6 +75,11 @@ const Header = () => {
     } else {
       toast.error("Usuário ou senha inválidos");
     }
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    toast.success(`Redirecionando para login com ${provider}...`);
+    // Implementação de integração de login social seria feita aqui
   };
 
   const handleRegister = (e: React.FormEvent) => {
@@ -307,40 +313,91 @@ const Header = () => {
             </div>
             <DialogTitle className="text-xl text-center">Faça seu login</DialogTitle>
           </DialogHeader>
-          <form className="space-y-4" onSubmit={handleLogin}>
-            <div>
-              <label className="block text-sm font-medium mb-1">Usuário</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-md"
-                placeholder="Digite seu usuário"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Senha</label>
-              <input
-                type="password"
-                className="w-full p-2 border rounded-md"
-                placeholder="Digite sua senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="text-right">
+          
+          <div className="space-y-4">
+            {/* Opções de Login Social */}
+            <div className="grid grid-cols-2 gap-3">
               <Button 
-                variant="link" 
-                className="text-sm text-primary hover:text-primary/80"
-                type="button"
+                variant="outline" 
+                className="w-full flex items-center justify-center gap-2"
+                onClick={() => handleSocialLogin("Google")}
               >
-                Esqueci minha senha
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
+                  <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.691 0 3.225.6 4.425 1.583l3.715-3.715A11.945 11.945 0 0 0 12 0C7.392 0 3.397 2.6 1.385 6.461l3.881 3.304z"/>
+                  <path fill="#34A853" d="M16.041 18.013C14.951 18.716 13.529 19.091 12 19.091c-2.676 0-4.959-1.483-6.168-3.662L2.289 18.24A11.944 11.944 0 0 0 12 24c3.059 0 5.842-1.154 7.961-3.039l-3.92-2.948z"/>
+                  <path fill="#4285F4" d="M19.834 11.23a9.31 9.31 0 0 0-.207-1.995H12v3.818h4.537a3.97 3.97 0 0 1-1.679 2.575l3.92 2.948c2.327-2.153 3.641-5.348 3.056-9.345z"/>
+                  <path fill="#FBBC05" d="M5.832 14.045a7.073 7.073 0 0 1-.389-2.315c0-.79.14-1.56.389-2.272L2.289 6.461A11.86 11.86 0 0 0 1.091 12c0 1.902.445 3.7 1.198 5.29l3.543-3.245z"/>
+                </svg>
+                Google
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full flex items-center justify-center gap-2"
+                onClick={() => handleSocialLogin("Apple")}
+              >
+                <Apple className="w-5 h-5 text-black" />
+                Apple
               </Button>
             </div>
-            <Button className="w-full" type="submit">
-              Entrar
-            </Button>
-          </form>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300"></span>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">ou continue com</span>
+              </div>
+            </div>
+            
+            <form className="space-y-4" onSubmit={handleLogin}>
+              <div>
+                <label className="block text-sm font-medium mb-1">Usuário</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Digite seu usuário"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Senha</label>
+                <input
+                  type="password"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Digite sua senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="text-right">
+                <Button 
+                  variant="link" 
+                  className="text-sm text-primary hover:text-primary/80"
+                  type="button"
+                >
+                  Esqueci minha senha
+                </Button>
+              </div>
+              <Button className="w-full" type="submit">
+                Entrar
+              </Button>
+            </form>
+            
+            <p className="text-center text-sm text-gray-500">
+              Não tem uma conta?{" "}
+              <Button 
+                variant="link" 
+                className="p-0 h-auto text-primary"
+                onClick={() => {
+                  setIsLoginOpen(false);
+                  setIsRegisterOpen(true);
+                }}
+              >
+                Registre-se
+              </Button>
+            </p>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -356,68 +413,105 @@ const Header = () => {
             </div>
             <DialogTitle className="text-xl">Criar Conta</DialogTitle>
           </DialogHeader>
-          <form className="space-y-4" onSubmit={handleRegister}>
-            <div>
-              <label className="block text-sm font-medium mb-1">Nome</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-md"
-                placeholder="Seu nome completo"
-                value={registerData.name}
-                onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
-              <input
-                type="email"
-                className="w-full p-2 border rounded-md"
-                placeholder="seu@email.com"
-                value={registerData.email}
-                onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Senha</label>
-              <input
-                type="password"
-                className="w-full p-2 border rounded-md"
-                placeholder="Digite sua senha"
-                value={registerData.password}
-                onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
-              <input
-                type="password"
-                className="w-full p-2 border rounded-md"
-                placeholder="Confirme sua senha"
-                value={registerData.confirmPassword}
-                onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
-                required
-              />
-            </div>
-            <Button className="w-full" type="submit">
-              Criar Conta
-            </Button>
-            <p className="text-center text-sm text-gray-500">
-              Já tem uma conta?{" "}
+          
+          <div className="space-y-4">
+            {/* Opções de Registro Social */}
+            <div className="grid grid-cols-2 gap-3">
               <Button 
-                variant="link" 
-                className="p-0 h-auto"
-                onClick={() => {
-                  setIsRegisterOpen(false);
-                  setIsLoginOpen(true);
-                }}
+                variant="outline" 
+                className="w-full flex items-center justify-center gap-2"
+                onClick={() => handleSocialLogin("Google")}
               >
-                Faça login
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
+                  <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.691 0 3.225.6 4.425 1.583l3.715-3.715A11.945 11.945 0 0 0 12 0C7.392 0 3.397 2.6 1.385 6.461l3.881 3.304z"/>
+                  <path fill="#34A853" d="M16.041 18.013C14.951 18.716 13.529 19.091 12 19.091c-2.676 0-4.959-1.483-6.168-3.662L2.289 18.24A11.944 11.944 0 0 0 12 24c3.059 0 5.842-1.154 7.961-3.039l-3.92-2.948z"/>
+                  <path fill="#4285F4" d="M19.834 11.23a9.31 9.31 0 0 0-.207-1.995H12v3.818h4.537a3.97 3.97 0 0 1-1.679 2.575l3.92 2.948c2.327-2.153 3.641-5.348 3.056-9.345z"/>
+                  <path fill="#FBBC05" d="M5.832 14.045a7.073 7.073 0 0 1-.389-2.315c0-.79.14-1.56.389-2.272L2.289 6.461A11.86 11.86 0 0 0 1.091 12c0 1.902.445 3.7 1.198 5.29l3.543-3.245z"/>
+                </svg>
+                Google
               </Button>
-            </p>
-          </form>
+              <Button 
+                variant="outline" 
+                className="w-full flex items-center justify-center gap-2"
+                onClick={() => handleSocialLogin("Apple")}
+              >
+                <Apple className="w-5 h-5 text-black" />
+                Apple
+              </Button>
+            </div>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300"></span>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">ou preencha o formulário</span>
+              </div>
+            </div>
+            
+            <form className="space-y-4" onSubmit={handleRegister}>
+              <div>
+                <label className="block text-sm font-medium mb-1">Nome</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Seu nome completo"
+                  value={registerData.name}
+                  onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="seu@email.com"
+                  value={registerData.email}
+                  onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Senha</label>
+                <input
+                  type="password"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Digite sua senha"
+                  value={registerData.password}
+                  onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
+                <input
+                  type="password"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Confirme sua senha"
+                  value={registerData.confirmPassword}
+                  onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
+                  required
+                />
+              </div>
+              <Button className="w-full" type="submit">
+                Criar Conta
+              </Button>
+              <p className="text-center text-sm text-gray-500">
+                Já tem uma conta?{" "}
+                <Button 
+                  variant="link" 
+                  className="p-0 h-auto text-primary"
+                  onClick={() => {
+                    setIsRegisterOpen(false);
+                    setIsLoginOpen(true);
+                  }}
+                >
+                  Faça login
+                </Button>
+              </p>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </header>
