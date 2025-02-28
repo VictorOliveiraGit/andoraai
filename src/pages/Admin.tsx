@@ -44,7 +44,7 @@ const AdminContent = () => {
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
       />
-      <div className="flex-1 md:ml-64 w-full overflow-y-auto">
+      <div className={`flex-1 w-full overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "md:ml-64" : "md:ml-0"}`}>
         <div className="p-4 md:p-8 pb-24 md:pb-8">
           {renderContent()}
         </div>

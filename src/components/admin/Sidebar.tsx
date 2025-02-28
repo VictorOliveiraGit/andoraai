@@ -4,6 +4,7 @@ import { useAdmin } from "@/contexts/AdminContext";
 import { X, Menu } from "lucide-react";
 import { menuItems } from "@/config/admin";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -32,9 +33,9 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   // Handle sidebar visibility on resize
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && !isOpen) {
+      if (window.innerWidth >= 768) {
         setIsOpen(true);
-      } else if (window.innerWidth < 768 && isOpen && isMobile) {
+      } else if (window.innerWidth < 768 && isOpen && !isMobile) {
         setIsOpen(false);
       }
     };
@@ -46,30 +47,47 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isMobile, isOpen, setIsOpen]);
+  }, [isOpen, setIsOpen, isMobile]);
 
   // Toggle sidebar on menu button click
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
+  // Create overlay when sidebar is open on mobile
+  const renderOverlay = () => {
+    if (isMobile && isOpen) {
+      return (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-20"
+          onClick={() => setIsOpen(false)}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
+      {renderOverlay()}
+      
       {/* Mobile menu button */}
-      <button
+      <Button
         onClick={toggleSidebar}
         className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
+        variant="secondary"
+        size="icon"
         aria-label="Toggle menu"
       >
         <Menu size={24} />
-      </button>
+      </Button>
 
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out transform z-30 shadow-md md:translate-x-0 md:relative ${
+        className={`bg-white fixed inset-y-0 left-0 w-64 overflow-y-auto transition-transform duration-300 ease-in-out shadow-md md:shadow-none z-30 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } md:translate-x-0 ${isMobile ? "z-40" : ""}`}
       >
         {isMobile && (
           <button
