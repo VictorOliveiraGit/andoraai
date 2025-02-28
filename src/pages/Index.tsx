@@ -146,10 +146,7 @@ const Index = () => {
     { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-primary" /> },
   ];
 
-  const partners = [
-    "/lovable-uploads/03437dee-3573-4420-bc7a-01e1be5c3d7f.png",
-    "/lovable-uploads/84035efb-a614-408b-899f-ff3878cf0a51.png",
-  ];
+  // Removing the partners array that was causing the Stripe images to appear
 
   return (
     <div className="min-h-screen font-glacial">
@@ -419,21 +416,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section className="py-10 px-6 bg-gray-50">
-        <div className="container mx-auto">
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">
-            {partners.map((partner, index) => (
-              <img 
-                key={index} 
-                src={partner} 
-                alt={`Partner ${index + 1}`} 
-                className="h-8 md:h-10 opacity-70 hover:opacity-100 transition-opacity"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Removed Partners Section that was showing the Stripe images */}
 
       {/* CTA Section */}
       <section className="py-20 px-6 gradient-wave text-white">
