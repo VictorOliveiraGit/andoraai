@@ -3,40 +3,67 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreditCard, Shield, Zap, Check } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export const Subscription = () => {
+  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
+  
   const handleSubscribe = (planType: string) => {
     toast.info("Redirecionando para o checkout...");
   };
 
+  const handleMouseEnter = (planType: string) => {
+    setHoveredPlan(planType);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredPlan(null);
+  };
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Planos de Assinatura</h2>
+    <div className="space-y-10">
+      <h2 className="text-3xl font-bold text-secondary">Planos de Assinatura</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Plano Básico */}
-        <Card className="p-6 space-y-4">
-          <div className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-blue-500" />
-            <h3 className="text-xl font-semibold">Básico</h3>
+        <Card 
+          className={`p-6 space-y-6 border border-primary/20 transition-all duration-300 hover:shadow-lg ${
+            hoveredPlan === 'basic' ? 'transform scale-105' : ''
+          }`}
+          onMouseEnter={() => handleMouseEnter('basic')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="relative overflow-hidden">
+            <div className="flex items-center gap-2 z-10 relative">
+              <div className="p-2 bg-primary/10 rounded-full">
+                <CreditCard className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-secondary">Básico</h3>
+            </div>
           </div>
-          <p className="text-3xl font-bold">R$ 29<span className="text-sm font-normal">/mês</span></p>
-          <ul className="space-y-2">
+          
+          <div className="space-y-1">
+            <p className="text-4xl font-bold text-secondary">R$ 29<span className="text-sm font-normal text-gray-500">/mês</span></p>
+            <p className="text-sm text-gray-500">Ideal para pequenos negócios</p>
+          </div>
+          
+          <ul className="space-y-3">
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Até 100 usuários</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Relatórios básicos</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Suporte por email</span>
             </li>
           </ul>
+          
           <Button 
-            className="w-full"
+            className="w-full bg-white hover:bg-white/90 text-secondary border border-primary/20"
             onClick={() => handleSubscribe('basic')}
           >
             Assinar Plano Básico
@@ -44,33 +71,52 @@ export const Subscription = () => {
         </Card>
 
         {/* Plano Pro */}
-        <Card className="p-6 space-y-4 border-blue-500 shadow-lg">
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-blue-500" />
-            <h3 className="text-xl font-semibold">Pro</h3>
+        <Card 
+          className={`p-6 space-y-6 border-2 border-primary bg-gradient-to-b from-secondary to-secondary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl ${
+            hoveredPlan === 'pro' ? 'transform scale-105' : ''
+          }`}
+          onMouseEnter={() => handleMouseEnter('pro')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="absolute -top-4 right-4 bg-primary text-secondary font-bold text-xs px-3 py-1 rounded-full">
+            POPULAR
           </div>
-          <p className="text-3xl font-bold">R$ 59<span className="text-sm font-normal">/mês</span></p>
-          <ul className="space-y-2">
+          
+          <div className="relative overflow-hidden">
+            <div className="flex items-center gap-2 z-10 relative">
+              <div className="p-2 bg-primary/20 rounded-full">
+                <Shield className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Pro</h3>
+            </div>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-4xl font-bold">R$ 59<span className="text-sm font-normal text-white/70">/mês</span></p>
+            <p className="text-sm text-white/70">Para negócios em crescimento</p>
+          </div>
+          
+          <ul className="space-y-3">
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Até 1000 usuários</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Relatórios avançados</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Suporte prioritário</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>API access</span>
             </li>
           </ul>
+          
           <Button 
-            className="w-full"
-            variant="secondary"
+            className="w-full bg-primary hover:bg-primary/90 text-secondary"
             onClick={() => handleSubscribe('pro')}
           >
             Assinar Plano Pro
@@ -78,36 +124,52 @@ export const Subscription = () => {
         </Card>
 
         {/* Plano Enterprise */}
-        <Card className="p-6 space-y-4">
-          <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-blue-500" />
-            <h3 className="text-xl font-semibold">Enterprise</h3>
+        <Card 
+          className={`p-6 space-y-6 border border-primary/20 transition-all duration-300 hover:shadow-lg ${
+            hoveredPlan === 'enterprise' ? 'transform scale-105' : ''
+          }`}
+          onMouseEnter={() => handleMouseEnter('enterprise')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="relative overflow-hidden">
+            <div className="flex items-center gap-2 z-10 relative">
+              <div className="p-2 bg-primary/10 rounded-full">
+                <Zap className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-secondary">Enterprise</h3>
+            </div>
           </div>
-          <p className="text-3xl font-bold">R$ 99<span className="text-sm font-normal">/mês</span></p>
-          <ul className="space-y-2">
+          
+          <div className="space-y-1">
+            <p className="text-4xl font-bold text-secondary">R$ 99<span className="text-sm font-normal text-gray-500">/mês</span></p>
+            <p className="text-sm text-gray-500">Para grandes empresas</p>
+          </div>
+          
+          <ul className="space-y-3">
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Usuários ilimitados</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Relatórios personalizados</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Suporte 24/7</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>API dedicated</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-5 h-5 text-primary" />
               <span>Setup personalizado</span>
             </li>
           </ul>
+          
           <Button 
-            className="w-full"
+            className="w-full bg-white hover:bg-white/90 text-secondary border border-primary/20"
             onClick={() => handleSubscribe('enterprise')}
           >
             Assinar Plano Enterprise
