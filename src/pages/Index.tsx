@@ -133,17 +133,17 @@ const Index = () => {
   };
 
   const productDropdownItems = [
-    { title: "Payments", description: "Pagamentos online", icon: <CreditCard className="w-6 h-6 text-blue-500" /> },
-    { title: "Terminal", description: "Pagamentos presenciais", icon: <CreditCard className="w-6 h-6 text-green-500" /> },
-    { title: "Connect", description: "Pagamentos para plataformas", icon: <CreditCard className="w-6 h-6 text-purple-500" /> },
-    { title: "Billing", description: "Assinaturas e pagamentos por uso", icon: <CreditCard className="w-6 h-6 text-orange-500" /> },
+    { title: "Payments", description: "Pagamentos online", icon: <CreditCard className="w-6 h-6 text-primary" /> },
+    { title: "Terminal", description: "Pagamentos presenciais", icon: <CreditCard className="w-6 h-6 text-primary" /> },
+    { title: "Connect", description: "Pagamentos para plataformas", icon: <CreditCard className="w-6 h-6 text-primary" /> },
+    { title: "Billing", description: "Assinaturas e pagamentos por uso", icon: <CreditCard className="w-6 h-6 text-primary" /> },
   ];
 
   const solutionsDropdownItems = [
-    { title: "Comércio eletrônico", description: "Soluções para e-commerce", icon: <DollarSign className="w-6 h-6 text-blue-500" /> },
-    { title: "Marketplace", description: "Plataformas multivendedor", icon: <DollarSign className="w-6 h-6 text-green-500" /> },
-    { title: "SaaS", description: "Para empresas de software", icon: <BarChart className="w-6 h-6 text-purple-500" /> },
-    { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-orange-500" /> },
+    { title: "Comércio eletrônico", description: "Soluções para e-commerce", icon: <DollarSign className="w-6 h-6 text-primary" /> },
+    { title: "Marketplace", description: "Plataformas multivendedor", icon: <DollarSign className="w-6 h-6 text-primary" /> },
+    { title: "SaaS", description: "Para empresas de software", icon: <BarChart className="w-6 h-6 text-primary" /> },
+    { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-primary" /> },
   ];
 
   const partners = [
@@ -154,7 +154,7 @@ const Index = () => {
   return (
     <div className="min-h-screen font-glacial">
       {/* Header com dropdown menus inspirado na imagem do Stripe */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-700 via-purple-500 to-orange-400">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-secondary to-primary">
         <nav className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-10">
@@ -228,7 +228,7 @@ const Index = () => {
               >
                 Entrar <ArrowRight size={16} />
               </a>
-              <Button className="bg-white text-purple-600 hover:bg-white/90">
+              <Button className="bg-white text-secondary hover:bg-white/90">
                 Fale com nossa equipe
               </Button>
             </div>
@@ -250,7 +250,7 @@ const Index = () => {
                 <a href="#" className="text-white">Recursos</a>
                 <a href="#precos" className="text-white">Preços</a>
                 <a href="/admin" className="text-white">Entrar</a>
-                <Button className="bg-white text-purple-600 hover:bg-white/90 w-full">
+                <Button className="bg-white text-secondary hover:bg-white/90 w-full">
                   Fale com nossa equipe
                 </Button>
               </div>
@@ -260,7 +260,7 @@ const Index = () => {
       </header>
       
       {/* Hero Section - Inspirado na imagem do Stripe */}
-      <section id="inicio" className="pt-32 pb-20 px-6 bg-gradient-to-r from-purple-700 via-purple-500 to-orange-400 text-white relative overflow-hidden">
+      <section id="inicio" className="pt-32 pb-20 px-6 bg-gradient-to-r from-secondary to-primary text-white relative overflow-hidden">
         <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div className="text-left relative z-10">
             <h1 className="text-4xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight">
@@ -340,7 +340,7 @@ const Index = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow">
+              <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/20">
                 <div className="mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-codec mb-3 text-secondary">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
@@ -362,7 +362,7 @@ const Index = () => {
                 key={index} 
                 className={`p-6 animate-on-scroll ${
                   plan.highlighted 
-                    ? "border-primary bg-white text-secondary transform scale-105 border-secondary" 
+                    ? "border-primary bg-white text-secondary transform scale-105" 
                     : "bg-white/5 text-white"
                 }`}
               >
@@ -405,7 +405,7 @@ const Index = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow">
+              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/20">
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="text-primary" size={16} fill="#C6BA77" />
@@ -439,7 +439,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-purple-700 via-purple-500 to-orange-400 text-white">
+      <section className="py-20 px-6 bg-gradient-to-r from-secondary to-primary text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-codec-bold mb-6 animate-on-scroll">
             Pronto para Começar?
@@ -450,7 +450,7 @@ const Index = () => {
           <div className="flex justify-center gap-4">
             <Button
               size="lg"
-              className="animate-on-scroll bg-white text-purple-600 hover:bg-white/90"
+              className="animate-on-scroll bg-white text-secondary hover:bg-white/90"
             >
               Comece Gratuitamente
             </Button>
