@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, Trash, Eye } from "lucide-react";
 import { toast } from "sonner";
-import { ImageCropper } from "./ImageCropper";
-import { ImageViewer } from "./ImageViewer";
+import { ImageCropper } from "@/components/modals/ImageCropper";
+import { ImageViewer } from "@/components/modals/ImageViewer";
 import {
   Tooltip,
   TooltipContent,
