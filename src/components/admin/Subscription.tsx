@@ -77,11 +77,7 @@ export const Subscription = () => {
           }`}
           onMouseEnter={() => handleMouseEnter('pro')}
           onMouseLeave={handleMouseLeave}
-        >
-          <div className="absolute -top-4 right-4 bg-secondary text-primary font-bold text-xs px-3 py-1 rounded-full">
-            POPULAR
-          </div>
-          
+        >          
           <div className="relative overflow-hidden">
             <div className="flex items-center gap-2 z-10 relative">
               <div className="p-2 bg-secondary/20 rounded-full">
