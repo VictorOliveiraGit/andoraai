@@ -14,7 +14,6 @@ import {
   DollarSign, 
   BarChart, 
   LineChart, 
-  Search,
   Shield,
   Zap
 } from "lucide-react";
@@ -126,33 +125,33 @@ const Index = () => {
       <Header />
       
       {/* Hero Section */}
-      <section id="inicio" className="pt-32 pb-20 px-6 gradient-wave text-foreground relative overflow-hidden">
+      <section id="inicio" className="pt-24 md:pt-32 pb-20 px-4 md:px-6 gradient-wave text-foreground relative overflow-hidden">
         <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div className="text-left relative z-10">
-            <h1 className="text-4xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight text-white">
+            <h1 className="text-3xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight text-white">
               Infraestrutura financeira para a internet
             </h1>
-            <p className="text-lg md:text-xl mb-8 animate-fadeIn font-codec text-white/90 max-w-lg">
+            <p className="text-base md:text-xl mb-8 animate-fadeIn font-codec text-white/90 max-w-lg">
               Faça como os milhões de empresas que confiam na Andora
               para receber pagamentos online e presenciais, oferecer
               serviços financeiros integrados, capacitar modelos de
               receita personalizados e aumentar os lucros nos negócios.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative">
+              <div className="relative w-full sm:w-auto">
                 <input 
                   type="email" 
                   placeholder="Seu e-mail"
                   className="px-4 py-3 rounded-md w-full sm:w-64 text-gray-800 border border-gray-300"
                 />
               </div>
-              <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90">
+              <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90 w-full sm:w-auto">
                 Comece agora
                 <ArrowRight className="ml-2" size={16} />
               </Button>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div className="bg-white p-6 rounded-xl shadow-xl transform md:translate-y-10">
               <div className="text-center mb-4">
                 <h3 className="text-gray-800 text-lg font-medium">Analytics Dashboard</h3>
@@ -200,12 +199,12 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section id="recursos" className="py-20 px-6 mt-16">
+      <section id="recursos" className="py-16 md:py-20 px-4 md:px-6 mt-16">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
+          <h2 className="text-2xl md:text-3xl font-codec-bold text-center mb-8 md:mb-12 animate-on-scroll">
             Por Que Escolher Nossa Solução
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="p-6 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/10">
                 <div className="mb-4">{feature.icon}</div>
@@ -217,12 +216,12 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Pricing Section - Updated to match Admin Subscription styling */}
-      <section id="precos" className="py-20 px-6 gradient-plans relative">
-        <div className="container mx-auto space-y-10">
-          <h2 className="text-3xl font-bold text-primary text-center">Planos de Assinatura</h2>
+      {/* Pricing Section - Matching Admin Subscription styling */}
+      <section id="precos" className="py-16 md:py-20 px-4 md:px-6 gradient-plans relative">
+        <div className="container mx-auto space-y-8 md:space-y-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary text-center">Planos de Assinatura</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
             {/* Plano Básico */}
             <Card 
               className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
@@ -247,25 +246,27 @@ const Index = () => {
               
               <ul className="space-y-3 mt-6 flex-grow">
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Até 100 usuários</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Relatórios básicos</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Suporte por email</span>
                 </li>
               </ul>
               
-              <Button 
-                className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20 mt-6"
-                onClick={() => handleSubscribe('basic')}
-              >
-                Assinar Plano Básico
-              </Button>
+              <div className="mt-6">
+                <Button 
+                  className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+                  onClick={() => handleSubscribe('basic')}
+                >
+                  Assinar Plano Básico
+                </Button>
+              </div>
             </Card>
 
             {/* Plano Pro */}
@@ -275,7 +276,7 @@ const Index = () => {
               }`}
               onMouseEnter={() => handleMouseEnter('pro')}
               onMouseLeave={handleMouseLeave}
-            >
+            >          
               <div className="relative overflow-hidden">
                 <div className="flex items-center gap-2 z-10 relative">
                   <div className="p-2 bg-secondary/20 rounded-full">
@@ -292,29 +293,31 @@ const Index = () => {
               
               <ul className="space-y-3 mt-6 flex-grow">
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Até 1000 usuários</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Relatórios avançados</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Suporte prioritário</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>API access</span>
                 </li>
               </ul>
               
-              <Button 
-                className="w-full bg-secondary hover:bg-secondary/90 text-primary mt-6"
-                onClick={() => handleSubscribe('pro')}
-              >
-                Assinar Plano Pro
-              </Button>
+              <div className="mt-6">
+                <Button 
+                  className="w-full bg-secondary hover:bg-secondary/90 text-primary"
+                  onClick={() => handleSubscribe('pro')}
+                >
+                  Assinar Plano Pro
+                </Button>
+              </div>
             </Card>
 
             {/* Plano Enterprise */}
@@ -341,47 +344,49 @@ const Index = () => {
               
               <ul className="space-y-3 mt-6 flex-grow">
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Usuários ilimitados</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Relatórios personalizados</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Suporte 24/7</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>API dedicated</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-secondary" />
+                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span>Setup personalizado</span>
                 </li>
               </ul>
               
-              <Button 
-                className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20 mt-6"
-                onClick={() => handleSubscribe('enterprise')}
-              >
-                Assinar Plano Enterprise
-              </Button>
+              <div className="mt-6">
+                <Button 
+                  className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+                  onClick={() => handleSubscribe('enterprise')}
+                >
+                  Assinar Plano Enterprise
+                </Button>
+              </div>
             </Card>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section id="depoimentos" className="py-20 px-6">
+      <section id="depoimentos" className="py-16 md:py-20 px-4 md:px-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-codec-bold text-center mb-12 animate-on-scroll">
+          <h2 className="text-2xl md:text-3xl font-codec-bold text-center mb-8 md:mb-12 animate-on-scroll">
             O Que Nossos Clientes Dizem
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-8 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/10">
+              <Card key={index} className="p-6 md:p-8 animate-on-scroll hover:shadow-lg transition-shadow border border-primary/10">
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="text-secondary" size={16} fill="hsl(var(--secondary))" />
@@ -399,25 +404,25 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 gradient-wave text-white">
+      <section className="py-16 md:py-20 px-4 md:px-6 gradient-wave text-white">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-codec-bold mb-6 animate-on-scroll">
+          <h2 className="text-2xl md:text-3xl font-codec-bold mb-4 md:mb-6 animate-on-scroll">
             Pronto para Começar?
           </h2>
-          <p className="text-lg mb-8 animate-on-scroll font-codec">
+          <p className="text-base md:text-lg mb-6 md:mb-8 animate-on-scroll font-codec max-w-xl mx-auto">
             Junte-se a milhares de clientes satisfeitos e transforme seu negócio hoje
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button
               size="lg"
-              className="animate-on-scroll bg-secondary text-primary hover:bg-secondary/90"
+              className="animate-on-scroll bg-secondary text-primary hover:bg-secondary/90 w-full sm:w-auto"
             >
               Comece Gratuitamente
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="animate-on-scroll bg-transparent border border-white/30 text-white hover:bg-white/10"
+              className="animate-on-scroll bg-transparent border border-white/30 text-white hover:bg-white/10 w-full sm:w-auto"
             >
               Saiba mais
             </Button>

@@ -21,10 +21,10 @@ export const Subscription = () => {
   };
 
   return (
-    <div className="space-y-10 gradient-plans p-10 rounded-xl">
-      <h2 className="text-3xl font-bold text-primary">Planos de Assinatura</h2>
+    <div className="space-y-10 gradient-plans p-4 md:p-10 rounded-xl">
+      <h2 className="text-2xl md:text-3xl font-bold text-primary">Planos de Assinatura</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
         {/* Plano Básico */}
         <Card 
           className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
@@ -49,25 +49,27 @@ export const Subscription = () => {
           
           <ul className="space-y-3 mt-6 flex-grow">
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Até 100 usuários</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Relatórios básicos</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Suporte por email</span>
             </li>
           </ul>
           
-          <Button 
-            className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20 mt-6"
-            onClick={() => handleSubscribe('basic')}
-          >
-            Assinar Plano Básico
-          </Button>
+          <div className="mt-6">
+            <Button 
+              className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+              onClick={() => handleSubscribe('basic')}
+            >
+              Assinar Plano Básico
+            </Button>
+          </div>
         </Card>
 
         {/* Plano Pro */}
@@ -94,29 +96,31 @@ export const Subscription = () => {
           
           <ul className="space-y-3 mt-6 flex-grow">
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Até 1000 usuários</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Relatórios avançados</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Suporte prioritário</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>API access</span>
             </li>
           </ul>
           
-          <Button 
-            className="w-full bg-secondary hover:bg-secondary/90 text-primary mt-6"
-            onClick={() => handleSubscribe('pro')}
-          >
-            Assinar Plano Pro
-          </Button>
+          <div className="mt-6">
+            <Button 
+              className="w-full bg-secondary hover:bg-secondary/90 text-primary"
+              onClick={() => handleSubscribe('pro')}
+            >
+              Assinar Plano Pro
+            </Button>
+          </div>
         </Card>
 
         {/* Plano Enterprise */}
@@ -143,33 +147,35 @@ export const Subscription = () => {
           
           <ul className="space-y-3 mt-6 flex-grow">
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Usuários ilimitados</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Relatórios personalizados</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Suporte 24/7</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>API dedicated</span>
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-secondary" />
+              <Check className="w-5 h-5 text-secondary flex-shrink-0" />
               <span>Setup personalizado</span>
             </li>
           </ul>
           
-          <Button 
-            className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20 mt-6"
-            onClick={() => handleSubscribe('enterprise')}
-          >
-            Assinar Plano Enterprise
-          </Button>
+          <div className="mt-6">
+            <Button 
+              className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+              onClick={() => handleSubscribe('enterprise')}
+            >
+              Assinar Plano Enterprise
+            </Button>
+          </div>
         </Card>
       </div>
     </div>

@@ -161,7 +161,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       <Sheet>
         <SheetTrigger asChild>
           <Button
-            className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
+            className="fixed top-4 left-4 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
             variant="secondary"
             size="icon"
             aria-label="Open menu"
@@ -189,7 +189,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       {isMobile && !isMobileSheetMode() && (
         <Button
           onClick={toggleSidebar}
-          className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
+          className="fixed top-4 left-4 z-50 p-3 rounded-full bg-secondary shadow-lg text-white md:hidden"
           variant="secondary"
           size="icon"
           aria-label="Toggle menu"
