@@ -40,7 +40,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4 text-white">Contato</h3>
             <ul className="space-y-2">
-              <li className="text-sm text-white/80">Email: contato@empresa.com</li>
+              <li className="text-sm text-white/80">Email: contato@andoraai.com.br</li>
               <li className="text-sm text-white/80">Telefone: (11) 1234-5678</li>
               <li className="text-sm text-white/80">Endereço: Rua Example, 123</li>
             </ul>
@@ -65,7 +65,7 @@ const Footer = () => {
         </div>
         <div className="border-t border-white/10 mt-8 pt-8 text-center">
           <p className="text-sm text-white/80">
-            © {new Date().getFullYear()} Sua Empresa. Todos os direitos reservados.
+            © {new Date().getFullYear()} AndoraAI. Todos os direitos reservados.
           </p>
         </div>
       </div>
