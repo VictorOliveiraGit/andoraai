@@ -21,6 +21,7 @@ import { LogOut, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { MobileNavbar } from "@/components/admin/MobileNavbar";
 
 /**
  * AdminContent Component
@@ -116,7 +117,7 @@ const AdminContent = () => {
         </div>
 
         {/* Content Container with scrollable area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto pb-16 md:pb-0">
           <div className="p-4 md:p-6 lg:p-8">
             {/* Desktop Logout Button (hidden on mobile) */}
             <div className="hidden md:flex justify-end mb-6">
@@ -136,6 +137,9 @@ const AdminContent = () => {
             </div>
           </div>
         </div>
+
+        {/* Mobile Bottom Navbar */}
+        {isMobile && <MobileNavbar />}
       </div>
     </div>
   );

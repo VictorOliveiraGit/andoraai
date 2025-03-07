@@ -79,6 +79,14 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     return isMobile && window.innerWidth < 640;
   };
 
+  // Handle menu item click on mobile
+  const handleMenuItemClick = (itemId: string) => {
+    setActiveSection(itemId);
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  };
+
   // Render the sidebar content (used in both desktop sidebar and mobile sheet)
   const renderSidebarContent = () => {
     return (
@@ -109,10 +117,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                         ? "bg-gray-100 text-secondary"
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
-                    onClick={() => {
-                      setActiveSection(item.id);
-                      if (isMobile) setIsOpen(false);
-                    }}
+                    onClick={() => handleMenuItemClick(item.id)}
                   >
                     <IconComponent className="w-5 h-5 mr-2" />
                     <span>{item.label}</span>
