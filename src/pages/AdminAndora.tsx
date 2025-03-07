@@ -3,10 +3,15 @@
  * Admin Andora Dashboard Page
  * 
  * This component serves as the main container for the Andora admin dashboard,
- * with a layout similar to AdminUsuario but keeping Andora specific content.
+ * providing a premium admin experience with enhanced visual design.
  */
 
-import { Sidebar } from "@/components/admin/Sidebar";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { 
   LayoutDashboard, 
   Users, 
@@ -20,53 +25,167 @@ import {
   Menu,
   Bell
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { MobileNavbar } from "@/components/admin/MobileNavbar";
+
+// Admin Andora navigation items
+const navItems = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "ecommerce", label: "E-commerce", icon: ShoppingCart },
+  { id: "products", label: "Produtos", icon: Package },
+  { id: "users", label: "Usuários", icon: Users },
+  { id: "subscriptions", label: "Assinaturas", icon: CreditCard },
+  { id: "security", label: "Segurança", icon: ShieldCheck },
+  { id: "analytics", label: "Analytics", icon: BarChart4 },
+  { id: "settings", label: "Configurações", icon: Settings },
+];
 
 /**
- * AdminAndoraContent Component
+ * AdminAndora Component
  * 
- * Handles the main content area of the admin andora dashboard based on 
- * the active section selected in the sidebar.
- * 
- * @returns {JSX.Element} The rendered AdminAndoraContent component
+ * Premium admin dashboard for Andora with enhanced visual design
+ * and fully responsive layout for any screen size.
  */
-const AdminAndoraContent = () => {
-  const { 
-    activeSection, 
-    isSidebarOpen, 
-    setIsSidebarOpen 
-  } = useAdmin();
-  const navigate = useNavigate();
+const AdminAndora = () => {
+  const [activeSection, setActiveSection] = useState("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
-  /**
-   * Renders the appropriate component based on the active section
-   * @returns {JSX.Element} The component for the active section
-   */
+  // Handle logout
+  const handleLogout = () => {
+    toast.success("Logout realizado com sucesso!");
+    navigate("/");
+  };
+  
+  // Toggle sidebar on mobile view
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // Render sidebar/navigation
+  const renderSidebar = () => {
+    // Don't render sidebar on mobile - use bottom nav instead
+    if (isMobile) return null;
+    
+    return (
+      <div className={cn(
+        "h-screen bg-gradient-to-b from-primary/95 to-primary transition-all duration-300 overflow-y-auto",
+        "fixed top-0 left-0 z-30 w-64 shadow-lg",
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 md:w-20"
+      )}>
+        {/* Logo Section */}
+        <div className="p-6 flex justify-between items-center">
+          {isSidebarOpen ? (
+            <h1 className="text-xl font-bold text-white">Andora Admin</h1>
+          ) : (
+            <h1 className="text-xl font-bold text-white">A</h1>
+          )}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSidebar}
+            className="text-white hover:bg-white/10"
+          >
+            <Menu size={20} />
+          </Button>
+        </div>
+        
+        {/* Nav Links */}
+        <nav className="mt-6 px-3">
+          <ul className="space-y-1">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <li key={item.id}>
+                  <button
+                    onClick={() => setActiveSection(item.id)}
+                    className={cn(
+                      "flex items-center w-full px-3 py-2.5 rounded-lg transition-all",
+                      "hover:bg-white/10",
+                      isActive 
+                        ? "bg-white/20 text-white" 
+                        : "text-white/80"
+                    )}
+                  >
+                    <item.icon size={20} className="shrink-0" />
+                    {isSidebarOpen && (
+                      <span className="ml-3 transition-opacity duration-200">{item.label}</span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        
+        {/* Logout Button */}
+        {isSidebarOpen && (
+          <div className="absolute bottom-8 left-0 right-0 px-6">
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="w-full border border-white/10 text-white hover:bg-white/10 justify-start"
+            >
+              <LogOut size={16} className="mr-2" />
+              Sair
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Render mobile bottom navigation
+  const renderMobileNav = () => {
+    if (!isMobile) return null;
+    
+    return (
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 md:hidden">
+        <div className="flex justify-around">
+          {navItems.slice(0, 5).map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className="flex flex-col items-center py-2 flex-1"
+              >
+                <item.icon
+                  size={20}
+                  className={cn(
+                    "mb-1",
+                    isActive ? "text-primary" : "text-gray-500"
+                  )}
+                />
+                <span className={cn(
+                  "text-xs",
+                  isActive ? "text-primary font-medium" : "text-gray-500"
+                )}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // Render main content based on active section
   const renderContent = () => {
     switch(activeSection) {
       case "dashboard":
         return <DashboardContent />;
-      case "sales":
       case "ecommerce":
         return <EcommerceContent />;
       case "products": 
         return <ProductsContent />;
       case "users":
         return <UsersContent />;
-      case "subscription":
       case "subscriptions":
         return <SubscriptionsContent />;
       case "security":
         return <SecurityContent />;
-      case "reports":
       case "analytics":
         return <AnalyticsContent />;
       case "settings":
@@ -76,101 +195,69 @@ const AdminAndoraContent = () => {
     }
   };
 
-  /**
-   * Handles user logout
-   * Displays a success message and redirects to homepage
-   */
-  const handleLogout = () => {
-    toast.success("Logout realizado com sucesso!");
-    navigate("/");
-  };
-
-  /**
-   * Toggle sidebar on mobile view
-   */
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-white overflow-hidden">
-      {/* Sidebar Component */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        setIsOpen={setIsSidebarOpen}
-      />
+    <div className="admin-andora">
+      {/* Render sidebar for tablet/desktop */}
+      {renderSidebar()}
       
-      {/* Main Content Area */}
-      <div 
-        className={`flex-1 flex flex-col transition-all duration-300 h-full w-full ${
-          isSidebarOpen && !isMobile ? "md:ml-64" : "md:ml-0"
-        }`}
-      >
-        {/* Mobile Header with menu toggle and logout */}
-        <div className="sticky top-0 z-30 bg-white p-4 md:hidden flex justify-between items-center shadow-sm">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleSidebar}
-            className="md:hidden"
-          >
-            <Menu size={24} />
-          </Button>
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
-            onClick={handleLogout}
-            size="sm"
-          >
-            <LogOut size={16} />
-            Sair
-          </Button>
-        </div>
-
-        {/* Content Container with scrollable area */}
-        <div className="flex-1 overflow-y-auto pb-16 md:pb-0">
-          <div className="p-4 md:p-6 lg:p-8">
-            {/* Desktop Logout Button (hidden on mobile) */}
-            <div className="hidden md:flex justify-end mb-6">
+      {/* Main content */}
+      <div className={cn(
+        "min-h-screen bg-gray-50 transition-all duration-300",
+        isMobile 
+          ? "pb-20" // Add padding for mobile bottom nav
+          : isSidebarOpen
+            ? "md:ml-64" 
+            : "md:ml-20"
+      )}>
+        {/* Top Bar */}
+        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+          {isMobile && (
+            <div className="flex items-center">
               <Button 
-                variant="outline" 
-                className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleSidebar}
+                className="md:hidden"
+              >
+                <Menu size={24} />
+              </Button>
+              <h1 className="text-lg font-bold ml-2">Andora Admin</h1>
+            </div>
+          )}
+          
+          {!isMobile && (
+            <div>
+              <h2 className="text-lg font-medium">{navItems.find(item => item.id === activeSection)?.label}</h2>
+            </div>
+          )}
+          
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon">
+              <Bell size={20} />
+            </Button>
+            
+            {!isMobile && (
+              <Button
+                variant="outline"
                 onClick={handleLogout}
+                className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
               >
                 <LogOut size={16} />
                 Sair
               </Button>
-            </div>
-            
-            {/* Rendered Content Based on Active Section */}
-            <div className="pb-20 md:pb-8">
-              {renderContent()}
-            </div>
+            )}
           </div>
         </div>
-
-        {/* Mobile Bottom Navbar */}
-        {isMobile && <MobileNavbar />}
+        
+        {/* Content Area */}
+        <div className="p-4 md:p-6 lg:p-8">
+          {renderContent()}
+        </div>
       </div>
+      
+      {/* Mobile Bottom Navigation */}
+      {renderMobileNav()}
     </div>
-  );
-};
-
-/**
- * AdminAndora Component
- * 
- * Wraps the AdminAndoraContent component with AdminProvider to provide
- * context for admin-related state management.
- * 
- * @returns {JSX.Element} The rendered AdminAndora component
- */
-const AdminAndora = () => {
-  return (
-    <AdminProvider>
-      <div className="admin-andora">
-        <AdminAndoraContent />
-      </div>
-    </AdminProvider>
   );
 };
 
