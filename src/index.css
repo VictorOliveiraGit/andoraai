@@ -62,10 +62,17 @@
   overflow-x: hidden;
 }
 
-/* Apply the gradient only to non-admin pages */
+/* Apply primary background to the landing page */
 body:not(:has(.admin-page)):not(:has(.admin-andora)) {
-  @apply gradient-wave text-foreground;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  min-height: 100vh;
 }
+
+/* Remove the gradient wave from non-admin pages */
+/* body:not(:has(.admin-page)):not(:has(.admin-andora)) {
+  @apply gradient-wave text-foreground;
+} */
 
 .glass {
   @apply backdrop-blur-sm bg-white/30 border border-white/20;
