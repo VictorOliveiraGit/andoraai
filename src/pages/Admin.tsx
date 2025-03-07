@@ -82,7 +82,7 @@ const AdminContent = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-gray-100 overflow-hidden">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-white overflow-hidden">
       {/* Sidebar Component */}
       <Sidebar
         isOpen={isSidebarOpen}
@@ -156,7 +156,9 @@ const AdminContent = () => {
 const AdminDashboard = () => {
   return (
     <AdminProvider>
-      <AdminContent />
+      <div className="admin-page">
+        <AdminContent />
+      </div>
     </AdminProvider>
   );
 };
