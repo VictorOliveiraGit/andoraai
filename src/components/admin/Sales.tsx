@@ -56,7 +56,7 @@ export const Sales = () => {
         <CardHeader>
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <CardTitle>Vendas Recentes</CardTitle>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-wrap gap-3">
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
                 <input
