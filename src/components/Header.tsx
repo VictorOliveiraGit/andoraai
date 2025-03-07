@@ -268,7 +268,7 @@ const Header = () => {
       </nav>
 
       <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
-        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto bg-white">
           <DialogHeader>
             <DialogTitle>Entre em Contato</DialogTitle>
           </DialogHeader>
@@ -277,7 +277,7 @@ const Header = () => {
               <label className="block text-sm font-medium mb-1">Nome</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md bg-white"
                 placeholder="Seu nome"
               />
             </div>
@@ -285,13 +285,13 @@ const Header = () => {
               <label className="block text-sm font-medium mb-1">Email</label>
               <input
                 type="email"
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md bg-white"
                 placeholder="seu@email.com"
               />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Onde nos conheceu?</label>
-              <select className="w-full p-2 border rounded-md">
+              <select className="w-full p-2 border rounded-md bg-white">
                 <option value="">Selecione uma opção</option>
                 {sourceOptions.map((option) => (
                   <option key={option} value={option.toLowerCase()}>
@@ -303,7 +303,7 @@ const Header = () => {
             <div>
               <label className="block text-sm font-medium mb-1">Mensagem</label>
               <textarea
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md bg-white"
                 rows={4}
                 placeholder="Sua mensagem..."
               />
@@ -316,7 +316,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -333,7 +333,7 @@ const Header = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 bg-white"
                 onClick={() => handleSocialLogin("Google")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
@@ -346,7 +346,7 @@ const Header = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 bg-white"
                 onClick={() => handleSocialLogin("Apple")}
               >
                 <Apple className="w-5 h-5 text-black" />
@@ -368,7 +368,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Usuário</label>
                 <input
                   type="text"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md bg-white"
                   placeholder="Digite seu usuário"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -378,7 +378,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md bg-white"
                   placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -416,7 +416,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
-        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -433,7 +433,7 @@ const Header = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 bg-white"
                 onClick={() => handleSocialLogin("Google")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
@@ -446,7 +446,7 @@ const Header = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 bg-white"
                 onClick={() => handleSocialLogin("Apple")}
               >
                 <Apple className="w-5 h-5 text-black" />
@@ -468,7 +468,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Nome</label>
                 <input
                   type="text"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md bg-white"
                   placeholder="Seu nome completo"
                   value={registerData.name}
                   onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
@@ -479,7 +479,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Email</label>
                 <input
                   type="email"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md bg-white"
                   placeholder="seu@email.com"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
@@ -490,7 +490,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md bg-white"
                   placeholder="Digite sua senha"
                   value={registerData.password}
                   onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
@@ -501,7 +501,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md bg-white"
                   placeholder="Confirme sua senha"
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}

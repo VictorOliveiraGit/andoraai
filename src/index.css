@@ -42,6 +42,17 @@
     overflow: hidden;
     padding-right: 17px; /* Largura padrão da scrollbar */
   }
+
+  /* Assegure que os dialogs e seus conteúdos têm fundo sólido */
+  [role="dialog"] {
+    @apply bg-background;
+  }
+
+  /* Assegure que os inputs têm fundo sólido */
+  input, select, textarea {
+    @apply bg-background;
+    opacity: 1 !important;
+  }
 }
 
 /* Admin specific styles */
