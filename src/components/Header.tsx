@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -106,9 +106,9 @@ const Header = () => {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <a href="/" className="text-2xl font-bold text-gray-700">
+            <Link to="/" className="text-2xl font-bold text-gray-700">
               <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
-            </a>
+            </Link>
 
             <div className="hidden md:flex items-center space-x-8">
               <div className="relative">
@@ -155,6 +155,9 @@ const Header = () => {
               <a href="#precos" className="text-gray-700 hover:opacity-80 transition-colors">
                 Preços
               </a>
+              <Link to="/about" className="text-gray-700 hover:opacity-80 transition-colors">
+                Sobre
+              </Link>
             </div>
           </div>
 
@@ -229,6 +232,9 @@ const Header = () => {
               <a href="#precos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
                 Preços
               </a>
+              <Link to="/about" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+                Sobre
+              </Link>
               <Button 
                 variant="ghost" 
                 onClick={() => {
