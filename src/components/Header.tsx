@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -368,7 +367,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Usuário</label>
                 <input
                   type="text"
-                  className="w-full p-2 border rounded-md bg-white"
+                  className="w-full p-2 border rounded-md bg-white text-black"
                   placeholder="Digite seu usuário"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -378,7 +377,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md bg-white"
+                  className="w-full p-2 border rounded-md bg-white text-black"
                   placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -468,7 +467,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Nome</label>
                 <input
                   type="text"
-                  className="w-full p-2 border rounded-md bg-white"
+                  className="w-full p-2 border rounded-md bg-white text-black"
                   placeholder="Seu nome completo"
                   value={registerData.name}
                   onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
@@ -479,7 +478,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Email</label>
                 <input
                   type="email"
-                  className="w-full p-2 border rounded-md bg-white"
+                  className="w-full p-2 border rounded-md bg-white text-black"
                   placeholder="seu@email.com"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
@@ -490,7 +489,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md bg-white"
+                  className="w-full p-2 border rounded-md bg-white text-black"
                   placeholder="Digite sua senha"
                   value={registerData.password}
                   onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
@@ -501,7 +500,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md bg-white"
+                  className="w-full p-2 border rounded-md bg-white text-black"
                   placeholder="Confirme sua senha"
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
