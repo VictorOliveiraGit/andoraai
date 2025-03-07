@@ -68,11 +68,19 @@ const Header = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check user credentials and redirect to appropriate admin panel
     if (username === "admin" && password === "admin") {
       setIsLoginOpen(false);
-      toast.success("Login realizado com sucesso!");
+      toast.success("Login realizado com sucesso! Redirecionando para Admin Andora.");
+      navigate("/admin-andora");
+    } 
+    else if (username === "victor" && password === "victor") {
+      setIsLoginOpen(false);
+      toast.success("Login realizado com sucesso! Redirecionando para Admin Dashboard.");
       navigate("/admin");
-    } else {
+    }
+    else {
       toast.error("Usuário ou senha inválidos");
     }
   };
