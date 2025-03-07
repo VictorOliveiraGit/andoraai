@@ -1,8 +1,8 @@
 
 /**
- * Admin Dashboard Page
+ * Admin Usuario Page
  * 
- * This component serves as the main container for the admin dashboard,
+ * This component serves as the main container for the admin user dashboard,
  * integrating all admin-related components and managing the layout.
  */
 
@@ -146,14 +146,14 @@ const AdminContent = () => {
 };
 
 /**
- * AdminDashboard Component
+ * AdminUsuario Component
  * 
  * Wraps the AdminContent component with AdminProvider to provide
  * context for admin-related state management.
  * 
- * @returns {JSX.Element} The rendered AdminDashboard component
+ * @returns {JSX.Element} The rendered AdminUsuario component
  */
-const AdminDashboard = () => {
+const AdminUsuario = () => {
   return (
     <AdminProvider>
       <div className="admin-page">
@@ -163,4 +163,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminUsuario;
