@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -105,12 +104,10 @@ const Index = () => {
     { title: "Financeiro", description: "Soluções para finanças", icon: <LineChart className="w-6 h-6 text-primary" /> },
   ];
 
-  // Handler para simular o subscrine de um plano
   const handleSubscribe = (planType: string) => {
     toast.info(`Redirecionando para o checkout do plano ${planType}...`);
   };
 
-  // Funções para gerenciar o hover nos planos (efeito de escalada)
   const handleMouseEnter = (planType: string) => {
     setHoveredPlan(planType);
   };
@@ -121,11 +118,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen font-glacial">
-      {/* Header */}
       <Header />
       
-      {/* Hero Section */}
-      <section id="inicio" className="pt-24 md:pt-32 pb-20 px-4 md:px-6 gradient-wave text-foreground relative overflow-hidden">
+      <section id="inicio" className="pt-24 md:pt-32 pb-20 px-4 md:px-6 text-foreground relative overflow-hidden">
         <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div className="text-left relative z-10">
             <h1 className="text-3xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight text-white">
@@ -198,8 +193,7 @@ const Index = () => {
         <div className="absolute -bottom-24 left-0 right-0 h-24 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSIxMDAiIHZpZXdCb3g9IjAgMCAxNDQwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwQzEyMCAyMCAyNDAgMjAgMzYwIDIwQzQ4MCAyMCA2MDAgNDAgNzIwIDUwQzg0MCA2MCA5NjAgNjAgMTA4MCA2MEMxMjAwIDYwIDEzMjAgNDAgMTQ0MCAwVjEwMEgwVjBaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==')]"></div>
       </section>
 
-      {/* Features Section */}
-      <section id="recursos" className="py-16 md:py-20 px-4 md:px-6 mt-16">
+      <section id="recursos" className="py-16 md:py-20 px-4 md:px-6 mt-16 bg-white text-foreground">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-codec-bold text-center mb-8 md:mb-12 animate-on-scroll">
             Por Que Escolher Nossa Solução
@@ -216,13 +210,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Pricing Section - Matching Admin Subscription styling */}
       <section id="precos" className="py-16 md:py-20 px-4 md:px-6 gradient-plans relative">
         <div className="container mx-auto space-y-8 md:space-y-10">
           <h2 className="text-2xl md:text-3xl font-bold text-primary text-center">Planos de Assinatura</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-            {/* Plano Básico */}
             <Card 
               className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
                 hoveredPlan === 'basic' ? 'transform scale-105' : ''
@@ -269,7 +261,6 @@ const Index = () => {
               </div>
             </Card>
 
-            {/* Plano Pro */}
             <Card 
               className={`p-6 flex flex-col h-full border-2 border-secondary bg-gradient-to-b from-primary to-primary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl ${
                 hoveredPlan === 'pro' ? 'transform scale-105' : ''
@@ -320,7 +311,6 @@ const Index = () => {
               </div>
             </Card>
 
-            {/* Plano Enterprise */}
             <Card 
               className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
                 hoveredPlan === 'enterprise' ? 'transform scale-105' : ''
@@ -378,8 +368,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="depoimentos" className="py-16 md:py-20 px-4 md:px-6">
+      <section id="depoimentos" className="py-16 md:py-20 px-4 md:px-6 bg-white text-foreground">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-codec-bold text-center mb-8 md:mb-12 animate-on-scroll">
             O Que Nossos Clientes Dizem
@@ -403,8 +392,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-20 px-4 md:px-6 gradient-wave text-white">
+      <section className="py-16 md:py-20 px-4 md:px-6 text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-codec-bold mb-4 md:mb-6 animate-on-scroll">
             Pronto para Começar?

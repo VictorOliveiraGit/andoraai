@@ -42,6 +42,11 @@
     overflow: hidden;
     padding-right: 17px; /* Largura padrão da scrollbar */
   }
+
+  /* Aplicando o fundo com gradiente em todo o body */
+  body {
+    @apply gradient-wave text-foreground;
+  }
 }
 
 .glass {
