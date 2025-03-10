@@ -57,7 +57,7 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
           <img 
             src={avatar} 
             alt="Avatar" 
-            className="w-24 h-24 rounded-full object-cover"
+            className="w-24 h-24 rounded-full object-cover border border-gray-200"
           />
           {avatar !== "/placeholder.svg" && (
             <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">

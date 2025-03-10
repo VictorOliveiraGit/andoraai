@@ -102,9 +102,40 @@ export const ImageCropper = ({
     isDraggingRef.current = false;
   };
 
+  // Add touch event handlers for mobile support
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      isDraggingRef.current = true;
+      startPosRef.current = { 
+        x: e.touches[0].clientX, 
+        y: e.touches[0].clientY 
+      };
+      startOffsetRef.current = { ...cropPosition };
+      e.preventDefault();
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDraggingRef.current || e.touches.length !== 1) return;
+    
+    const deltaX = e.touches[0].clientX - startPosRef.current.x;
+    const deltaY = e.touches[0].clientY - startPosRef.current.y;
+    
+    setCropPosition({
+      x: startOffsetRef.current.x - deltaX,
+      y: startOffsetRef.current.y - deltaY
+    });
+    
+    e.preventDefault();
+  };
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="sm:max-w-xl bg-white">
         <DialogHeader>
           <DialogTitle>Ajuste seu Avatar</DialogTitle>
           <DialogDescription>
@@ -115,11 +146,14 @@ export const ImageCropper = ({
         <div className="flex flex-col items-center space-y-4">
           <div 
             ref={containerRef}
-            className="relative w-[400px] h-[400px] border-2 border-primary rounded-full overflow-hidden cursor-move"
+            className="relative w-[300px] h-[300px] border-2 border-primary rounded-full overflow-hidden cursor-move"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleDragEnd}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {tempImage && (
               <img
