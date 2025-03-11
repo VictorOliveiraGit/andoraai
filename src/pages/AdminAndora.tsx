@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import AICostCard from "@/components/admin/analytics/AICostCard";
 import { 
   LayoutDashboard, 
   Users, 
