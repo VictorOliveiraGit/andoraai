@@ -1,3 +1,4 @@
+
 /**
  * Admin Andora Dashboard Page
  * 
@@ -12,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AICostCard from "@/components/admin/analytics/AICostCard";
-import { 
+import {
   LayoutDashboard, 
   Users, 
   Settings, 
@@ -25,7 +26,8 @@ import {
   Menu,
   Bell,
   Calendar,
-  Filter
+  Filter,
+  ChevronUp
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -38,6 +40,16 @@ import {
   ResponsiveContainer 
 } from "recharts";
 import { format } from "date-fns";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 // Admin Andora navigation items
 const navItems = [
@@ -113,6 +125,7 @@ const dailySalesData = {
 const AdminAndora = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
@@ -125,6 +138,12 @@ const AdminAndora = () => {
   // Toggle sidebar on mobile view
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // Select section and close drawer
+  const selectSection = (sectionId) => {
+    setActiveSection(sectionId);
+    setIsDrawerOpen(false);
   };
 
   // Render sidebar/navigation
@@ -200,41 +219,54 @@ const AdminAndora = () => {
     );
   };
 
-  // Render mobile bottom navigation
+  // Render mobile bottom drawer trigger
   const renderMobileNav = () => {
     if (!isMobile) return null;
     
     return (
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 md:hidden overflow-x-auto">
-        <div className="flex whitespace-nowrap">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={cn(
-                  "flex flex-col items-center py-2 px-4",
-                  isActive ? "text-primary" : "text-gray-500"
-                )}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 md:hidden p-2">
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+          <DrawerTrigger asChild className="w-full">
+            <Button variant="ghost" className="w-full flex items-center gap-2 justify-center py-2">
+              <span className="text-primary font-medium">{navItems.find(item => item.id === activeSection)?.label}</span>
+              <ChevronUp className="h-5 w-5 text-primary" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="h-80 overflow-y-auto">
+            <DrawerHeader className="text-left px-4 py-2 border-b">
+              <DrawerTitle>Menu de Navegação</DrawerTitle>
+            </DrawerHeader>
+            <div className="grid grid-cols-2 gap-2 p-4">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <Button
+                    key={item.id}
+                    variant={isActive ? "default" : "outline"}
+                    className={cn(
+                      "h-20 flex flex-col items-center justify-center gap-2",
+                      isActive ? "bg-primary text-white" : ""
+                    )}
+                    onClick={() => selectSection(item.id)}
+                  >
+                    <item.icon size={24} />
+                    <span>{item.label}</span>
+                  </Button>
+                );
+              })}
+            </div>
+            <DrawerFooter className="border-t pt-2">
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
               >
-                <item.icon
-                  size={20}
-                  className={cn(
-                    "mb-1",
-                    isActive ? "text-primary" : "text-gray-500"
-                  )}
-                />
-                <span className={cn(
-                  "text-xs",
-                  isActive ? "text-primary font-medium" : "text-gray-500"
-                )}>
-                  {item.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                <LogOut size={16} />
+                Sair
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
     );
   };
@@ -272,7 +304,7 @@ const AdminAndora = () => {
       <div className={cn(
         "min-h-screen bg-gray-50 transition-all duration-300",
         isMobile 
-          ? "pb-20" // Add padding for mobile bottom nav
+          ? "pb-16" // Add padding for mobile bottom nav
           : isSidebarOpen
             ? "md:ml-64" 
             : "md:ml-20"
@@ -323,7 +355,7 @@ const AdminAndora = () => {
         </div>
       </div>
       
-      {/* Mobile Bottom Navigation */}
+      {/* Mobile Bottom Drawer Navigation */}
       {renderMobileNav()}
     </div>
   );
