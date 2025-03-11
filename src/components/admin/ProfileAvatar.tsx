@@ -52,27 +52,30 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
 
   return (
     <TooltipProvider>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6">
         <div className="relative group">
-          <img 
-            src={avatar} 
-            alt="Avatar" 
-            className="w-24 h-24 rounded-full object-cover border border-gray-200"
-          />
+          <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-primary/20 shadow-md">
+            <img 
+              src={avatar} 
+              alt="Avatar" 
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+          
           {avatar !== "/placeholder.svg" && (
-            <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <div className="absolute inset-0 bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
                     onClick={() => setIsViewModalOpen(true)}
+                    className="h-10 w-10 rounded-full bg-white/20 text-white hover:bg-white/30 hover:text-white hover:scale-110 transition-all"
                   >
-                    <Eye size={16} />
+                    <Eye size={18} />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="bottom">
                   <p>Visualizar</p>
                 </TooltipContent>
               </Tooltip>
@@ -82,30 +85,35 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-white hover:text-white hover:bg-white/20"
                     onClick={handleDeleteAvatar}
+                    className="h-10 w-10 rounded-full bg-white/20 text-white hover:bg-destructive/90 hover:text-white hover:scale-110 transition-all"
                   >
-                    <Trash size={16} />
+                    <Trash size={18} />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="bottom">
                   <p>Excluir</p>
                 </TooltipContent>
               </Tooltip>
             </div>
           )}
         </div>
+        
         <div>
-          <Button variant="outline" className="relative">
+          <Button variant="outline" className="relative overflow-hidden group hover:border-primary/50 transition-all">
             <input
               type="file"
               accept="image/*"
               onChange={handleAvatarUpload}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              aria-label="Selecionar imagem de avatar"
             />
-            <Upload className="mr-2" size={20} />
-            Alterar Avatar
+            <Upload className="mr-2 text-primary/70 group-hover:text-primary transition-colors" size={20} />
+            <span className="group-hover:text-primary/90 transition-colors">Alterar Avatar</span>
           </Button>
+          <p className="text-xs text-muted-foreground mt-2">
+            Clique para fazer upload de uma nova imagem
+          </p>
         </div>
       </div>
 
