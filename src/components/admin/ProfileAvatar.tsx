@@ -100,7 +100,10 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
         </div>
         
         <div>
-          <Button variant="outline" className="relative overflow-hidden group hover:border-primary/50 transition-all">
+          <Button 
+            variant="default" 
+            className="relative overflow-hidden group bg-primary hover:bg-primary/90 text-white transition-all duration-300"
+          >
             <input
               type="file"
               accept="image/*"
@@ -108,8 +111,8 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               aria-label="Selecionar imagem de avatar"
             />
-            <Upload className="mr-2 text-primary/70 group-hover:text-primary transition-colors" size={20} />
-            <span className="group-hover:text-primary/90 transition-colors">Alterar Avatar</span>
+            <Upload className="mr-2 text-white transition-transform group-hover:scale-110" size={20} />
+            <span className="text-white">Alterar Avatar</span>
           </Button>
           <p className="text-xs text-muted-foreground mt-2">
             Clique para fazer upload de uma nova imagem
