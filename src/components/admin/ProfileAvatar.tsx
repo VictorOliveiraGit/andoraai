@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, Trash, Eye } from "lucide-react";
 import { toast } from "sonner";
@@ -22,8 +22,8 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
 
-  // Create a reference to the hidden file input element
-  const fileInputRef = useState<HTMLInputElement | null>(null);
+  // Create a reference to the hidden file input element using useRef instead of useState
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const handleButtonClick = () => {
     // Trigger the hidden file input click event
