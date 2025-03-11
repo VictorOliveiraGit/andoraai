@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -60,10 +59,6 @@ export const ImageViewer = ({ isOpen, onClose, imageSrc }: ImageViewerProps) => 
   // --------------------
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      {/* 
-        Dark themed dialog content with maximum width and no border 
-        for a modern, immersive look
-      */}
       <DialogContent className="sm:max-w-2xl p-0 overflow-hidden bg-black/95 border-none">
         {/* Header with close button */}
         <DialogHeader className="p-4 text-white/90 flex flex-row items-center justify-between">
