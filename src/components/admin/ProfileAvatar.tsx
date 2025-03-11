@@ -22,6 +22,14 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
 
+  // Create a reference to the hidden file input element
+  const fileInputRef = useState<HTMLInputElement | null>(null);
+  
+  const handleButtonClick = () => {
+    // Trigger the hidden file input click event
+    fileInputRef.current?.click();
+  };
+
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -31,6 +39,8 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
         setIsModalOpen(true);
       };
       reader.readAsDataURL(file);
+      // Reset the input value so the same file can be selected again if needed
+      e.target.value = '';
     }
   };
 
@@ -100,17 +110,22 @@ export const ProfileAvatar = ({ avatar, setAvatar }: ProfileAvatarProps) => {
         </div>
         
         <div>
+          {/* Hidden file input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*"
+            onChange={handleAvatarUpload}
+            className="hidden"
+            aria-label="Selecionar imagem de avatar"
+          />
+          
+          {/* Visible styled button */}
           <Button 
             variant="default" 
-            className="relative overflow-hidden group bg-primary hover:bg-primary/90 text-white transition-all duration-300"
+            onClick={handleButtonClick}
+            className="group bg-primary hover:bg-primary/90 text-white transition-all duration-300"
           >
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarUpload}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              aria-label="Selecionar imagem de avatar"
-            />
             <Upload className="mr-2 text-white transition-transform group-hover:scale-110" size={20} />
             <span className="text-white">Alterar Avatar</span>
           </Button>
