@@ -16,19 +16,6 @@ const HeroSection = () => {
             serviços financeiros integrados, capacitar modelos de
             receita personalizados e aumentar os lucros nos negócios.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative w-full sm:w-auto">
-              <input 
-                type="email" 
-                placeholder="Seu e-mail"
-                className="px-4 py-3 rounded-md w-full sm:w-64 text-gray-800 border border-gray-300"
-              />
-            </div>
-            <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90 w-full sm:w-auto">
-              Comece agora
-              <ArrowRight className="ml-2" size={16} />
-            </Button>
-          </div>
         </div>
         <div className="relative hidden md:block">
           <div className="bg-white p-6 rounded-xl shadow-xl transform md:translate-y-10">
