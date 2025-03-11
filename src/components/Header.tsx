@@ -315,7 +315,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
+        <DialogContent className="!text-black sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -415,7 +415,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
-        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
+        <DialogContent className="text-black sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 

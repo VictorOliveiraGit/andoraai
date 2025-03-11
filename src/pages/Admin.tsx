@@ -155,7 +155,7 @@ const AdminContent = () => {
             <Button
               variant="ghost"
               onClick={handleLogout}
-              className="w-full border border-white/10 text-white hover:bg-white/10 justify-start"
+              className="w-full text-white justify-start"
             >
               <LogOut size={16} className="mr-2" />
               Sair
@@ -220,14 +220,14 @@ const AdminContent = () => {
         <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-3 flex justify-between items-center">
           {isMobile && (
             <div className="flex items-center">
-              <Button 
+              {/* <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleSidebar}
                 className="md:hidden"
               >
                 <Menu size={24} />
-              </Button>
+              </Button> */}
               <h1 className="text-lg font-bold ml-2">Admin Usuario</h1>
             </div>
           )}
@@ -238,7 +238,7 @@ const AdminContent = () => {
             </div>
           )}
           
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon">
               <Bell size={20} />
             </Button>
@@ -253,7 +253,7 @@ const AdminContent = () => {
                 Sair
               </Button>
             )}
-          </div>
+          </div> */}
         </div>
         
         {/* Content Area */}

@@ -23,7 +23,7 @@ const PricingSection = () => {
   return (
     <section id="precos" className="py-16 md:py-20 px-4 md:px-6 gradient-plans relative">
       <div className="container mx-auto space-y-8 md:space-y-10">
-        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center">Planos de Assinatura</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-white text-center">Planos de Assinatura</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
           <Card 
