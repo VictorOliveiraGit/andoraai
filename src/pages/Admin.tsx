@@ -46,18 +46,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-
-// Admin Usuario navigation items
-const navItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "users", label: "Usuários", icon: Users },
-  { id: "reports", label: "Relatórios", icon: BarChart4 },
-  { id: "subscription", label: "Assinaturas", icon: CreditCard },
-  { id: "sales", label: "Vendas", icon: ShoppingCart },
-  { id: "products", label: "Produtos", icon: Package },
-  { id: "customers", label: "Clientes", icon: Users },
-  { id: "settings", label: "Configurações", icon: Settings },
-];
+import { menuItems } from "@/config/admin";
 
 /**
  * AdminContent Component
@@ -142,7 +131,7 @@ const AdminContent = () => {
         {/* Nav Links */}
         <nav className="mt-6 px-3">
           <ul className="space-y-1">
-            {navItems.map((item) => {
+            {menuItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
                 <li key={item.id}>
@@ -193,7 +182,7 @@ const AdminContent = () => {
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerTrigger asChild className="w-full">
             <Button variant="ghost" className="w-full flex items-center gap-2 justify-center py-2">
-              <span className="text-primary font-medium">{navItems.find(item => item.id === activeSection)?.label}</span>
+              <span className="text-primary font-medium">{menuItems.find(item => item.id === activeSection)?.label}</span>
               <ChevronUp className="h-5 w-5 text-primary" />
             </Button>
           </DrawerTrigger>
@@ -202,7 +191,7 @@ const AdminContent = () => {
               <DrawerTitle>Menu de Navegação</DrawerTitle>
             </DrawerHeader>
             <div className="grid grid-cols-2 gap-2 p-4">
-              {navItems.map((item) => {
+              {menuItems.map((item) => {
                 const isActive = activeSection === item.id;
                 return (
                   <Button
@@ -268,7 +257,7 @@ const AdminContent = () => {
           
           {!isMobile && (
             <div>
-              <h2 className="text-lg font-medium">{navItems.find(item => item.id === activeSection)?.label}</h2>
+              <h2 className="text-lg font-medium">{menuItems.find(item => item.id === activeSection)?.label}</h2>
             </div>
           )}
           
