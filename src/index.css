@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,9 +32,46 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    scroll-behavior: smooth; /* Add smooth scrolling behavior to the html element */
+    /* macOS-like scrollbar for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+  
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    overflow-y: auto !important; /* Ensure vertical scrolling is always possible */
+  }
+  
+  /* Apple macOS style scrollbars for Webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+    background-clip: content-box;
+  }
+  
+  /* Hide scrollbar when not in use (macOS-like) */
+  ::-webkit-scrollbar-thumb:window-inactive {
+    background-color: rgba(0, 0, 0, 0.1);
   }
   
   /* Previne o scroll e mantém a largura quando o modal está aberto */
@@ -68,6 +106,7 @@
   width: 100%;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto; /* Ensure vertical scrolling is possible */
 }
 
 /* Admin Andora specific styles */
@@ -77,6 +116,7 @@
   width: 100%;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto; /* Ensure vertical scrolling is possible */
 }
 
 /* Apply primary background to the landing page */
@@ -84,26 +124,7 @@ body:not(:has(.admin-page)):not(:has(.admin-andora)) {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
   min-height: 100vh;
-}
-
-/* Remove the gradient wave from non-admin pages */
-/* body:not(:has(.admin-page)):not(:has(.admin-andora)) {
-  @apply gradient-wave text-foreground;
-} */
-
-.glass {
-  @apply backdrop-blur-sm bg-white/30 border border-white/20;
-}
-
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease-out;
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
+  overflow-y: auto; /* Ensure vertical scrolling is possible */
 }
 
 /* Gradient backgrounds */
@@ -149,4 +170,6 @@ body:not(:has(.admin-page)):not(:has(.admin-andora)) {
   .responsive-flex {
     @apply flex flex-col sm:flex-row items-start sm:items-center;
   }
+  
+  /* Removed the .custom-scrollbar class since we're applying Apple macOS scrollbar globally */
 }

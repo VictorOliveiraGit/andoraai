@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -21,8 +20,11 @@ import {
   TrendingUp, 
   ShoppingCart,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Filter
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 
 const data = [
   { name: "Jan", vendas: 4000, clientes: 240 },
@@ -53,8 +55,46 @@ const customerData = [
   { name: "Dom", valor: 5 },
 ];
 
+const dailySalesData = {
+  "2024": {
+    "1": [
+      { day: "Segunda", sales: 1500 },
+      { day: "Terça", sales: 2200 },
+      { day: "Quarta", sales: 1800 },
+      { day: "Quinta", sales: 2500 },
+      { day: "Sexta", sales: 3000 },
+      { day: "Sábado", sales: 2800 },
+      { day: "Domingo", sales: 1200 },
+    ],
+    "2": [
+      { day: "Segunda", sales: 1700 },
+      { day: "Terça", sales: 2400 },
+      { day: "Quarta", sales: 2100 },
+      { day: "Quinta", sales: 2700 },
+      { day: "Sexta", sales: 3200 },
+      { day: "Sábado", sales: 2600 },
+      { day: "Domingo", sales: 1400 },
+    ],
+  },
+  "2023": {
+    "12": [
+      { day: "Segunda", sales: 1400 },
+      { day: "Terça", sales: 2000 },
+      { day: "Quarta", sales: 1600 },
+      { day: "Quinta", sales: 2300 },
+      { day: "Sexta", sales: 2800 },
+      { day: "Sábado", sales: 2500 },
+      { day: "Domingo", sales: 1100 },
+    ],
+  }
+};
+
 export const Dashboard = () => {
   const [period, setPeriod] = useState("mensal");
+  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedMonth, setSelectedMonth] = useState("1");
+
+  const currentData = dailySalesData[selectedYear]?.[selectedMonth] || [];
 
   return (
     <div className="space-y-6">
@@ -187,6 +227,50 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Vendas Diárias</CardTitle>
+          <div className="flex gap-2">
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="bg-white border rounded-md px-3 py-1.5 text-sm"
+            >
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+            </select>
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="bg-white border rounded-md px-3 py-1.5 text-sm"
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                <option key={month} value={month.toString()}>
+                  {format(new Date(2024, month - 1), 'MMMM')}
+                </option>
+              ))}
+            </select>
+          </div>
+        </CardHeader>
+        <CardContent className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={currentData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip 
+                formatter={(value) => [`R$ ${value}`, 'Vendas']}
+              />
+              <Bar 
+                dataKey="sales" 
+                fill="#C6BA77" 
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
