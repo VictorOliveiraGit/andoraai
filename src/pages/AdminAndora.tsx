@@ -590,10 +590,16 @@ const SecurityContent = () => (
   </div>
 );
 
+// Atualização do componente Analytics
 const AnalyticsContent = () => (
   <div className="space-y-6">
     <h2 className="text-2xl font-bold">Analytics</h2>
     <p className="text-gray-500">Visualize estatísticas e métricas do sistema.</p>
+    
+    {/* AICostCard Component */}
+    <AICostCard />
+    
+    {/* Outros cartões de análise podem ser adicionados aqui */}
   </div>
 );
 
