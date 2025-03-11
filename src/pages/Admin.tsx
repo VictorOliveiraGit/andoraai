@@ -1,4 +1,3 @@
-
 /**
  * Admin Usuario Page
  * 
@@ -171,15 +170,18 @@ const AdminContent = () => {
     if (!isMobile) return null;
     
     return (
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 md:hidden">
-        <div className="flex justify-around">
-          {navItems.slice(0, 5).map((item) => {
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 md:hidden overflow-x-auto">
+        <div className="flex whitespace-nowrap">
+          {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className="flex flex-col items-center py-2 flex-1"
+                className={cn(
+                  "flex flex-col items-center py-2 px-4",
+                  isActive ? "text-primary" : "text-gray-500"
+                )}
               >
                 <item.icon
                   size={20}
