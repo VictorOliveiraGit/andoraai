@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"; // Add this import
 import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { AppointmentItem } from "./AppointmentItem";
 import { AppointmentEditForm } from "./AppointmentEditForm";
@@ -156,3 +157,4 @@ export const AppointmentList = ({
     </div>
   );
 };
+
