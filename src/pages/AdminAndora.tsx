@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Customers } from "@/components/admin/Customers";
@@ -17,17 +16,15 @@ import { menuItems } from "@/config/admin";
 
 const AdminAndora = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // On small screens, close sidebar when route changes
   useEffect(() => {
     if (window.innerWidth < 1024) {
-      setIsSidebarOpen(false);
+      setIsOpen(false);
     }
   }, [activeSection]);
 
-  // Helper to render the active section
   const renderActiveSection = () => {
     switch (activeSection) {
       case "dashboard":
@@ -56,25 +53,21 @@ const AdminAndora = () => {
   return (
     <AdminProvider>
       <div className="flex h-screen overflow-hidden bg-gray-100/40">
-        {/* Sidebar for larger screens */}
         <Sidebar
           menuItems={menuItems}
           activeSection={activeSection}
           setActiveSection={setActiveSection}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
         />
 
-        {/* Main content area */}
         <div className="flex flex-col flex-1 w-full overflow-hidden">
-          {/* Mobile header */}
           <MobileNavbar 
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
+            isSidebarOpen={isOpen}
+            setIsSidebarOpen={setIsOpen}
             activeSection={activeSection}
           />
 
-          {/* Main content */}
           <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50/30">
             <div className="mx-auto max-w-7xl">
               {renderActiveSection()}
