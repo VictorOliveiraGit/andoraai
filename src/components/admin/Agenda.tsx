@@ -41,18 +41,8 @@ export const Agenda = () => {
   const [view, setView] = useState<"day" | "week" | "month">("month");
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  // New appointment form state
-  const [newAppointment, setNewAppointment] = useState({
-    title: "",
-    clientName: "",
-    phoneNumber: "",
-    date: new Date(),
-    time: "",
-    status: "scheduled" as "scheduled" | "pending" | "delayed" | "canceled"
-  });
-  
-  // Placeholder for appointments data that would come from the database
-  const appointments: Appointment[] = [
+  // Store appointments in state instead of using placeholder data
+  const [appointments, setAppointments] = useState<Appointment[]>([
     {
       id: 1,
       title: "Consulta Dr. Silva",
@@ -71,7 +61,17 @@ export const Agenda = () => {
       phoneNumber: "(11) 91234-5678",
       time: "15:45"
     }
-  ];
+  ]);
+  
+  // New appointment form state
+  const [newAppointment, setNewAppointment] = useState({
+    title: "",
+    clientName: "",
+    phoneNumber: "",
+    date: new Date(),
+    time: "",
+    status: "scheduled" as "scheduled" | "pending" | "delayed" | "canceled"
+  });
 
   // Handle input change for the form
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,8 +104,14 @@ export const Agenda = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Here you would typically make an API call to save the appointment
-    console.log("New appointment data:", newAppointment);
+    // Create a new appointment with an ID
+    const newAppointmentWithId: Appointment = {
+      ...newAppointment,
+      id: Date.now(), // Use timestamp as a simple ID
+    };
+    
+    // Add the new appointment to the list
+    setAppointments(prev => [...prev, newAppointmentWithId]);
     
     // Show success message
     toast.success("Agendamento criado com sucesso!");
@@ -143,6 +149,18 @@ export const Agenda = () => {
       default: return 'bg-gray-100 text-gray-700';
     }
   };
+
+  // Filter appointments for the currently selected date
+  const filteredAppointments = appointments.filter(appointment => {
+    if (!date) return false;
+    
+    const appointmentDate = new Date(appointment.date);
+    return (
+      appointmentDate.getDate() === date.getDate() &&
+      appointmentDate.getMonth() === date.getMonth() &&
+      appointmentDate.getFullYear() === date.getFullYear()
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -313,26 +331,32 @@ export const Agenda = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {appointments.map((appointment) => (
-                <div
-                  key={appointment.id}
-                  className="flex flex-col space-y-2 p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{appointment.time}</span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(appointment.status)}`}>
-                      {getStatusLabel(appointment.status)}
-                    </span>
+              {filteredAppointments.length > 0 ? (
+                filteredAppointments.map((appointment) => (
+                  <div
+                    key={appointment.id}
+                    className="flex flex-col space-y-2 p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{appointment.time}</span>
+                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(appointment.status)}`}>
+                        {getStatusLabel(appointment.status)}
+                      </span>
+                    </div>
+                    <span className="text-sm font-medium">{appointment.title}</span>
+                    <span className="text-sm text-muted-foreground">{appointment.clientName}</span>
+                    {appointment.phoneNumber && (
+                      <span className="text-sm text-muted-foreground flex items-center gap-1">
+                        <Phone size={12} /> {appointment.phoneNumber}
+                      </span>
+                    )}
                   </div>
-                  <span className="text-sm font-medium">{appointment.title}</span>
-                  <span className="text-sm text-muted-foreground">{appointment.clientName}</span>
-                  {appointment.phoneNumber && (
-                    <span className="text-sm text-muted-foreground flex items-center gap-1">
-                      <Phone size={12} /> {appointment.phoneNumber}
-                    </span>
-                  )}
+                ))
+              ) : (
+                <div className="text-center py-6 text-muted-foreground">
+                  Nenhum agendamento para este dia
                 </div>
-              ))}
+              )}
             </div>
           </CardContent>
         </Card>
