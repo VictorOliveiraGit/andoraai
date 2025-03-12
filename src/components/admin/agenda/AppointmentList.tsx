@@ -1,7 +1,6 @@
-
 import { Pencil, Save, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Appointment, AppointmentStatus } from "@/types/appointment";
+import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { formatPhoneNumber } from "@/utils/appointment-utils";
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
 import { useState } from "react";
@@ -40,26 +39,22 @@ export const AppointmentList = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedAppointment, setEditedAppointment] = useState<Appointment | null>(null);
 
-  // Filter appointments based on the selected view and date
   const filteredAppointments = appointments.filter(appointment => {
     if (!selectedDate) return false;
     
     const appointmentDate = new Date(appointment.date);
     
     if (view === "day") {
-      // For day view: show only appointments on the selected day
       return (
         appointmentDate.getDate() === selectedDate.getDate() &&
         appointmentDate.getMonth() === selectedDate.getMonth() &&
         appointmentDate.getFullYear() === selectedDate.getFullYear()
       );
     } else if (view === "week") {
-      // For week view: show appointments within the current week
       const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 });
       const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 0 });
       return isWithinInterval(appointmentDate, { start: weekStart, end: weekEnd });
     } else if (view === "month") {
-      // For month view: show appointments within the current month
       const monthStart = startOfMonth(selectedDate);
       const monthEnd = endOfMonth(selectedDate);
       return isWithinInterval(appointmentDate, { start: monthStart, end: monthEnd });
@@ -68,7 +63,6 @@ export const AppointmentList = ({
     return false;
   });
 
-  // Get the title based on the current view
   const getViewTitle = () => {
     switch (view) {
       case "day":
@@ -149,6 +143,15 @@ export const AppointmentList = ({
     }
   };
 
+  const handlePaymentChange = (value: PaymentStatus) => {
+    if (editedAppointment) {
+      setEditedAppointment({
+        ...editedAppointment,
+        payment: value
+      });
+    }
+  };
+
   return (
     <>
       <Card className="md:col-span-4">
@@ -174,7 +177,6 @@ export const AppointmentList = ({
         </CardContent>
       </Card>
 
-      {/* Status Change Dialog */}
       <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -195,6 +197,7 @@ export const AppointmentList = ({
               onInputChange={handleInputChange}
               onPhoneChange={handlePhoneChange}
               onStatusChange={handleEditStatusChange}
+              onPaymentChange={handlePaymentChange}
             />
           ) : selectedAppointment ? (
             <AppointmentStatusForm 

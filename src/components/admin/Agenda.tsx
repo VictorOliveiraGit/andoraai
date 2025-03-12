@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { Appointment, AppointmentStatus } from "@/types/appointment";
+import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { AppointmentForm } from "./agenda/AppointmentForm";
 import { AppointmentList } from "./agenda/AppointmentList";
 import { CalendarView } from "./agenda/CalendarView";
@@ -22,7 +22,8 @@ export const Agenda = () => {
       status: "scheduled",
       clientName: "João Pedro",
       phoneNumber: "(11) 98765-4321",
-      time: "14:30"
+      time: "14:30",
+      payment: "pending"
     },
     {
       id: 2,
@@ -31,7 +32,8 @@ export const Agenda = () => {
       status: "pending",
       clientName: "Maria Santos",
       phoneNumber: "(11) 91234-5678",
-      time: "15:45"
+      time: "15:45",
+      payment: "paid"
     }
   ]);
   

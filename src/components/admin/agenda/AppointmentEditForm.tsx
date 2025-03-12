@@ -1,6 +1,6 @@
 
 import { Pencil } from "lucide-react";
-import { Appointment, AppointmentStatus } from "@/types/appointment";
+import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatPhoneNumber } from "@/utils/appointment-utils";
@@ -10,6 +10,7 @@ interface AppointmentEditFormProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onStatusChange: (value: AppointmentStatus) => void;
+  onPaymentChange: (value: PaymentStatus) => void;
 }
 
 export const AppointmentEditForm = ({
@@ -17,6 +18,7 @@ export const AppointmentEditForm = ({
   onInputChange,
   onPhoneChange,
   onStatusChange,
+  onPaymentChange,
 }: AppointmentEditFormProps) => {
   return (
     <div className="grid gap-4 py-4">
@@ -105,6 +107,25 @@ export const AppointmentEditForm = ({
             <SelectItem value="in-progress">Em Atendimento</SelectItem>
             <SelectItem value="canceled">Cancelado</SelectItem>
             <SelectItem value="delayed">Atrasado</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
+      <div className="grid grid-cols-4 items-center gap-4">
+        <label htmlFor="payment" className="text-right text-sm font-medium">
+          Pagamento
+        </label>
+        <Select 
+          value={appointment?.payment || "not_required"} 
+          onValueChange={onPaymentChange}
+        >
+          <SelectTrigger className="col-span-3">
+            <SelectValue placeholder="Status do pagamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="not_required">Não requer pagamento</SelectItem>
+            <SelectItem value="pending">Aguardando pagamento</SelectItem>
+            <SelectItem value="paid">Pago</SelectItem>
           </SelectContent>
         </Select>
       </div>

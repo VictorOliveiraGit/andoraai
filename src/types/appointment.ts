@@ -7,6 +7,7 @@ export interface Appointment {
   clientName: string;
   phoneNumber?: string;
   time: string;
+  payment?: PaymentStatus;
 }
 
 export interface NewAppointmentForm {
@@ -16,6 +17,7 @@ export interface NewAppointmentForm {
   date: Date;
   time: string;
   status: AppointmentStatus;
+  payment?: PaymentStatus;
 }
 
 export type AppointmentStatus = 
@@ -24,7 +26,9 @@ export type AppointmentStatus =
   | "completed" 
   | "in-progress" 
   | "canceled" 
-  | "delayed"
-  | "pending_payment"
-  | "paid";
+  | "delayed";
 
+export type PaymentStatus = 
+  | "pending" 
+  | "paid"
+  | "not_required";

@@ -1,5 +1,5 @@
 
-import { Clock, Phone, User } from "lucide-react";
+import { Clock, CreditCard, Phone, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
-import { Appointment, NewAppointmentForm } from "@/types/appointment";
+import { Appointment, NewAppointmentForm, PaymentStatus } from "@/types/appointment";
 import { formatPhoneNumber } from "@/utils/appointment-utils";
 
 interface AppointmentFormProps {
@@ -24,7 +24,8 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
     phoneNumber: "",
     date: new Date(),
     time: "",
-    status: "scheduled"
+    status: "scheduled",
+    payment: "not_required"
   });
 
   // Handle phone input with mask
@@ -50,6 +51,14 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
     setNewAppointment(prev => ({
       ...prev,
       status: value as "scheduled" | "pending" | "delayed" | "canceled"
+    }));
+  };
+  
+  // Handle payment status change
+  const handlePaymentChange = (value: string) => {
+    setNewAppointment(prev => ({
+      ...prev,
+      payment: value as PaymentStatus
     }));
   };
   
@@ -83,7 +92,8 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
       phoneNumber: "",
       date: new Date(),
       time: "",
-      status: "scheduled"
+      status: "scheduled",
+      payment: "not_required"
     });
   };
 
@@ -196,6 +206,27 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
                   <SelectItem value="canceled">Cancelado</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="payment" className="text-right">
+                Pagamento
+              </Label>
+              <div className="col-span-3 flex items-center gap-2">
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
+                <Select 
+                  value={newAppointment.payment || "not_required"} 
+                  onValueChange={handlePaymentChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Status do pagamento" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="not_required">Não requer pagamento</SelectItem>
+                    <SelectItem value="pending">Aguardando pagamento</SelectItem>
+                    <SelectItem value="paid">Pago</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
           <DialogFooter>
