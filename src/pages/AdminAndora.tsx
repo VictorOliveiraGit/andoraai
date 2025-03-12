@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AICostCard from "@/components/admin/analytics/AICostCard";
+import Customers from "@/components/admin/Customers";
 import {
   LayoutDashboard, 
   Users, 
@@ -280,6 +281,8 @@ const AdminAndora = () => {
         return <ProductsContent />;
       case "users":
         return <UsersContent />;
+      case "customers":
+        return <Customers />;
       case "subscription":
         return <SubscriptionsContent />;
       case "security":
@@ -636,4 +639,3 @@ const SettingsContent = () => (
 );
 
 export default AdminAndora;
-

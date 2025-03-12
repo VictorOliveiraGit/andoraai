@@ -14,9 +14,11 @@ import {
   ArrowUpRight,
   ArrowDownRight
 } from "lucide-react";
+import { NewProductModal, Product } from "./products/NewProductModal";
+import { toast } from "sonner";
 
 // Dados de exemplo
-const productsData = [
+const initialProductsData = [
   { id: 1, nome: "Produto Premium", categoria: "Assinatura", preco: 1250.00, estoque: 0, vendas: 156, status: "Ativo" },
   { id: 2, nome: "Serviço Anual", categoria: "Serviço", preco: 3500.00, estoque: 0, vendas: 89, status: "Ativo" },
   { id: 3, nome: "Produto Basic", categoria: "Assinatura", preco: 550.00, estoque: 0, vendas: 327, status: "Ativo" },
@@ -28,8 +30,13 @@ const productsData = [
 ];
 
 export const Products = () => {
+  const [productsData, setProductsData] = useState<Product[]>(initialProductsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("todas");
+  const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
+  
+  // Unique categories for filter and form
+  const uniqueCategories = [...new Set(productsData.map(product => product.categoria))];
   
   // Filtra os dados com base no termo de busca e categoria selecionada
   const filteredProducts = productsData.filter(product => {
@@ -44,8 +51,14 @@ export const Products = () => {
     return matchesSearch && matchesCategory;
   });
 
-  // Extrair categorias únicas
-  const uniqueCategories = [...new Set(productsData.map(product => product.categoria))];
+  const handleAddProduct = (product: Product) => {
+    setProductsData(prevProducts => [...prevProducts, product]);
+  };
+
+  const handleDeleteProduct = (id: number) => {
+    setProductsData(prevProducts => prevProducts.filter(product => product.id !== id));
+    toast.success("Produto removido com sucesso!");
+  };
 
   return (
     <div className="space-y-6">
@@ -54,7 +67,10 @@ export const Products = () => {
           <Package className="mr-2 h-6 w-6" />
           Catálogo de Produtos
         </h1>
-        <Button className="flex items-center gap-2">
+        <Button 
+          className="flex items-center gap-2"
+          onClick={() => setIsNewProductModalOpen(true)}
+        >
           <Plus className="h-4 w-4" />
           Novo Produto
         </Button>
@@ -194,7 +210,12 @@ export const Products = () => {
                       <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-500">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0 text-red-500"
+                        onClick={() => handleDeleteProduct(product.id)}
+                      >
                         <Trash className="h-4 w-4" />
                       </Button>
                     </td>
@@ -217,6 +238,13 @@ export const Products = () => {
           </div>
         </CardContent>
       </Card>
+      
+      <NewProductModal 
+        isOpen={isNewProductModalOpen}
+        onClose={() => setIsNewProductModalOpen(false)}
+        onAddProduct={handleAddProduct}
+        categories={uniqueCategories}
+      />
     </div>
   );
 };

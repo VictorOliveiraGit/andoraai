@@ -1,238 +1,317 @@
 
-import { Pencil, Save, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Appointment, AppointmentStatus } from "@/types/appointment";
-import { formatPhoneNumber } from "@/utils/appointment-utils";
-import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
-import { useState } from "react";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle,
-  DialogFooter,
-  DialogDescription 
-} from "@/components/ui/dialog";
+import { useState, useEffect, ChangeEvent } from "react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { AppointmentItem } from "./AppointmentItem";
+import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { AppointmentEditForm } from "./AppointmentEditForm";
-import { AppointmentStatusForm } from "./AppointmentStatusForm";
 
-interface AppointmentListProps {
+export interface AppointmentListProps {
   appointments: Appointment[];
-  selectedDate: Date | undefined;
+  selectedDate: Date;
   view: "day" | "week" | "month";
-  onStatusChange?: (id: number, status: AppointmentStatus) => void;
-  onAppointmentUpdate?: (appointment: Appointment) => void;
+  onStatusChange: (id: number, newStatus: AppointmentStatus) => void;
+  onPaymentStatusChange: (id: number, newPaymentStatus: PaymentStatus) => void;
+  onAppointmentUpdate: (updatedAppointment: Appointment) => void;
 }
 
-export const AppointmentList = ({ 
-  appointments, 
-  selectedDate, 
-  view, 
+export const AppointmentList = ({
+  appointments,
+  selectedDate,
+  view,
   onStatusChange,
-  onAppointmentUpdate 
+  onPaymentStatusChange,
+  onAppointmentUpdate
 }: AppointmentListProps) => {
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
-  const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
-  const [newStatus, setNewStatus] = useState<AppointmentStatus>("scheduled");
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editedAppointment, setEditedAppointment] = useState<Appointment | null>(null);
+  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([]);
+  const [statusFilter, setStatusFilter] = useState<AppointmentStatus | "all">("all");
 
-  // Filter appointments based on the selected view and date
-  const filteredAppointments = appointments.filter(appointment => {
-    if (!selectedDate) return false;
+  useEffect(() => {
+    let filtered = [...appointments];
     
-    const appointmentDate = new Date(appointment.date);
-    
-    if (view === "day") {
-      // For day view: show only appointments on the selected day
-      return (
-        appointmentDate.getDate() === selectedDate.getDate() &&
-        appointmentDate.getMonth() === selectedDate.getMonth() &&
-        appointmentDate.getFullYear() === selectedDate.getFullYear()
-      );
-    } else if (view === "week") {
-      // For week view: show appointments within the current week
-      const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 });
-      const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 0 });
-      return isWithinInterval(appointmentDate, { start: weekStart, end: weekEnd });
-    } else if (view === "month") {
-      // For month view: show appointments within the current month
-      const monthStart = startOfMonth(selectedDate);
-      const monthEnd = endOfMonth(selectedDate);
-      return isWithinInterval(appointmentDate, { start: monthStart, end: monthEnd });
+    // Apply status filter
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(appt => appt.status === statusFilter);
     }
     
-    return false;
-  });
-
-  // Get the title based on the current view
-  const getViewTitle = () => {
-    switch (view) {
-      case "day":
-        return "Agendamentos do Dia";
-      case "week":
-        return "Agendamentos da Semana";
-      case "month":
-        return "Agendamentos do Mês";
-      default:
-        return "Agendamentos";
-    }
-  };
+    // Sort by time
+    filtered.sort((a, b) => {
+      const timeA = a.time.split(":").map(Number);
+      const timeB = b.time.split(":").map(Number);
+      
+      if (timeA[0] !== timeB[0]) {
+        return timeA[0] - timeB[0];
+      } else {
+        return timeA[1] - timeB[1];
+      }
+    });
+    
+    setFilteredAppointments(filtered);
+  }, [appointments, statusFilter]);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
-    setNewStatus(appointment.status);
-    setIsStatusDialogOpen(true);
+    setEditingAppointment(null);
   };
 
-  const handleStatusChange = () => {
-    if (selectedAppointment && onStatusChange) {
-      onStatusChange(selectedAppointment.id, newStatus);
-      setIsStatusDialogOpen(false);
-    }
-  };
-
-  const handleEdit = () => {
+  const handleEditClick = () => {
     if (selectedAppointment) {
-      setEditedAppointment({...selectedAppointment});
-      setIsEditMode(true);
+      setEditingAppointment({ ...selectedAppointment });
     }
   };
 
-  const handleSaveEdit = () => {
-    if (editedAppointment && onAppointmentUpdate) {
-      onAppointmentUpdate(editedAppointment);
-      toast.success("Agendamento atualizado com sucesso!");
-      setIsEditMode(false);
-      setIsStatusDialogOpen(false);
+  const handleStatusChange = (id: number, status: AppointmentStatus) => {
+    onStatusChange(id, status);
+    if (selectedAppointment && selectedAppointment.id === id) {
+      setSelectedAppointment({ ...selectedAppointment, status });
+    }
+  };
+  
+  const handlePaymentStatusChange = (id: number, paymentStatus: PaymentStatus) => {
+    onPaymentStatusChange(id, paymentStatus);
+    if (selectedAppointment && selectedAppointment.id === id) {
+      setSelectedAppointment({ ...selectedAppointment, paymentStatus });
     }
   };
 
-  const handleCancelEdit = () => {
-    setIsEditMode(false);
-    setEditedAppointment(null);
+  const handleEditCancel = () => {
+    setEditingAppointment(null);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedAppointment) return;
+  const handleEditSave = () => {
+    if (editingAppointment) {
+      onAppointmentUpdate(editingAppointment);
+      setSelectedAppointment(editingAppointment);
+      setEditingAppointment(null);
+    }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!editingAppointment) return;
     
     const { name, value } = e.target;
-    setEditedAppointment({
-      ...editedAppointment,
-      [name]: value,
+    setEditingAppointment({
+      ...editingAppointment,
+      [name]: value
     });
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedAppointment) return;
+  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!editingAppointment) return;
     
-    const formattedValue = formatPhoneNumber(e.target.value);
-    setEditedAppointment({
-      ...editedAppointment,
-      phoneNumber: formattedValue,
+    let value = e.target.value;
+    // Remove any non-digit character
+    value = value.replace(/\D/g, "");
+    
+    // Apply mask (XX) XXXXX-XXXX
+    if (value.length <= 2) {
+      value = value;
+    } else if (value.length <= 7) {
+      value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+    } else if (value.length <= 11) {
+      value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+    } else {
+      value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+    }
+    
+    setEditingAppointment({
+      ...editingAppointment,
+      phoneNumber: value
     });
   };
 
-  const handleStatusSelect = (value: AppointmentStatus) => {
-    setNewStatus(value);
+  const handleStatusUpdate = (status: AppointmentStatus) => {
+    if (!editingAppointment) return;
+    
+    setEditingAppointment({
+      ...editingAppointment,
+      status
+    });
   };
 
-  const handleEditStatusChange = (value: AppointmentStatus) => {
-    if (editedAppointment) {
-      setEditedAppointment({
-        ...editedAppointment,
-        status: value
-      });
-    }
+  const handlePaymentStatusUpdate = (paymentStatus: PaymentStatus) => {
+    if (!editingAppointment) return;
+    
+    setEditingAppointment({
+      ...editingAppointment,
+      paymentStatus
+    });
   };
 
   return (
-    <>
-      <Card className="md:col-span-4">
-        <CardHeader>
-          <CardTitle>{getViewTitle()}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {filteredAppointments.length > 0 ? (
-              filteredAppointments.map((appointment) => (
-                <AppointmentItem 
-                  key={appointment.id}
-                  appointment={appointment}
-                  onClick={handleAppointmentClick}
-                />
-              ))
-            ) : (
-              <div className="text-center py-6 text-muted-foreground">
-                Nenhum agendamento para este {view === "day" ? "dia" : view === "week" ? "semana" : "mês"}
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+    <div className="h-full flex flex-col">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-xl font-semibold">
+          {format(selectedDate, "EEEE, d 'de' MMMM", { locale: ptBR })}
+        </h2>
+        <div className="flex space-x-2">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as AppointmentStatus | "all")}
+            className="border rounded-md px-3 py-1 text-sm"
+          >
+            <option value="all">Todos os status</option>
+            <option value="scheduled">Agendado</option>
+            <option value="pending">Pendente</option>
+            <option value="in-progress">Em Andamento</option>
+            <option value="completed">Concluído</option>
+            <option value="canceled">Cancelado</option>
+            <option value="delayed">Atrasado</option>
+          </select>
+        </div>
+      </div>
 
-      {/* Status Change Dialog */}
-      <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>
-              {isEditMode ? "Editar Agendamento" : "Alterar Status do Agendamento"}
-            </DialogTitle>
-            <DialogDescription>
-              {isEditMode 
-                ? "Edite os detalhes do agendamento abaixo"
-                : "Selecione o novo status ou edite os detalhes do agendamento"
-              }
-            </DialogDescription>
-          </DialogHeader>
-          
-          {isEditMode && editedAppointment ? (
-            <AppointmentEditForm 
-              appointment={editedAppointment}
-              onInputChange={handleInputChange}
-              onPhoneChange={handlePhoneChange}
-              onStatusChange={handleEditStatusChange}
-            />
-          ) : selectedAppointment ? (
-            <AppointmentStatusForm 
-              appointment={selectedAppointment}
-              newStatus={newStatus}
-              onStatusChange={handleStatusSelect}
-            />
-          ) : null}
-          
-          <DialogFooter>
-            {isEditMode ? (
-              <>
-                <Button variant="outline" onClick={handleCancelEdit}>
-                  <X className="mr-2 h-4 w-4" />
-                  Cancelar
-                </Button>
-                <Button onClick={handleSaveEdit}>
-                  <Save className="mr-2 h-4 w-4" />
-                  Salvar
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" onClick={() => setIsStatusDialogOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button variant="outline" onClick={handleEdit}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Editar
-                </Button>
-                <Button onClick={handleStatusChange}>
-                  Salvar Status
-                </Button>
-              </>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto pr-1">
+        <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-13rem)]">
+          {filteredAppointments.length > 0 ? (
+            filteredAppointments.map((appointment) => (
+              <AppointmentItem
+                key={appointment.id}
+                appointment={appointment}
+                onClick={handleAppointmentClick}
+              />
+            ))
+          ) : (
+            <Card>
+              <CardContent className="p-4 text-center text-muted-foreground">
+                Nenhum agendamento encontrado para este dia ou filtro.
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        <div>
+          {selectedAppointment && !editingAppointment && (
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-medium">{selectedAppointment.title}</h3>
+                    <p className="text-muted-foreground">{selectedAppointment.time}</p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={handleEditClick}>
+                    Editar
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Cliente</p>
+                  <p>{selectedAppointment.clientName}</p>
+                </div>
+                
+                {selectedAppointment.phoneNumber && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Telefone</p>
+                    <p>{selectedAppointment.phoneNumber}</p>
+                  </div>
+                )}
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Status do Agendamento</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button 
+                        variant={selectedAppointment.status === "scheduled" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleStatusChange(selectedAppointment.id, "scheduled")}
+                      >
+                        Agendado
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.status === "pending" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleStatusChange(selectedAppointment.id, "pending")}
+                      >
+                        Pendente
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.status === "in-progress" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleStatusChange(selectedAppointment.id, "in-progress")}
+                      >
+                        Em Andamento
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.status === "completed" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleStatusChange(selectedAppointment.id, "completed")}
+                      >
+                        Concluído
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.status === "canceled" ? "destructive" : "outline"}
+                        size="sm"
+                        onClick={() => handleStatusChange(selectedAppointment.id, "canceled")}
+                      >
+                        Cancelado
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.status === "delayed" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleStatusChange(selectedAppointment.id, "delayed")}
+                      >
+                        Atrasado
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Status de Pagamento</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button 
+                        variant={selectedAppointment.paymentStatus === "pending" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePaymentStatusChange(selectedAppointment.id, "pending")}
+                      >
+                        Pendente
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.paymentStatus === "paid" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePaymentStatusChange(selectedAppointment.id, "paid")}
+                      >
+                        Pago
+                      </Button>
+                      <Button 
+                        variant={selectedAppointment.paymentStatus === "not-required" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePaymentStatusChange(selectedAppointment.id, "not-required")}
+                      >
+                        Não Requerido
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {editingAppointment && (
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-medium mb-4">Editar Agendamento</h3>
+                
+                <AppointmentEditForm 
+                  appointment={editingAppointment}
+                  onInputChange={handleInputChange}
+                  onPhoneChange={handlePhoneChange}
+                  onStatusChange={handleStatusUpdate}
+                  onPaymentStatusChange={handlePaymentStatusUpdate}
+                />
+                
+                <div className="flex justify-end space-x-2 mt-6">
+                  <Button variant="outline" onClick={handleEditCancel}>Cancelar</Button>
+                  <Button onClick={handleEditSave}>Salvar Alterações</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
