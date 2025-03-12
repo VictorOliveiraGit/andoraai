@@ -1,12 +1,10 @@
-
 import { useState } from "react";
-import { Package, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { NewProductModal, Product } from "./NewProductModal";
+import { NewProductModal } from "./NewProductModal";
 import { ProductsHeader } from "./ProductsHeader";
 import { ProductsStats } from "./ProductsStats";
 import { ProductsTable } from "./ProductsTable";
 import { toast } from "sonner";
+import { Product } from "./types";
 
 // Dados de exemplo
 const initialProductsData = [
