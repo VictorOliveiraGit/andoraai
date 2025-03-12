@@ -1,11 +1,10 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserCheck, UserX, Link as LinkIcon } from "lucide-react";
 import { toast } from "sonner";
 import { users } from "@/config/admin";
 
-export const UserManagement = () => {
+export const Users = () => {
   const handleActivateUser = (userId: number) => {
     toast.success("Link de ativação enviado com sucesso!");
   };
@@ -40,3 +39,5 @@ export const UserManagement = () => {
     </div>
   );
 };
+
+export const UserManagement = Users;

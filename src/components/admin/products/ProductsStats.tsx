@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tag, BarChart, Package, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import { Product } from "./NewProductModal";
+import { Product } from "./types";
 
 interface ProductsStatsProps {
   productsData: Product[];
