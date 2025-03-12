@@ -4,7 +4,7 @@ import { UserCheck, UserX, Link as LinkIcon } from "lucide-react";
 import { toast } from "sonner";
 import { users } from "@/config/admin";
 
-export const Users = () => {
+const Users = () => {
   const handleActivateUser = (userId: number) => {
     toast.success("Link de ativação enviado com sucesso!");
   };
@@ -40,4 +40,5 @@ export const Users = () => {
   );
 };
 
+export { Users };
 export const UserManagement = Users;

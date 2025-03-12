@@ -11,15 +11,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import type { LucideIcon } from "lucide-react";
 
-interface SidebarProps {
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+export interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  menuItems: Array<{
-    id: string;
-    label: string;
-    icon: React.ComponentType<any>;
-  }>;
+  menuItems: MenuItem[];
   activeSection: string;
   setActiveSection: (section: string) => void;
 }

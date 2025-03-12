@@ -12,6 +12,8 @@ interface MobileNavbarProps {
 }
 
 export const MobileNavbar = ({ isSidebarOpen, setIsSidebarOpen, activeSection }: MobileNavbarProps) => {
+  const { avatar, setAvatar } = useAdmin();
+  
   return (
     <div className="border-b lg:hidden">
       <div className="flex items-center justify-between p-2 md:p-4">
@@ -28,7 +30,7 @@ export const MobileNavbar = ({ isSidebarOpen, setIsSidebarOpen, activeSection }:
             {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
           </h1>
         </div>
-        <ProfileAvatar />
+        <ProfileAvatar avatar={avatar} setAvatar={setAvatar} />
       </div>
     </div>
   );
