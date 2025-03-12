@@ -1,6 +1,6 @@
 
-import { Pencil } from "lucide-react";
-import { Appointment, AppointmentStatus } from "@/types/appointment";
+import { Pencil, CreditCard } from "lucide-react";
+import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatPhoneNumber } from "@/utils/appointment-utils";
@@ -10,6 +10,7 @@ interface AppointmentEditFormProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onStatusChange: (value: AppointmentStatus) => void;
+  onPaymentStatusChange: (value: PaymentStatus) => void;
 }
 
 export const AppointmentEditForm = ({
@@ -17,6 +18,7 @@ export const AppointmentEditForm = ({
   onInputChange,
   onPhoneChange,
   onStatusChange,
+  onPaymentStatusChange,
 }: AppointmentEditFormProps) => {
   return (
     <div className="grid gap-4 py-4">
@@ -105,6 +107,25 @@ export const AppointmentEditForm = ({
             <SelectItem value="in-progress">Em Atendimento</SelectItem>
             <SelectItem value="canceled">Cancelado</SelectItem>
             <SelectItem value="delayed">Atrasado</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid grid-cols-4 items-center gap-4">
+        <label htmlFor="paymentStatus" className="text-right text-sm font-medium">
+          Pagamento
+        </label>
+        <Select 
+          value={appointment?.paymentStatus || "pending"} 
+          onValueChange={onPaymentStatusChange}
+        >
+          <SelectTrigger className="col-span-3">
+            <SelectValue placeholder="Status de Pagamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="pending">Pagamento Pendente</SelectItem>
+            <SelectItem value="paid">Pago</SelectItem>
+            <SelectItem value="not-required">Sem Pagamento</SelectItem>
           </SelectContent>
         </Select>
       </div>

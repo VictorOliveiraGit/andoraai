@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,32 +12,95 @@ import {
   Filter,
   Download
 } from "lucide-react";
+import { NewSaleModal, Sale } from "./sales/NewSaleModal";
+import { exportToExcel } from "@/utils/excel-export";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
-// Dados de exemplo
-const salesData = [
-  { id: 1, cliente: "João Silva", produto: "Produto Premium", data: "15/06/2023", valor: 1250.00, status: "Completo" },
-  { id: 2, cliente: "Maria Oliveira", produto: "Serviço Anual", data: "10/06/2023", valor: 3500.00, status: "Completo" },
-  { id: 3, cliente: "Pedro Santos", produto: "Produto Basic", data: "05/06/2023", valor: 550.00, status: "Pendente" },
-  { id: 4, cliente: "Ana Costa", produto: "Plano Mensal", data: "01/06/2023", valor: 150.00, status: "Cancelado" },
-  { id: 5, cliente: "Carlos Ferreira", produto: "Produto Standard", data: "28/05/2023", valor: 850.00, status: "Completo" },
-];
+// Tipos de filtro para período
+type PeriodFilter = "hoje" | "semana" | "mes" | "ano" | "todos";
 
 export const Sales = () => {
+  const [salesData, setSalesData] = useState<Sale[]>([
+    { id: 1, cliente: "João Silva", produto: "Produto Premium", data: "15/06/2023", valor: 1250.00, status: "Completo" },
+    { id: 2, cliente: "Maria Oliveira", produto: "Serviço Anual", data: "10/06/2023", valor: 3500.00, status: "Completo" },
+    { id: 3, cliente: "Pedro Santos", produto: "Produto Basic", data: "05/06/2023", valor: 550.00, status: "Pendente" },
+    { id: 4, cliente: "Ana Costa", produto: "Plano Mensal", data: "01/06/2023", valor: 150.00, status: "Cancelado" },
+    { id: 5, cliente: "Carlos Ferreira", produto: "Produto Standard", data: "28/05/2023", valor: 850.00, status: "Completo" },
+  ]);
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("todos");
+  const [periodFilter, setPeriodFilter] = useState<PeriodFilter>("todos");
+  const [isNewSaleModalOpen, setIsNewSaleModalOpen] = useState(false);
+  const [totalSalesCount, setTotalSalesCount] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [averageTicket, setAverageTicket] = useState(0);
+  const [conversionRate, setConversionRate] = useState(0);
   
-  // Filtra os dados com base no termo de busca e status selecionado
+  // Filtra os dados com base nos filtros aplicados
   const filteredSales = salesData.filter(sale => {
+    // Filtro de busca
     const matchesSearch = 
       sale.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
       sale.produto.toLowerCase().includes(searchTerm.toLowerCase());
     
+    // Filtro de status
     const matchesStatus = 
       selectedStatus === "todos" || 
       sale.status.toLowerCase() === selectedStatus.toLowerCase();
     
-    return matchesSearch && matchesStatus;
+    // Filtro de período
+    let matchesPeriod = true;
+    if (periodFilter !== "todos") {
+      const saleDate = new Date(sale.data.split('/').reverse().join('-'));
+      const today = new Date();
+      
+      if (periodFilter === "hoje") {
+        matchesPeriod = saleDate.toDateString() === today.toDateString();
+      } else if (periodFilter === "semana") {
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        matchesPeriod = saleDate >= weekStart;
+      } else if (periodFilter === "mes") {
+        matchesPeriod = 
+          saleDate.getMonth() === today.getMonth() && 
+          saleDate.getFullYear() === today.getFullYear();
+      } else if (periodFilter === "ano") {
+        matchesPeriod = saleDate.getFullYear() === today.getFullYear();
+      }
+    }
+    
+    return matchesSearch && matchesStatus && matchesPeriod;
   });
+
+  // Calcula os KPIs com base nos dados filtrados
+  useEffect(() => {
+    // Total de vendas
+    setTotalSalesCount(filteredSales.length);
+    
+    // Receita total
+    const revenue = filteredSales.reduce((total, sale) => total + sale.valor, 0);
+    setTotalRevenue(revenue);
+    
+    // Ticket médio
+    setAverageTicket(filteredSales.length > 0 ? revenue / filteredSales.length : 0);
+    
+    // Taxa de conversão (simulada - normalmente viria de outro lugar)
+    setConversionRate(Math.random() * 5 + 2); // Valor aleatório entre 2% e 7%
+  }, [filteredSales]);
+
+  // Adiciona uma nova venda
+  const handleAddSale = (newSale: Sale) => {
+    setSalesData(prev => [newSale, ...prev]);
+    toast.success("Venda registrada com sucesso!");
+  };
+
+  // Exporta para Excel
+  const handleExportToExcel = () => {
+    exportToExcel(filteredSales, `vendas-${format(new Date(), 'dd-MM-yyyy')}`);
+    toast.success("Relatório exportado com sucesso!");
+  };
 
   return (
     <div className="space-y-6">
@@ -46,7 +109,10 @@ export const Sales = () => {
           <ShoppingBag className="mr-2 h-6 w-6" />
           Gerenciamento de Vendas
         </h1>
-        <Button className="flex items-center gap-2">
+        <Button 
+          className="flex items-center gap-2"
+          onClick={() => setIsNewSaleModalOpen(true)}
+        >
           <Plus className="h-4 w-4" />
           Nova Venda
         </Button>
@@ -77,17 +143,25 @@ export const Sales = () => {
                 <option value="pendente">Pendente</option>
                 <option value="cancelado">Cancelado</option>
               </select>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                Filtros
-              </Button>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Período
-              </Button>
-              <Button variant="secondary" size="sm" className="flex items-center gap-2">
+              <select
+                className="border rounded-md px-3 py-2"
+                value={periodFilter}
+                onChange={(e) => setPeriodFilter(e.target.value as PeriodFilter)}
+              >
+                <option value="todos">Todos os Períodos</option>
+                <option value="hoje">Hoje</option>
+                <option value="semana">Esta Semana</option>
+                <option value="mes">Este Mês</option>
+                <option value="ano">Este Ano</option>
+              </select>
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                className="flex items-center gap-2"
+                onClick={handleExportToExcel}
+              >
                 <Download className="h-4 w-4" />
-                Exportar
+                Exportar Excel
               </Button>
             </div>
           </div>
@@ -155,9 +229,9 @@ export const Sales = () => {
         <Card>
           <CardContent className="p-4">
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">Vendas Hoje</p>
-              <h3 className="text-2xl font-bold">12</h3>
-              <p className="text-xs text-green-600">+20% em relação a ontem</p>
+              <p className="text-sm font-medium text-muted-foreground">Vendas</p>
+              <h3 className="text-2xl font-bold">{totalSalesCount}</h3>
+              <p className="text-xs text-green-600">Período selecionado</p>
             </div>
           </CardContent>
         </Card>
@@ -165,9 +239,9 @@ export const Sales = () => {
         <Card>
           <CardContent className="p-4">
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">Receita Hoje</p>
-              <h3 className="text-2xl font-bold">R$ 4.320,50</h3>
-              <p className="text-xs text-green-600">+15% em relação a ontem</p>
+              <p className="text-sm font-medium text-muted-foreground">Receita Total</p>
+              <h3 className="text-2xl font-bold">R$ {totalRevenue.toFixed(2)}</h3>
+              <p className="text-xs text-green-600">Período selecionado</p>
             </div>
           </CardContent>
         </Card>
@@ -176,8 +250,8 @@ export const Sales = () => {
           <CardContent className="p-4">
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">Ticket Médio</p>
-              <h3 className="text-2xl font-bold">R$ 360,04</h3>
-              <p className="text-xs text-red-600">-5% em relação a ontem</p>
+              <h3 className="text-2xl font-bold">R$ {averageTicket.toFixed(2)}</h3>
+              <p className="text-xs text-green-600">Período selecionado</p>
             </div>
           </CardContent>
         </Card>
@@ -186,12 +260,19 @@ export const Sales = () => {
           <CardContent className="p-4">
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">Taxa de Conversão</p>
-              <h3 className="text-2xl font-bold">3,8%</h3>
-              <p className="text-xs text-green-600">+0,5% em relação a ontem</p>
+              <h3 className="text-2xl font-bold">{conversionRate.toFixed(1)}%</h3>
+              <p className="text-xs text-green-600">Período selecionado</p>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal de Nova Venda */}
+      <NewSaleModal 
+        isOpen={isNewSaleModalOpen}
+        onClose={() => setIsNewSaleModalOpen(false)}
+        onAddSale={handleAddSale}
+      />
     </div>
   );
 };
