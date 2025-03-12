@@ -1,56 +1,27 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { DollarSign, TrendingUp, ArrowUpRight, TrendingDown, Clock, FileText, Receipt, Wallet } from "lucide-react";
+import { DollarSign, TrendingUp, ArrowUpRight, TrendingDown, Clock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import {
-  BarChart,
-  Bar,
+  ResponsiveContainer,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
   Legend
 } from "recharts";
-
-interface AICostMetrics {
-  currentMonth: {
-    usd: number;
-    requests: number;
-    percentageChange: number;
-  };
-  previousMonth: {
-    usd: number;
-    requests: number;
-  };
-  models: {
-    name: string;
-    cost: number;
-    percentage: number;
-  }[];
-  historicalData: {
-    month: string;
-    cost: number;
-    requests: number;
-  }[];
-  dailyUsage: {
-    day: string;
-    cost: number;
-    requests: number;
-  }[];
-}
-
-// Taxa de conversão (em um app real, isso viria de uma API)
-const DOLLAR_TO_BRL = 5.03;
 
 const AICostCard = () => {
   const [viewMode, setViewMode] = useState<'daily' | 'monthly'>('monthly');
   
-  // Exemplo de dados - em uma aplicação real, estes viriam da sua API
-  const metrics: AICostMetrics = {
+  // Taxa de conversão (em um app real, isso viria de uma API)
+  const DOLLAR_TO_BRL = 5.03;
+  
+  // Dados fictícios sobre gastos com IA
+  const metrics = {
     currentMonth: {
       usd: 156.42,
       requests: 12543,
@@ -93,11 +64,10 @@ const AICostCard = () => {
   const costIncreaseUSD = metrics.currentMonth.usd - metrics.previousMonth.usd;
   const costIncreaseBRL = costIncreaseUSD * DOLLAR_TO_BRL;
   const isIncrease = metrics.currentMonth.percentageChange > 0;
-  const totalRequests = metrics.historicalData.reduce((sum, item) => sum + item.requests, 0);
   
   const chartData = viewMode === 'monthly' ? metrics.historicalData : metrics.dailyUsage;
   
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 shadow-md rounded-md border border-gray-200">
@@ -117,7 +87,7 @@ const AICostCard = () => {
         <CardHeader>
           <CardTitle className="text-xl flex items-center gap-2">
             <DollarSign className="h-6 w-6 text-primary" />
-            Custos com AI
+            Custos com IA
           </CardTitle>
           <CardDescription>
             Análise detalhada de custos com serviços de Inteligência Artificial
@@ -160,7 +130,7 @@ const AICostCard = () => {
 
               <div className="p-4 rounded-lg bg-gray-50">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                  <Clock className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium text-gray-500">Comparação Mensal</span>
                 </div>
                 <div className="mt-2 space-y-1">
@@ -212,13 +182,10 @@ const AICostCard = () => {
         </CardContent>
       </Card>
 
-      {/* Card Dashboard com gráficos */}
+      {/* Card com gráfico histórico */}
       <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2">
-            <Receipt className="h-6 w-6 text-primary" />
-            Dashboard de Custos AI
-          </CardTitle>
+          <CardTitle className="text-xl">Tendências de Custo</CardTitle>
           <div className="flex justify-between items-center">
             <CardDescription>
               Visualização histórica de custos e requisições
@@ -240,76 +207,58 @@ const AICostCard = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey={viewMode === 'monthly' ? 'month' : 'day'} />
-                  <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                  <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
-                  <Line 
-                    yAxisId="left" 
-                    type="monotone" 
-                    dataKey="cost" 
-                    name="Custo (USD)" 
-                    stroke="#8884d8" 
-                    activeDot={{ r: 8 }} 
-                  />
-                  <Line 
-                    yAxisId="right" 
-                    type="monotone" 
-                    dataKey="requests" 
-                    name="Requisições" 
-                    stroke="#82ca9d" 
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey={viewMode === 'monthly' ? 'month' : 'day'} />
+                <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                <Line 
+                  yAxisId="left" 
+                  type="monotone" 
+                  dataKey="cost" 
+                  name="Custo (USD)" 
+                  stroke="#8884d8" 
+                  activeDot={{ r: 8 }} 
+                />
+                <Line 
+                  yAxisId="right" 
+                  type="monotone" 
+                  dataKey="requests" 
+                  name="Requisições" 
+                  stroke="#82ca9d" 
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <Separator className="my-4" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500">Total Acumulado (USD)</p>
+              <p className="text-xl font-bold">
+                ${metrics.historicalData.reduce((sum, item) => sum + item.cost, 0).toFixed(2)}
+              </p>
+              <p className="text-sm text-gray-500">
+                ≈ R$ {(metrics.historicalData.reduce((sum, item) => sum + item.cost, 0) * DOLLAR_TO_BRL).toFixed(2)}
+              </p>
             </div>
-
-            <Separator />
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg bg-gray-50">
-                <div className="flex items-center gap-2">
-                  <Wallet className="h-5 w-5 text-primary" />
-                  <span className="text-sm font-medium text-gray-500">Custo Total Acumulado</span>
-                </div>
-                <p className="text-xl font-bold mt-2">
-                  ${metrics.historicalData.reduce((sum, item) => sum + item.cost, 0).toFixed(2)}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  ≈ R$ {(metrics.historicalData.reduce((sum, item) => sum + item.cost, 0) * DOLLAR_TO_BRL).toFixed(2)}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-gray-50">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-500">Total de Requisições</span>
-                </div>
-                <p className="text-xl font-bold mt-2">
-                  {totalRequests.toLocaleString()}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Média por mês: {Math.round(totalRequests / metrics.historicalData.length).toLocaleString()}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-gray-50">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-green-500" />
-                  <span className="text-sm font-medium text-gray-500">Eficiência de Custos</span>
-                </div>
-                <p className="text-xl font-bold mt-2">
-                  ${(metrics.historicalData.reduce((sum, item) => sum + item.cost, 0) / totalRequests).toFixed(4)}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Custo médio por requisição (histórico)
-                </p>
-              </div>
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500">Média Mensal (USD)</p>
+              <p className="text-xl font-bold">
+                ${(metrics.historicalData.reduce((sum, item) => sum + item.cost, 0) / metrics.historicalData.length).toFixed(2)}
+              </p>
+              <p className="text-sm text-gray-500">
+                ≈ R$ {((metrics.historicalData.reduce((sum, item) => sum + item.cost, 0) / metrics.historicalData.length) * DOLLAR_TO_BRL).toFixed(2)}
+              </p>
+            </div>
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500">Total Requisições</p>
+              <p className="text-xl font-bold">
+                {metrics.historicalData.reduce((sum, item) => sum + item.requests, 0).toLocaleString()}
+              </p>
             </div>
           </div>
         </CardContent>

@@ -1,17 +1,36 @@
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { DollarSign, TrendingUp, ArrowUpRight, TrendingDown } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Reports } from "@/components/admin/Reports";
+import AICostCard from "@/components/admin/analytics/AICostCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const AnalyticsContent = () => (
-  <div className="space-y-6">
-    <h2 className="text-2xl font-bold">Relatórios</h2>
-    <p className="text-gray-500">Análise de dados e relatórios detalhados.</p>
-    
-    <Card>
-      <CardContent className="p-6 flex items-center justify-center">
-        <p className="text-muted-foreground">Relatórios detalhados serão exibidos aqui</p>
-      </CardContent>
-    </Card>
-  </div>
-);
+const AnalyticsContent = () => {
+  // Taxa de conversão (em um app real, isso viria de uma API)
+  const DOLLAR_TO_BRL = 5.03;
+  
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">Relatórios e Análises</h2>
+      <p className="text-gray-500">Visualize dados importantes sobre vendas, clientes e custos operacionais.</p>
+      
+      <Tabs defaultValue="sales" className="w-full">
+        <TabsList>
+          <TabsTrigger value="sales">Vendas</TabsTrigger>
+          <TabsTrigger value="ai-costs">Custos de IA</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="sales" className="space-y-6 pt-4">
+          <Reports />
+        </TabsContent>
+        
+        <TabsContent value="ai-costs" className="space-y-6 pt-4">
+          <AICostCard />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
 
 export default AnalyticsContent;
