@@ -3,7 +3,7 @@ export interface Appointment {
   id: number;
   title: string;
   date: Date;
-  status: "scheduled" | "pending" | "delayed" | "canceled";
+  status: AppointmentStatus;
   clientName: string;
   phoneNumber?: string;
   time: string;
@@ -15,7 +15,8 @@ export interface NewAppointmentForm {
   phoneNumber: string;
   date: Date;
   time: string;
-  status: "scheduled" | "pending" | "delayed" | "canceled";
+  status: AppointmentStatus;
 }
 
-export type AppointmentStatus = "scheduled" | "pending" | "delayed" | "canceled";
+export type AppointmentStatus = "scheduled" | "pending" | "completed" | "in-progress" | "canceled" | "delayed";
+

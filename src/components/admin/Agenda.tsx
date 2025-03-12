@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { Appointment } from "@/types/appointment";
+import { Appointment, AppointmentStatus } from "@/types/appointment";
 import { AppointmentForm } from "./agenda/AppointmentForm";
 import { AppointmentList } from "./agenda/AppointmentList";
 import { CalendarView } from "./agenda/CalendarView";
@@ -47,6 +47,19 @@ export const Agenda = () => {
     setIsModalOpen(false);
   };
 
+  // Handle status change
+  const handleStatusChange = (id: number, newStatus: AppointmentStatus) => {
+    setAppointments(prev => 
+      prev.map(appointment => 
+        appointment.id === id 
+          ? { ...appointment, status: newStatus }
+          : appointment
+      )
+    );
+    
+    toast.success("Status atualizado com sucesso!");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -71,6 +84,7 @@ export const Agenda = () => {
           appointments={appointments}
           selectedDate={date}
           view={view}
+          onStatusChange={handleStatusChange}
         />
       </div>
 
