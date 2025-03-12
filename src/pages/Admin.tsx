@@ -1,4 +1,3 @@
-
 /**
  * Admin Usuario Page
  * 
@@ -47,6 +46,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { menuItems } from "@/config/admin";
+import { Agenda } from "@/components/admin/Agenda";
 
 /**
  * AdminContent Component
@@ -95,6 +95,8 @@ const AdminContent = () => {
         return <Customers />;
       case "settings":
         return <SettingsComponent />;
+      case "agenda":
+        return <Agenda />;
       default:
         return <Dashboard />;
     }

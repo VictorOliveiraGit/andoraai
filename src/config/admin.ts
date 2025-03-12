@@ -1,4 +1,3 @@
-
 import {
   LayoutDashboard,
   Users,
@@ -7,7 +6,8 @@ import {
   CreditCard,
   ShoppingCart,
   Package,
-  UserCircle
+  UserCircle,
+  Calendar
 } from "lucide-react";
 
 export const menuItems = [
@@ -15,6 +15,11 @@ export const menuItems = [
     id: "dashboard",
     label: "Dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    id: "agenda",
+    label: "Agenda",
+    icon: Calendar,
   },
   {
     id: "sales",
@@ -53,7 +58,6 @@ export const menuItems = [
   },
 ];
 
-// Add the missing users data that's being imported in UserManagement.tsx
 export const users = [
   {
     id: 1,
