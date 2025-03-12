@@ -1,3 +1,4 @@
+
 /**
  * Admin Andora Dashboard Page
  * 
@@ -21,6 +22,7 @@ import SubscriptionsContent from "@/components/admin/andora/SubscriptionsContent
 import SecurityContent from "@/components/admin/andora/SecurityContent";
 import AnalyticsContent from "@/components/admin/andora/AnalyticsContent";
 import SettingsContent from "@/components/admin/andora/SettingsContent";
+import { UserManagement } from "@/components/admin/UserManagement";
 
 // Import navigation components
 import AndoraSidebar from "@/components/admin/andora/AndoraSidebar";
@@ -67,6 +69,8 @@ const AdminAndora = () => {
         return <ProductsContent />;
       case "customers":
         return <Customers />;
+      case "users":
+        return <UserManagement />;
       case "subscription":
         return <SubscriptionsContent />;
       case "security":
