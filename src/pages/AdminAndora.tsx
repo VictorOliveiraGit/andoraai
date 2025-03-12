@@ -17,7 +17,7 @@ import { menuItems } from "@/config/admin";
 import DashboardContent from "@/components/admin/andora/DashboardContent";
 import EcommerceContent from "@/components/admin/andora/EcommerceContent";
 import ProductsContent from "@/components/admin/andora/ProductsContent";
-import CustomersContent from "@/components/admin/andora/CustomersContent";
+import { Customers } from "@/components/admin/Customers";
 import SubscriptionsContent from "@/components/admin/andora/SubscriptionsContent";
 import SecurityContent from "@/components/admin/andora/SecurityContent";
 import AnalyticsContent from "@/components/admin/andora/AnalyticsContent";
@@ -39,14 +39,6 @@ const AdminAndora = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-
-  // Customer management state
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("todos");
-  const [selectedPlan, setSelectedPlan] = useState("todos");
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(5000);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState<number | null>(null);
 
   // Handle logout
   const handleLogout = () => {
@@ -74,21 +66,8 @@ const AdminAndora = () => {
         return <EcommerceContent />;
       case "products": 
         return <ProductsContent />;
-      case "users":
-        return <CustomersContent 
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          selectedStatus={selectedStatus}
-          setSelectedStatus={setSelectedStatus}
-          selectedPlan={selectedPlan}
-          setSelectedPlan={setSelectedPlan}
-          minValue={minValue}
-          setMinValue={setMinValue}
-          maxValue={maxValue}
-          setMaxValue={setMaxValue}
-          showDeleteConfirm={showDeleteConfirm}
-          setShowDeleteConfirm={setShowDeleteConfirm}
-        />;
+      case "customers":
+        return <Customers />;
       case "subscription":
         return <SubscriptionsContent />;
       case "security":

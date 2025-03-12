@@ -33,7 +33,6 @@ import { Settings as SettingsComponent } from "@/components/admin/Settings";
 import { Subscription } from "@/components/admin/Subscription";
 import { Sales } from "@/components/admin/Sales";
 import { Products } from "@/components/admin/Products";
-import { Customers } from "@/components/admin/Customers";
 import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
 import {
   Drawer,
@@ -91,8 +90,6 @@ const AdminContent = () => {
         return <Sales />;
       case "products":
         return <Products />;
-      case "customers":
-        return <Customers />;
       case "settings":
         return <SettingsComponent />;
       case "agenda":
@@ -255,14 +252,6 @@ const AdminContent = () => {
         <div className="sticky top-0 z-20 bg-white border-b border-gray-200 md:px-8 px-6 py-6 flex justify-between items-center">
           {isMobile && (
             <div className="flex items-center">
-              {/* <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={toggleSidebar}
-                className="md:hidden"
-              >
-                <Menu size={24} />
-              </Button> */}
               <h1 className="text-lg font-bold ml-2">Admin Usuario - {menuItems.find(item => item.id === activeSection)?.label}</h1>
             </div>
           )}
@@ -272,23 +261,6 @@ const AdminContent = () => {
               <h2 className="text-lg font-bold">{menuItems.find(item => item.id === activeSection)?.label}</h2>
             </div>
           )}
-          
-          {/* <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon">
-              <Bell size={20} />
-            </Button>
-            
-            {!isMobile && (
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
-              >
-                <LogOut size={16} />
-                Sair
-              </Button>
-            )}
-          </div> */}
         </div>
         
         {/* Content Area */}
