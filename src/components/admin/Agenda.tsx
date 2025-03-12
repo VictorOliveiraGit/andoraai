@@ -10,6 +10,7 @@ import { CalendarView } from "./agenda/CalendarView";
 
 export const Agenda = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [view, setView] = useState<"day" | "week" | "month">("month");
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Store appointments in state
@@ -61,12 +62,15 @@ export const Agenda = () => {
         <CalendarView 
           selectedDate={date}
           onDateSelect={setDate}
+          view={view}
+          onViewChange={setView}
         />
 
         {/* Appointments List */}
         <AppointmentList 
           appointments={appointments}
           selectedDate={date}
+          view={view}
         />
       </div>
 

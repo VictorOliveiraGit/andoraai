@@ -9,11 +9,11 @@ import { ptBR } from "date-fns/locale";
 interface CalendarViewProps {
   selectedDate: Date | undefined;
   onDateSelect: (date: Date | undefined) => void;
+  view: "day" | "week" | "month";
+  onViewChange: (view: "day" | "week" | "month") => void;
 }
 
-export const CalendarView = ({ selectedDate, onDateSelect }: CalendarViewProps) => {
-  const [view, setView] = useState<"day" | "week" | "month">("month");
-
+export const CalendarView = ({ selectedDate, onDateSelect, view, onViewChange }: CalendarViewProps) => {
   return (
     <Card className="md:col-span-8">
       <CardHeader>
@@ -22,7 +22,7 @@ export const CalendarView = ({ selectedDate, onDateSelect }: CalendarViewProps) 
             <CalendarIcon className="h-5 w-5" />
             Calendário
           </CardTitle>
-          <Select value={view} onValueChange={(value: "day" | "week" | "month") => setView(value)}>
+          <Select value={view} onValueChange={(value: "day" | "week" | "month") => onViewChange(value)}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
