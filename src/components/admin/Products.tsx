@@ -14,9 +14,19 @@ import {
   ArrowUpRight,
   ArrowDownRight
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 // Dados de exemplo
-const productsData = [
+const initialProductsData = [
   { id: 1, nome: "Produto Premium", categoria: "Assinatura", preco: 1250.00, estoque: 0, vendas: 156, status: "Ativo" },
   { id: 2, nome: "Serviço Anual", categoria: "Serviço", preco: 3500.00, estoque: 0, vendas: 89, status: "Ativo" },
   { id: 3, nome: "Produto Basic", categoria: "Assinatura", preco: 550.00, estoque: 0, vendas: 327, status: "Ativo" },
@@ -28,10 +38,25 @@ const productsData = [
 ];
 
 export const Products = () => {
+  const [productsData, setProductsData] = useState(initialProductsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("todas");
+  const [selectedStatus, setSelectedStatus] = useState("todos");
+  const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
   
-  // Filtra os dados com base no termo de busca e categoria selecionada
+  // Estado para o formulário de novo produto
+  const [newProduct, setNewProduct] = useState({
+    nome: "",
+    categoria: "",
+    preco: "",
+    estoque: "",
+    status: "Ativo"
+  });
+  
+  // Extrair categorias únicas
+  const uniqueCategories = [...new Set(productsData.map(product => product.categoria))];
+  
+  // Filtra os dados com base no termo de busca, categoria e status
   const filteredProducts = productsData.filter(product => {
     const matchesSearch = 
       product.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -40,12 +65,84 @@ export const Products = () => {
     const matchesCategory = 
       selectedCategory === "todas" || 
       product.categoria.toLowerCase() === selectedCategory.toLowerCase();
+      
+    const matchesStatus = 
+      selectedStatus === "todos" || 
+      product.status.toLowerCase() === selectedStatus.toLowerCase();
     
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  // Extrair categorias únicas
-  const uniqueCategories = [...new Set(productsData.map(product => product.categoria))];
+  // Manipulação do formulário de novo produto
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewProduct({
+      ...newProduct,
+      [name]: value
+    });
+  };
+  
+  // Adicionar novo produto
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+    
+    // Validação básica
+    if (!newProduct.nome || !newProduct.categoria || !newProduct.preco) {
+      toast.error("Por favor, preencha todos os campos obrigatórios");
+      return;
+    }
+    
+    // Definir estoque baseado na categoria
+    let estoque = parseInt(newProduct.estoque) || 0;
+    if (["Digital", "Serviço", "Assinatura"].includes(newProduct.categoria)) {
+      estoque = 0;
+    }
+    
+    // Criar novo produto
+    const product = {
+      id: productsData.length > 0 ? Math.max(...productsData.map(p => p.id)) + 1 : 1,
+      nome: newProduct.nome,
+      categoria: newProduct.categoria,
+      preco: parseFloat(newProduct.preco),
+      estoque: estoque,
+      vendas: 0,
+      status: estoque <= 5 && ["Produto Físico"].includes(newProduct.categoria) ? "Baixo Estoque" : "Ativo"
+    };
+    
+    // Adicionar ao estado
+    setProductsData([product, ...productsData]);
+    
+    // Resetar formulário e fechar modal
+    setNewProduct({
+      nome: "",
+      categoria: "",
+      preco: "",
+      estoque: "",
+      status: "Ativo"
+    });
+    
+    setIsNewProductModalOpen(false);
+    toast.success("Produto adicionado com sucesso!");
+  };
+
+  // Calcular estatísticas
+  const getProductStats = () => {
+    const totalProducts = productsData.length;
+    const totalSales = productsData.reduce((acc, product) => acc + product.vendas, 0);
+    const lowStockProducts = productsData.filter(p => p.status === "Baixo Estoque").length;
+    
+    // Encontrar o produto mais vendido
+    const bestSeller = [...productsData].sort((a, b) => b.vendas - a.vendas)[0];
+    
+    return {
+      totalProducts,
+      totalSales,
+      lowStockProducts,
+      bestSeller
+    };
+  };
+
+  const stats = getProductStats();
 
   return (
     <div className="space-y-6">
@@ -54,7 +151,10 @@ export const Products = () => {
           <Package className="mr-2 h-6 w-6" />
           Catálogo de Produtos
         </h1>
-        <Button className="flex items-center gap-2">
+        <Button 
+          className="flex items-center gap-2"
+          onClick={() => setIsNewProductModalOpen(true)}
+        >
           <Plus className="h-4 w-4" />
           Novo Produto
         </Button>
@@ -68,7 +168,7 @@ export const Products = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total de Produtos</p>
-              <h3 className="text-2xl font-bold">{productsData.length}</h3>
+              <h3 className="text-2xl font-bold">{stats.totalProducts}</h3>
             </div>
           </CardContent>
         </Card>
@@ -80,7 +180,7 @@ export const Products = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Vendas Totais</p>
-              <h3 className="text-2xl font-bold">1.549</h3>
+              <h3 className="text-2xl font-bold">{stats.totalSales}</h3>
               <div className="flex items-center mt-1 text-xs">
                 <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
                 <span className="text-green-600 font-medium">+12%</span>
@@ -96,8 +196,8 @@ export const Products = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Mais Vendido</p>
-              <h3 className="text-lg font-medium">Plano Mensal</h3>
-              <p className="text-xs text-muted-foreground">512 vendas</p>
+              <h3 className="text-lg font-medium">{stats.bestSeller?.nome}</h3>
+              <p className="text-xs text-muted-foreground">{stats.bestSeller?.vendas} vendas</p>
             </div>
           </CardContent>
         </Card>
@@ -109,7 +209,7 @@ export const Products = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Baixo Estoque</p>
-              <h3 className="text-2xl font-bold">2</h3>
+              <h3 className="text-2xl font-bold">{stats.lowStockProducts}</h3>
               <div className="flex items-center mt-1 text-xs">
                 <ArrowDownRight className="h-3 w-3 text-red-600 mr-1" />
                 <span className="text-red-600 font-medium">Alerta</span>
@@ -146,10 +246,16 @@ export const Products = () => {
                   </option>
                 ))}
               </select>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                Filtros
-              </Button>
+              <select
+                className="border rounded-md px-3 py-2"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="todos">Todos os Status</option>
+                <option value="ativo">Ativo</option>
+                <option value="baixo estoque">Baixo Estoque</option>
+                <option value="inativo">Inativo</option>
+              </select>
             </div>
           </div>
         </CardHeader>
@@ -194,7 +300,15 @@ export const Products = () => {
                       <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-500">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0 text-red-500"
+                        onClick={() => {
+                          setProductsData(productsData.filter(p => p.id !== product.id));
+                          toast.success("Produto removido com sucesso!");
+                        }}
+                      >
                         <Trash className="h-4 w-4" />
                       </Button>
                     </td>
@@ -217,6 +331,93 @@ export const Products = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modal de Novo Produto */}
+      <Dialog open={isNewProductModalOpen} onOpenChange={setIsNewProductModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Novo Produto</DialogTitle>
+            <DialogDescription>
+              Preencha os dados para adicionar um novo produto ao catálogo.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddProduct}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="nome" className="text-right font-medium col-span-1">
+                  Nome
+                </label>
+                <input
+                  id="nome"
+                  name="nome"
+                  value={newProduct.nome}
+                  onChange={handleInputChange}
+                  className="col-span-3 border rounded-md px-3 py-2"
+                  placeholder="Nome do produto"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="categoria" className="text-right font-medium col-span-1">
+                  Categoria
+                </label>
+                <select
+                  id="categoria"
+                  name="categoria"
+                  value={newProduct.categoria}
+                  onChange={handleInputChange}
+                  className="col-span-3 border rounded-md px-3 py-2"
+                >
+                  <option value="">Selecione uma categoria</option>
+                  {uniqueCategories.map((category, index) => (
+                    <option key={index} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="preco" className="text-right font-medium col-span-1">
+                  Preço (R$)
+                </label>
+                <input
+                  id="preco"
+                  name="preco"
+                  type="number"
+                  value={newProduct.preco}
+                  onChange={handleInputChange}
+                  className="col-span-3 border rounded-md px-3 py-2"
+                  placeholder="0.00"
+                  step="0.01"
+                />
+              </div>
+              {newProduct.categoria && 
+               !["Digital", "Serviço", "Assinatura"].includes(newProduct.categoria) && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="estoque" className="text-right font-medium col-span-1">
+                    Estoque
+                  </label>
+                  <input
+                    id="estoque"
+                    name="estoque"
+                    type="number"
+                    value={newProduct.estoque}
+                    onChange={handleInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                    placeholder="0"
+                    min="0"
+                  />
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">Cancelar</Button>
+              </DialogClose>
+              <Button type="submit">Salvar</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
