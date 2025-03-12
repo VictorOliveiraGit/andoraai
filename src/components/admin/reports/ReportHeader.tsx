@@ -2,20 +2,31 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Filter } from "lucide-react";
+import * as XLSX from 'xlsx';
 
 interface ReportHeaderProps {
   reportType: string;
   setReportType: (type: string) => void;
   reportPeriod: string;
   setReportPeriod: (period: string) => void;
+  data: any[];
 }
 
 export const ReportHeader = ({
   reportType,
   setReportType,
   reportPeriod,
-  setReportPeriod
+  setReportPeriod,
+  data
 }: ReportHeaderProps) => {
+  
+  const handleExport = () => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Report");
+    XLSX.writeFile(wb, `relatorio-${reportType}-${reportPeriod}.xlsx`);
+  };
+
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <h1 className="text-2xl font-bold">Relatórios e Análises</h1>
@@ -45,7 +56,12 @@ export const ReportHeader = ({
             <Filter className="h-4 w-4" />
             <span>Filtros</span>
           </Button>
-          <Button variant="secondary" size="sm" className="gap-2">
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="gap-2"
+            onClick={handleExport}
+          >
             <Download className="h-4 w-4" />
             <span>Exportar</span>
           </Button>
