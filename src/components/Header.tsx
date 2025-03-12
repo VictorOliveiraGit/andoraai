@@ -267,16 +267,16 @@ const Header = () => {
       </nav>
 
       <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
-        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto bg-white">
+        <DialogContent className="sm:max-w-md max-w-[95vw] w-full mx-auto bg-primary border-primary">
           <DialogHeader>
-            <DialogTitle>Entre em Contato</DialogTitle>
+            <DialogTitle className="text-center">Entre em Contato</DialogTitle>
           </DialogHeader>
           <form className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">Nome</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded-md bg-white"
+                className="w-full p-2 border rounded-md bg-primary placeholder:text-white !text-white"
                 placeholder="Seu nome"
               />
             </div>
@@ -284,13 +284,13 @@ const Header = () => {
               <label className="block text-sm font-medium mb-1">Email</label>
               <input
                 type="email"
-                className="w-full p-2 border rounded-md bg-white"
+                className="w-full p-2 border rounded-md bg-primary placeholder:text-white !text-white"
                 placeholder="seu@email.com"
               />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Onde nos conheceu?</label>
-              <select className="w-full p-2 border rounded-md bg-white">
+              <select className="w-full p-2 border rounded-md bg-primary !text-white">
                 <option value="">Selecione uma opção</option>
                 {sourceOptions.map((option) => (
                   <option key={option} value={option.toLowerCase()}>
@@ -302,12 +302,12 @@ const Header = () => {
             <div>
               <label className="block text-sm font-medium mb-1">Mensagem</label>
               <textarea
-                className="w-full p-2 border rounded-md bg-white"
+                className="w-full p-2 border rounded-md bg-primary placeholder:text-white !text-white"
                 rows={4}
                 placeholder="Sua mensagem..."
               />
             </div>
-            <Button className="w-full" type="submit">
+            <Button className="w-full bg-secondary !hover:bg-gray-500 border-primary text-primary" type="submit" variant="secondary">
               Enviar Mensagem
             </Button>
           </form>
@@ -315,7 +315,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-        <DialogContent className="!text-black sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
+        <DialogContent className="!text-white border-primary sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-primary">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -332,7 +332,7 @@ const Header = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2 bg-white"
+                className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Google")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
@@ -345,7 +345,7 @@ const Header = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2 bg-white"
+                className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Apple")}
               >
                 <Apple className="w-5 h-5 text-black" />
@@ -355,10 +355,10 @@ const Header = () => {
             
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300"></span>
+                <span className="w-full border-t border-gray-500"></span>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">ou continue com</span>
+                <span className="px-2 bg-primary text-white">ou continue com</span>
               </div>
             </div>
             
@@ -367,7 +367,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Usuário</label>
                 <input
                   type="text"
-                  className="w-full p-2 border rounded-md bg-white text-black"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
                   placeholder="Digite seu usuário"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -377,7 +377,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md bg-white text-black"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
                   placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -386,22 +386,22 @@ const Header = () => {
               <div className="text-right">
                 <Button 
                   variant="link" 
-                  className="text-sm text-primary hover:text-primary/80 p-0 h-auto"
+                  className="text-sm text-white p-0 h-auto"
                   type="button"
                 >
                   Esqueci minha senha
                 </Button>
               </div>
-              <Button className="w-full" type="submit">
+              <Button className="w-full bg-secondary " type="submit" variant="secondary">
                 Entrar
               </Button>
             </form>
             
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-white">
               Não tem uma conta?{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto text-primary"
+                className="p-0 h-auto text-secondary"
                 onClick={() => {
                   setIsLoginOpen(false);
                   setIsRegisterOpen(true);
@@ -415,7 +415,7 @@ const Header = () => {
       </Dialog>
 
       <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
-        <DialogContent className="text-black sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-white">
+        <DialogContent className="text-white sm:max-w-md max-w-[95vw] w-full mx-auto p-4 sm:p-6 bg-primary border-primary">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4">
               <img 
@@ -424,7 +424,7 @@ const Header = () => {
                 className="w-16 h-16 mx-auto"
               />
             </div>
-            <DialogTitle className="text-xl">Criar Conta</DialogTitle>
+            <DialogTitle className="text-xl text-center">Criar Conta</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">
@@ -432,7 +432,7 @@ const Header = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2 bg-white"
+                className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Google")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
@@ -445,7 +445,7 @@ const Header = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full flex items-center justify-center gap-2 bg-white"
+                className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Apple")}
               >
                 <Apple className="w-5 h-5 text-black" />
@@ -455,10 +455,10 @@ const Header = () => {
             
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300"></span>
+                <span className="w-full border-t border-gray-500"></span>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">ou preencha o formulário</span>
+                <span className="px-2 bg-primary text-white">ou preencha o formulário</span>
               </div>
             </div>
             
@@ -467,7 +467,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Nome</label>
                 <input
                   type="text"
-                  className="w-full p-2 border rounded-md bg-white text-black"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
                   placeholder="Seu nome completo"
                   value={registerData.name}
                   onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
@@ -478,7 +478,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Email</label>
                 <input
                   type="email"
-                  className="w-full p-2 border rounded-md bg-white text-black"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
                   placeholder="seu@email.com"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
@@ -489,7 +489,7 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md bg-white text-black"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
                   placeholder="Digite sua senha"
                   value={registerData.password}
                   onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
@@ -500,21 +500,21 @@ const Header = () => {
                 <label className="block text-sm font-medium mb-1">Confirmar Senha</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md bg-white text-black"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
                   placeholder="Confirme sua senha"
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
                   required
                 />
               </div>
-              <Button className="w-full" type="submit">
+              <Button className="w-full bg-secondary" type="submit" variant="secondary">
                 Criar Conta
               </Button>
-              <p className="text-center text-sm text-gray-500">
+              <p className="text-center text-sm text-white">
                 Já tem uma conta?{" "}
                 <Button 
                   variant="link" 
-                  className="p-0 h-auto text-primary"
+                  className="p-0 h-auto text-primary text-secondary"
                   onClick={() => {
                     setIsRegisterOpen(false);
                     setIsLoginOpen(true);
