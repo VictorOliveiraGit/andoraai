@@ -100,7 +100,7 @@ const dailySalesData = {
       { day: "Sexta", sales: 2700 },
       { day: "Sábado", sales: 2400 },
       { day: "Domingo", sales: 1000 },
-    ],
+    ]
   }
 };
 
@@ -220,7 +220,7 @@ const AdminAndora = () => {
               <ChevronUp className="h-5 w-5 text-primary" />
             </Button>
           </DrawerTrigger>
-          <DrawerContent className="h-80 overflow-y-auto">
+          <DrawerContent className="h-[80vh] overflow-y-auto">
             <DrawerHeader className="text-left px-4 py-2 border-b">
               <DrawerTitle>Menu de Navegação</DrawerTitle>
             </DrawerHeader>
@@ -634,3 +634,4 @@ const SettingsContent = () => (
 );
 
 export default AdminAndora;
+
