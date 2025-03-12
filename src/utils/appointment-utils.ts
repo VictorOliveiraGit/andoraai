@@ -1,3 +1,4 @@
+
 // Helper function to get status label in Portuguese
 export const getStatusLabel = (status: string) => {
   switch (status) {

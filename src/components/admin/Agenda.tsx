@@ -60,6 +60,17 @@ export const Agenda = () => {
     toast.success("Status atualizado com sucesso!");
   };
 
+  // Handle appointment update
+  const handleAppointmentUpdate = (updatedAppointment: Appointment) => {
+    setAppointments(prev => 
+      prev.map(appointment => 
+        appointment.id === updatedAppointment.id 
+          ? updatedAppointment
+          : appointment
+      )
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -85,6 +96,7 @@ export const Agenda = () => {
           selectedDate={date}
           view={view}
           onStatusChange={handleStatusChange}
+          onAppointmentUpdate={handleAppointmentUpdate}
         />
       </div>
 
