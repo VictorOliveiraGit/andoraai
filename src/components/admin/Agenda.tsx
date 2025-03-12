@@ -5,7 +5,7 @@ import { ptBR } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar as CalendarIcon, Plus, Clock, User } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, Clock, User, Phone } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -30,8 +30,9 @@ interface Appointment {
   id: number;
   title: string;
   date: Date;
-  status: "scheduled" | "completed" | "canceled";
+  status: "scheduled" | "pending" | "delayed" | "canceled";
   clientName: string;
+  phoneNumber?: string;
   time: string;
 }
 
@@ -44,9 +45,10 @@ export const Agenda = () => {
   const [newAppointment, setNewAppointment] = useState({
     title: "",
     clientName: "",
+    phoneNumber: "",
     date: new Date(),
     time: "",
-    status: "scheduled" as const
+    status: "scheduled" as "scheduled" | "pending" | "delayed" | "canceled"
   });
   
   // Placeholder for appointments data that would come from the database
@@ -57,14 +59,16 @@ export const Agenda = () => {
       date: new Date(),
       status: "scheduled",
       clientName: "João Pedro",
+      phoneNumber: "(11) 98765-4321",
       time: "14:30"
     },
     {
       id: 2,
       title: "Exame de Rotina",
       date: new Date(),
-      status: "completed",
+      status: "pending",
       clientName: "Maria Santos",
+      phoneNumber: "(11) 91234-5678",
       time: "15:45"
     }
   ];
@@ -82,7 +86,7 @@ export const Agenda = () => {
   const handleStatusChange = (value: string) => {
     setNewAppointment(prev => ({
       ...prev,
-      status: value as "scheduled" | "completed" | "canceled"
+      status: value as "scheduled" | "pending" | "delayed" | "canceled"
     }));
   };
   
@@ -111,10 +115,33 @@ export const Agenda = () => {
     setNewAppointment({
       title: "",
       clientName: "",
+      phoneNumber: "",
       date: new Date(),
       time: "",
       status: "scheduled"
     });
+  };
+
+  // Helper function to get status label in Portuguese
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'scheduled': return 'Agendado';
+      case 'pending': return 'Pendente';
+      case 'delayed': return 'Atrasado';
+      case 'canceled': return 'Cancelado';
+      default: return status;
+    }
+  };
+
+  // Helper function to get status color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'scheduled': return 'bg-blue-100 text-blue-700';
+      case 'pending': return 'bg-yellow-100 text-yellow-700';
+      case 'delayed': return 'bg-orange-100 text-orange-700';
+      case 'canceled': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
   };
 
   return (
@@ -169,6 +196,23 @@ export const Agenda = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="phoneNumber" className="text-right">
+                    Telefone
+                  </Label>
+                  <div className="col-span-3 flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      value={newAppointment.phoneNumber}
+                      onChange={handleInputChange}
+                      placeholder="(00) 00000-0000"
+                      className="flex-1"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
                   <Label className="text-right">
                     Data
                   </Label>
@@ -212,7 +256,8 @@ export const Agenda = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="scheduled">Agendado</SelectItem>
-                      <SelectItem value="completed">Concluído</SelectItem>
+                      <SelectItem value="pending">Pendente</SelectItem>
+                      <SelectItem value="delayed">Atrasado</SelectItem>
                       <SelectItem value="canceled">Cancelado</SelectItem>
                     </SelectContent>
                   </Select>
@@ -275,17 +320,17 @@ export const Agenda = () => {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{appointment.time}</span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      appointment.status === 'scheduled' ? 'bg-blue-100 text-blue-700' :
-                      appointment.status === 'completed' ? 'bg-green-100 text-green-700' :
-                      'bg-red-100 text-red-700'
-                    }`}>
-                      {appointment.status === 'scheduled' ? 'Agendado' :
-                       appointment.status === 'completed' ? 'Concluído' : 'Cancelado'}
+                    <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(appointment.status)}`}>
+                      {getStatusLabel(appointment.status)}
                     </span>
                   </div>
                   <span className="text-sm font-medium">{appointment.title}</span>
                   <span className="text-sm text-muted-foreground">{appointment.clientName}</span>
+                  {appointment.phoneNumber && (
+                    <span className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Phone size={12} /> {appointment.phoneNumber}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
