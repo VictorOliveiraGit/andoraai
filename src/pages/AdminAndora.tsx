@@ -150,7 +150,7 @@ const AdminAndora = () => {
           {isSidebarOpen ? (
             <h1 className="text-xl font-bold text-white">Andora Admin</h1>
           ) : (
-            <h1 className="text-xl font-bold text-white">A</h1>
+            <h1></h1>
           )}
           <Button 
             variant="ghost" 
@@ -191,7 +191,7 @@ const AdminAndora = () => {
         </nav>
         
         {/* Logout Button */}
-        {isSidebarOpen && (
+        {isSidebarOpen ? (
           <div className="absolute bottom-8 left-0 right-0 px-6">
             <Button
               variant="ghost"
@@ -200,6 +200,16 @@ const AdminAndora = () => {
             >
               <LogOut size={16} className="mr-2" />
               Sair
+            </Button>
+            </div>
+        ) : (
+          <div className="items-left absolute bottom-8 left-0 right-0 px-6">
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="w-full text-white justify-left"
+            >
+              <LogOut size={16} />
             </Button>
           </div>
         )}
@@ -298,43 +308,35 @@ const AdminAndora = () => {
             : "md:ml-20"
       )}>
         {/* Top Bar */}
-        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 md:px-8 px-6 py-6 flex justify-between items-center">
           {isMobile && (
             <div className="flex items-center">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={toggleSidebar}
-                className="md:hidden"
-              >
-                <Menu size={24} />
-              </Button>
-              <h1 className="text-lg font-bold ml-2">Andora Admin</h1>
+              <h2 className="text-lg font-bold">Andora Admin - {menuItems.find(item => item.id === activeSection)?.label}</h2>
             </div>
           )}
-          
           {!isMobile && (
             <div>
-              <h2 className="text-lg font-medium">{menuItems.find(item => item.id === activeSection)?.label}</h2>
+              <h2 className="text-lg font-bold">{menuItems.find(item => item.id === activeSection)?.label}</h2>
             </div>
           )}
           
-          {/* <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon">
-              <Bell size={20} />
-            </Button>
-            
-            {!isMobile && (
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
-              >
-                <LogOut size={16} />
-                Sair
+          {/* Notificação, ver o que irá fazer */}
+            {/* <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon">
+                <Bell size={20} />
               </Button>
-            )}
-          </div> */}
+              
+              {!isMobile && (
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200"
+                >
+                  <LogOut size={16} />
+                  Sair
+                </Button>
+              )}
+            </div> */}
         </div>
         
         {/* Content Area */}
