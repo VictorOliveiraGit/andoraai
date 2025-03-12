@@ -18,4 +18,13 @@ export interface NewAppointmentForm {
   status: AppointmentStatus;
 }
 
-export type AppointmentStatus = "scheduled" | "pending" | "completed" | "in-progress" | "canceled" | "delayed";
+export type AppointmentStatus = 
+  | "scheduled" 
+  | "pending" 
+  | "completed" 
+  | "in-progress" 
+  | "canceled" 
+  | "delayed"
+  | "pending_payment"
+  | "paid";
+
