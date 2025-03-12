@@ -143,7 +143,7 @@ export const AppointmentList = ({
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="md:col-span-4 h-full flex flex-col">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-xl font-semibold">
           {format(selectedDate, "EEEE, d 'de' MMMM", { locale: ptBR })}
@@ -165,7 +165,7 @@ export const AppointmentList = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto pr-1">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-grow overflow-y-auto pr-1">
         <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-13rem)]">
           {filteredAppointments.length > 0 ? (
             filteredAppointments.map((appointment) => (

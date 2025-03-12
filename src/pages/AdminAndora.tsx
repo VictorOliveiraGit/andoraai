@@ -1,6 +1,6 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Customers } from "@/components/admin/Customers";
 import { Sidebar } from "@/components/admin/Sidebar";
 import { Dashboard } from "@/components/admin/Dashboard";
 import { Users } from "@/components/admin/UserManagement";
@@ -35,8 +35,6 @@ const AdminAndora = () => {
         return <Sales />;
       case "products":
         return <Products />;
-      case "customers":
-        return <Customers />;
       case "users":
         return <Users />;
       case "reports":
