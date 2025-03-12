@@ -1,6 +1,8 @@
+
 import { useEffect, useRef } from "react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { X, Menu } from "lucide-react";
+import { menuItems } from "@/config/admin";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,24 +12,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { LucideIcon } from "lucide-react";
 
-interface MenuItem {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-}
-
-export interface SidebarProps {
+interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  menuItems: MenuItem[];
-  activeSection: string;
-  setActiveSection: (section: string) => void;
 }
 
-export const Sidebar = ({ isOpen, setIsOpen, menuItems, activeSection, setActiveSection }: SidebarProps) => {
-  const { avatar, name } = useAdmin();
+export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+  const { activeSection, setActiveSection, avatar, name } = useAdmin();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 

@@ -1,7 +1,7 @@
 
-import { Phone, CreditCard } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Appointment } from "@/types/appointment";
-import { AppointmentStatusBadge, PaymentStatusBadge } from "./AppointmentStatusBadge";
+import { AppointmentStatusBadge } from "./AppointmentStatusBadge";
 
 interface AppointmentItemProps {
   appointment: Appointment;
@@ -25,11 +25,6 @@ export const AppointmentItem = ({ appointment, onClick }: AppointmentItemProps) 
         <span className="text-sm text-muted-foreground flex items-center gap-1">
           <Phone size={12} /> {appointment.phoneNumber}
         </span>
-      )}
-      {appointment.paymentStatus && (
-        <div className="mt-1">
-          <PaymentStatusBadge status={appointment.paymentStatus} />
-        </div>
       )}
     </div>
   );

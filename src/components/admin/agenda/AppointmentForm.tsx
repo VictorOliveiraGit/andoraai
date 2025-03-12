@@ -1,5 +1,5 @@
 
-import { Clock, Phone, User, CreditCard } from "lucide-react";
+import { Clock, Phone, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
-import { Appointment, NewAppointmentForm, PaymentStatus } from "@/types/appointment";
+import { Appointment, NewAppointmentForm } from "@/types/appointment";
 import { formatPhoneNumber } from "@/utils/appointment-utils";
 
 interface AppointmentFormProps {
@@ -24,8 +24,7 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
     phoneNumber: "",
     date: new Date(),
     time: "",
-    status: "scheduled",
-    paymentStatus: "pending"
+    status: "scheduled"
   });
 
   // Handle phone input with mask
@@ -51,14 +50,6 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
     setNewAppointment(prev => ({
       ...prev,
       status: value as "scheduled" | "pending" | "delayed" | "canceled"
-    }));
-  };
-  
-  // Handle payment status change
-  const handlePaymentStatusChange = (value: string) => {
-    setNewAppointment(prev => ({
-      ...prev,
-      paymentStatus: value as PaymentStatus
     }));
   };
   
@@ -92,8 +83,7 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
       phoneNumber: "",
       date: new Date(),
       time: "",
-      status: "scheduled",
-      paymentStatus: "pending"
+      status: "scheduled"
     });
   };
 
@@ -161,7 +151,7 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
               <Label className="text-right">
                 Data
               </Label>
-              <div className="col-span-3 border rounded-md p-1">
+              <div className="col-span-3 border rounded-md p-3">
                 <Calendar
                   mode="single"
                   selected={newAppointment.date}
@@ -206,27 +196,6 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
                   <SelectItem value="canceled">Cancelado</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="paymentStatus" className="text-right">
-                Pagamento
-              </Label>
-              <div className="col-span-3 flex items-center gap-2">
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-                <Select 
-                  value={newAppointment.paymentStatus} 
-                  onValueChange={handlePaymentStatusChange}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Status de Pagamento" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pagamento Pendente</SelectItem>
-                    <SelectItem value="paid">Pago</SelectItem>
-                    <SelectItem value="not-required">Sem Pagamento</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
           </div>
           <DialogFooter>

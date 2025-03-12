@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
+import { Appointment, AppointmentStatus } from "@/types/appointment";
 import { AppointmentForm } from "./agenda/AppointmentForm";
 import { AppointmentList } from "./agenda/AppointmentList";
 import { CalendarView } from "./agenda/CalendarView";
@@ -22,8 +22,7 @@ export const Agenda = () => {
       status: "scheduled",
       clientName: "João Pedro",
       phoneNumber: "(11) 98765-4321",
-      time: "14:30",
-      paymentStatus: "pending"
+      time: "14:30"
     },
     {
       id: 2,
@@ -32,8 +31,7 @@ export const Agenda = () => {
       status: "pending",
       clientName: "Maria Santos",
       phoneNumber: "(11) 91234-5678",
-      time: "15:45",
-      paymentStatus: "paid"
+      time: "15:45"
     }
   ]);
   
@@ -62,19 +60,6 @@ export const Agenda = () => {
     toast.success("Status atualizado com sucesso!");
   };
 
-  // Handle payment status change
-  const handlePaymentStatusChange = (id: number, newPaymentStatus: PaymentStatus) => {
-    setAppointments(prev => 
-      prev.map(appointment => 
-        appointment.id === id 
-          ? { ...appointment, paymentStatus: newPaymentStatus }
-          : appointment
-      )
-    );
-    
-    toast.success("Status de pagamento atualizado com sucesso!");
-  };
-
   // Handle appointment update
   const handleAppointmentUpdate = (updatedAppointment: Appointment) => {
     setAppointments(prev => 
@@ -84,8 +69,6 @@ export const Agenda = () => {
           : appointment
       )
     );
-    
-    toast.success("Agendamento atualizado com sucesso!");
   };
 
   return (
@@ -113,7 +96,6 @@ export const Agenda = () => {
           selectedDate={date}
           view={view}
           onStatusChange={handleStatusChange}
-          onPaymentStatusChange={handlePaymentStatusChange}
           onAppointmentUpdate={handleAppointmentUpdate}
         />
       </div>
