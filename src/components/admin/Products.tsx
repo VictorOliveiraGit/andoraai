@@ -7,7 +7,7 @@ import {
   Plus,
   Search,
   Filter,
-  Edit,
+  Pencil,
   Trash,
   Tag,
   BarChart,
@@ -43,6 +43,8 @@ export const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState("todas");
   const [selectedStatus, setSelectedStatus] = useState("todos");
   const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
+  const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
   
   // Estado para o formulário de novo produto
   const [newProduct, setNewProduct] = useState({
@@ -80,6 +82,58 @@ export const Products = () => {
       ...newProduct,
       [name]: value
     });
+  };
+  
+  // Manipulação do formulário de edição de produto
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditingProduct({
+      ...editingProduct,
+      [name]: value
+    });
+  };
+  
+  // Editar produto existente
+  const handleEditProduct = (product) => {
+    setEditingProduct({
+      ...product,
+      preco: product.preco.toString(),
+      estoque: product.estoque.toString()
+    });
+    setIsEditProductModalOpen(true);
+  };
+  
+  // Salvar edição de produto
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    
+    // Validação básica
+    if (!editingProduct.nome || !editingProduct.categoria || !editingProduct.preco) {
+      toast.error("Por favor, preencha todos os campos obrigatórios");
+      return;
+    }
+    
+    // Definir estoque baseado na categoria
+    let estoque = parseInt(editingProduct.estoque) || 0;
+    if (["Digital", "Serviço", "Assinatura"].includes(editingProduct.categoria)) {
+      estoque = 0;
+    }
+    
+    // Criar produto atualizado
+    const updatedProduct = {
+      ...editingProduct,
+      preco: parseFloat(editingProduct.preco),
+      estoque: estoque,
+      status: estoque <= 5 && ["Produto Físico"].includes(editingProduct.categoria) ? "Baixo Estoque" : "Ativo"
+    };
+    
+    // Atualizar estado
+    setProductsData(productsData.map(product => 
+      product.id === updatedProduct.id ? updatedProduct : product
+    ));
+    
+    setIsEditProductModalOpen(false);
+    toast.success("Produto atualizado com sucesso!");
   };
   
   // Adicionar novo produto
@@ -297,8 +351,13 @@ export const Products = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 flex space-x-2">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                        <Edit className="h-4 w-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0"
+                        onClick={() => handleEditProduct(product)}
+                      >
+                        <Pencil className="h-4 w-4" />
                       </Button>
                       <Button 
                         variant="ghost" 
@@ -416,6 +475,95 @@ export const Products = () => {
               <Button type="submit">Salvar</Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Edição de Produto */}
+      <Dialog open={isEditProductModalOpen} onOpenChange={setIsEditProductModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Editar Produto</DialogTitle>
+            <DialogDescription>
+              Edite os dados do produto selecionado.
+            </DialogDescription>
+          </DialogHeader>
+          {editingProduct && (
+            <form onSubmit={handleSaveEdit}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-nome" className="text-right font-medium col-span-1">
+                    Nome
+                  </label>
+                  <input
+                    id="edit-nome"
+                    name="nome"
+                    value={editingProduct.nome}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                    placeholder="Nome do produto"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-categoria" className="text-right font-medium col-span-1">
+                    Categoria
+                  </label>
+                  <select
+                    id="edit-categoria"
+                    name="categoria"
+                    value={editingProduct.categoria}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                  >
+                    <option value="">Selecione uma categoria</option>
+                    {uniqueCategories.map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-preco" className="text-right font-medium col-span-1">
+                    Preço (R$)
+                  </label>
+                  <input
+                    id="edit-preco"
+                    name="preco"
+                    type="number"
+                    value={editingProduct.preco}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                    placeholder="0.00"
+                    step="0.01"
+                  />
+                </div>
+                {editingProduct.categoria && 
+                 !["Digital", "Serviço", "Assinatura"].includes(editingProduct.categoria) && (
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <label htmlFor="edit-estoque" className="text-right font-medium col-span-1">
+                      Estoque
+                    </label>
+                    <input
+                      id="edit-estoque"
+                      name="estoque"
+                      type="number"
+                      value={editingProduct.estoque}
+                      onChange={handleEditInputChange}
+                      className="col-span-3 border rounded-md px-3 py-2"
+                      placeholder="0"
+                      min="0"
+                    />
+                  </div>
+                )}
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="outline">Cancelar</Button>
+                </DialogClose>
+                <Button type="submit">Atualizar</Button>
+              </DialogFooter>
+            </form>
+          )}
         </DialogContent>
       </Dialog>
     </div>
