@@ -1,7 +1,6 @@
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Filter } from "lucide-react";
+import { Download } from "lucide-react";
 import * as XLSX from 'xlsx';
 
 interface ReportHeaderProps {
@@ -51,21 +50,15 @@ export const ReportHeader = ({
           <option value="mensal">Mensal</option>
           <option value="anual">Anual</option>
         </select>
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Filter className="h-4 w-4" />
-            <span>Filtros</span>
-          </Button>
-          <Button 
-            variant="secondary" 
-            size="sm" 
-            className="gap-2"
-            onClick={handleExport}
-          >
-            <Download className="h-4 w-4" />
-            <span>Exportar</span>
-          </Button>
-        </div>
+        <Button 
+          variant="secondary" 
+          size="sm" 
+          className="gap-2"
+          onClick={handleExport}
+        >
+          <Download className="h-4 w-4" />
+          <span>Exportar</span>
+        </Button>
       </div>
     </div>
   );

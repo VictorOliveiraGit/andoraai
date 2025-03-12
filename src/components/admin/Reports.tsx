@@ -6,12 +6,15 @@ import { ProductChart } from "./reports/ProductChart";
 import { ReportSummary } from "./reports/ReportSummary";
 import { DetailedHistory } from "./reports/DetailedHistory";
 import { monthlyData, productData, COLORS } from "./reports/reportData";
+import { FilterDialog } from "./reports/FilterDialog";
 
 export const Reports = () => {
   const [reportType, setReportType] = useState("vendas");
   const [reportPeriod, setReportPeriod] = useState("anual");
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(100000);
   
-  // Filter data based on selected type and period
+  // Filter data based on selected type, period and value range
   const filteredData = useMemo(() => {
     // Filter monthly data based on period
     let filtered = [...monthlyData];
@@ -26,23 +29,36 @@ export const Reports = () => {
       case "mensal":
         filtered = filtered.slice(-12); // Last 12 months
         break;
-      // For annual, use all data
       default:
         break;
     }
 
+    // Apply value range filter
+    filtered = filtered.filter(item => 
+      item.valor >= minValue && 
+      (maxValue === 0 || item.valor <= maxValue)
+    );
+
     return filtered;
-  }, [reportType, reportPeriod]);
+  }, [reportType, reportPeriod, minValue, maxValue]);
 
   return (
     <div className="space-y-6">
-      <ReportHeader 
-        reportType={reportType}
-        setReportType={setReportType}
-        reportPeriod={reportPeriod}
-        setReportPeriod={setReportPeriod}
-        data={filteredData}
-      />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <ReportHeader 
+          reportType={reportType}
+          setReportType={setReportType}
+          reportPeriod={reportPeriod}
+          setReportPeriod={setReportPeriod}
+          data={filteredData}
+        />
+        <FilterDialog
+          minValue={minValue}
+          maxValue={maxValue}
+          setMinValue={setMinValue}
+          setMaxValue={setMaxValue}
+        />
+      </div>
 
       <MonthlyChart data={filteredData} />
 
