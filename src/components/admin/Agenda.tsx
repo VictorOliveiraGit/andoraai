@@ -73,7 +73,30 @@ export const Agenda = () => {
     status: "scheduled" as "scheduled" | "pending" | "delayed" | "canceled"
   });
 
-  // Handle input change for the form
+  // Handle phone input with mask
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    
+    // Apply formatting based on the length of the input
+    let formattedValue = '';
+    if (value.length <= 2) {
+      formattedValue = value;
+    } else if (value.length <= 7) {
+      formattedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+    } else if (value.length <= 11) {
+      formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+    } else {
+      // Limit to 11 digits (2 DDD + 9 phone)
+      formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+    }
+    
+    setNewAppointment(prev => ({
+      ...prev,
+      phoneNumber: formattedValue
+    }));
+  };
+
+  // Handle input change for other form fields
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewAppointment(prev => ({
@@ -223,9 +246,10 @@ export const Agenda = () => {
                       id="phoneNumber"
                       name="phoneNumber"
                       value={newAppointment.phoneNumber}
-                      onChange={handleInputChange}
+                      onChange={handlePhoneChange}
                       placeholder="(00) 00000-0000"
                       className="flex-1"
+                      maxLength={15}
                       required
                     />
                   </div>
