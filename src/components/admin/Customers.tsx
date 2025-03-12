@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,8 +17,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { FilterDialog } from "./reports/FilterDialog";
+import ClientRegistrationModal from "./ClientRegistrationModal";
 
-// Dados de exemplo expandidos com informações de plano
 const customersData = [
   { id: 1, nome: "João Silva", email: "joao.silva@example.com", telefone: "(11) 98765-4321", ultimaCompra: "10/06/2023", totalGasto: 4750.00, status: "Ativo", plano: "Premium" },
   { id: 2, nome: "Maria Oliveira", email: "maria@example.com", telefone: "(21) 98765-4321", ultimaCompra: "05/06/2023", totalGasto: 3500.00, status: "Ativo", plano: "Básico" },
@@ -36,9 +35,10 @@ export const Customers = () => {
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(5000);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<number | null>(null);
+  const [customers, setCustomers] = useState(customersData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  // Filtra os dados com base nos critérios
-  const filteredCustomers = customersData.filter(customer => {
+  const filteredCustomers = customers.filter(customer => {
     const matchesSearch = 
       customer.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -61,20 +61,37 @@ export const Customers = () => {
   });
 
   const handleDeleteCustomer = (id: number) => {
-    // In a real application, this would call an API to delete the customer
+    setCustomers(customers.filter(customer => customer.id !== id));
     toast.success(`Cliente #${id} excluído com sucesso!`);
     setShowDeleteConfirm(null);
   };
 
   const handleEditCustomer = (id: number) => {
-    // In a real application, this would navigate to an edit form or open a modal
     toast.info(`Editando cliente #${id}`);
   };
 
+  const handleSaveNewClient = (clientData: {
+    nome: string;
+    email: string;
+    telefone: string;
+    plano: string;
+    status: string;
+  }) => {
+    const newId = Math.max(...customers.map(c => c.id)) + 1;
+    const newCustomer = {
+      id: newId,
+      ...clientData,
+      ultimaCompra: "Nunca",
+      totalGasto: 0,
+    };
+    
+    setCustomers([...customers, newCustomer]);
+  };
+
   const plansCount = {
-    "Basic": customersData.filter(c => c.plano === "Básico").length,
-    "Pro": customersData.filter(c => c.plano === "Pro").length,
-    "Premium": customersData.filter(c => c.plano === "Premium").length
+    "Basic": customers.filter(c => c.plano === "Básico").length,
+    "Pro": customers.filter(c => c.plano === "Pro").length,
+    "Premium": customers.filter(c => c.plano === "Premium").length
   };
 
   return (
@@ -84,11 +101,20 @@ export const Customers = () => {
           <Users className="mr-2 h-6 w-6" />
           Gerenciamento de Clientes
         </h1>
-        <Button className="flex items-center gap-2">
+        <Button 
+          className="flex items-center gap-2"
+          onClick={() => setIsModalOpen(true)}
+        >
           <Plus className="h-4 w-4" />
           Novo Cliente
         </Button>
       </div>
+
+      <ClientRegistrationModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSave={handleSaveNewClient}
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
@@ -98,7 +124,7 @@ export const Customers = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total de Clientes</p>
-              <h3 className="text-2xl font-bold">{customersData.length}</h3>
+              <h3 className="text-2xl font-bold">{customers.length}</h3>
               <div className="flex items-center mt-1 text-xs">
                 <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
                 <span className="text-green-600 font-medium">+2 esta semana</span>
@@ -115,10 +141,10 @@ export const Customers = () => {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Clientes Ativos</p>
               <h3 className="text-2xl font-bold">
-                {customersData.filter(c => c.status === "Ativo").length}
+                {customers.filter(c => c.status === "Ativo").length}
               </h3>
               <p className="text-xs text-muted-foreground">
-                {Math.round(customersData.filter(c => c.status === "Ativo").length / customersData.length * 100)}% do total
+                {Math.round(customers.filter(c => c.status === "Ativo").length / customers.length * 100)}% do total
               </p>
             </div>
           </CardContent>
@@ -151,7 +177,6 @@ export const Customers = () => {
         </Card>
       </div>
 
-      {/* Distribuição por planos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100">
           <CardContent className="p-4 flex justify-between items-center">
@@ -345,7 +370,7 @@ export const Customers = () => {
 
           <div className="flex justify-between items-center mt-4">
             <span className="text-sm text-gray-500">
-              Mostrando <span className="font-medium">{filteredCustomers.length}</span> de <span className="font-medium">{customersData.length}</span> clientes
+              Mostrando <span className="font-medium">{filteredCustomers.length}</span> de <span className="font-medium">{customers.length}</span> clientes
             </span>
             <div className="flex space-x-1">
               <Button variant="outline" size="sm" disabled>Anterior</Button>
