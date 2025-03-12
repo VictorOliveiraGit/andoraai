@@ -11,7 +11,8 @@ import {
   Search,
   Filter,
   Download,
-  X
+  X,
+  Pencil
 } from "lucide-react";
 import {
   Dialog,
@@ -49,8 +50,10 @@ export const Sales = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("todos");
   const [isNewSaleModalOpen, setIsNewSaleModalOpen] = useState(false);
+  const [isEditSaleModalOpen, setIsEditSaleModalOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("todos");
   const [datePeriod, setDatePeriod] = useState({ startDate: "", endDate: "" });
+  const [editingSale, setEditingSale] = useState(null);
   
   // Estado para o formulário de nova venda
   const [newSale, setNewSale] = useState({
@@ -144,6 +147,69 @@ export const Sales = () => {
         [name]: value
       });
     }
+  };
+  
+  // Editar venda existente
+  const handleEditSale = (sale) => {
+    // Convert date from DD/MM/YYYY to YYYY-MM-DD for the input
+    const parts = sale.data.split('/');
+    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    
+    setEditingSale({
+      ...sale,
+      data: formattedDate,
+      valor: sale.valor.toString()
+    });
+    setIsEditSaleModalOpen(true);
+  };
+  
+  // Handle edit input changes
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Se for o select de produto, atualiza automaticamente o valor
+    if (name === "produto" && value) {
+      const selectedProduct = availableProducts.find(p => p.nome === value);
+      setEditingSale({
+        ...editingSale,
+        [name]: value,
+        valor: selectedProduct?.valor.toString() || ""
+      });
+    } else {
+      setEditingSale({
+        ...editingSale,
+        [name]: value
+      });
+    }
+  };
+  
+  // Save edited sale
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    
+    // Validação básica
+    if (!editingSale.cliente || !editingSale.produto || !editingSale.data || !editingSale.valor) {
+      toast.error("Por favor, preencha todos os campos obrigatórios");
+      return;
+    }
+    
+    // Formatar a data para o padrão DD/MM/YYYY
+    const formattedDate = new Date(editingSale.data).toLocaleDateString('pt-BR');
+    
+    // Create updated sale object
+    const updatedSale = {
+      ...editingSale,
+      data: formattedDate,
+      valor: parseFloat(editingSale.valor)
+    };
+    
+    // Update the sale in the sales data
+    setSalesData(salesData.map(sale => 
+      sale.id === updatedSale.id ? updatedSale : sale
+    ));
+    
+    setIsEditSaleModalOpen(false);
+    toast.success("Venda atualizada com sucesso!");
   };
   
   // Adicionar nova venda
@@ -305,8 +371,13 @@ export const Sales = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 flex space-x-2">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                        <Edit className="h-4 w-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0"
+                        onClick={() => handleEditSale(sale)}
+                      >
+                        <Pencil className="h-4 w-4" />
                       </Button>
                       <Button 
                         variant="ghost" 
@@ -477,6 +548,106 @@ export const Sales = () => {
               <Button type="submit">Salvar</Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Edição de Venda */}
+      <Dialog open={isEditSaleModalOpen} onOpenChange={setIsEditSaleModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Editar Venda</DialogTitle>
+            <DialogDescription>
+              Edite os dados da venda selecionada.
+            </DialogDescription>
+          </DialogHeader>
+          {editingSale && (
+            <form onSubmit={handleSaveEdit}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-cliente" className="text-right font-medium col-span-1">
+                    Cliente
+                  </label>
+                  <input
+                    id="edit-cliente"
+                    name="cliente"
+                    value={editingSale.cliente}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                    placeholder="Nome do cliente"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-produto" className="text-right font-medium col-span-1">
+                    Produto
+                  </label>
+                  <select
+                    id="edit-produto"
+                    name="produto"
+                    value={editingSale.produto}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                  >
+                    <option value="">Selecione um produto</option>
+                    {availableProducts.map((product, index) => (
+                      <option key={index} value={product.nome}>
+                        {product.nome} - R$ {product.valor.toFixed(2)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-data" className="text-right font-medium col-span-1">
+                    Data
+                  </label>
+                  <input
+                    id="edit-data"
+                    name="data"
+                    type="date"
+                    value={editingSale.data}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-valor" className="text-right font-medium col-span-1">
+                    Valor (R$)
+                  </label>
+                  <input
+                    id="edit-valor"
+                    name="valor"
+                    type="number"
+                    value={editingSale.valor}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                    placeholder="0.00"
+                    step="0.01"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="edit-status" className="text-right font-medium col-span-1">
+                    Status
+                  </label>
+                  <select
+                    id="edit-status"
+                    name="status"
+                    value={editingSale.status}
+                    onChange={handleEditInputChange}
+                    className="col-span-3 border rounded-md px-3 py-2"
+                  >
+                    <option value="Completo">Completo</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Cancelado">Cancelado</option>
+                  </select>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="outline">Cancelar</Button>
+                </DialogClose>
+                <Button type="submit">Atualizar</Button>
+              </DialogFooter>
+            </form>
+          )}
         </DialogContent>
       </Dialog>
     </div>
