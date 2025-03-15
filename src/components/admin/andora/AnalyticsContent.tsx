@@ -39,13 +39,12 @@ const AnalyticsContent = () => {
           </TabsContent>
         </Tabs>
       ) : (
-        // Show all tabs for regular Admin
+        // Show only Sales, Appointments, and Conversion tabs for regular Admin (removed AI Costs)
         <Tabs defaultValue="sales" className="w-full">
           <TabsList>
             <TabsTrigger value="sales">Vendas</TabsTrigger>
             <TabsTrigger value="appointments">Atendimentos</TabsTrigger>
             <TabsTrigger value="conversion">Taxa de Conversão</TabsTrigger>
-            <TabsTrigger value="ai-costs">Custos de IA</TabsTrigger>
           </TabsList>
           
           <TabsContent value="sales" className="space-y-6 pt-4">
@@ -58,10 +57,6 @@ const AnalyticsContent = () => {
           
           <TabsContent value="conversion" className="space-y-6 pt-4">
             <ConversionRates />
-          </TabsContent>
-          
-          <TabsContent value="ai-costs" className="space-y-6 pt-4">
-            <AICostCard />
           </TabsContent>
         </Tabs>
       )}
