@@ -5,6 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import { Reports } from "@/components/admin/Reports";
 import AICostCard from "@/components/admin/analytics/AICostCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CompletedAppointments from "@/components/admin/analytics/CompletedAppointments";
+import ConversionRates from "@/components/admin/analytics/ConversionRates";
 
 const AnalyticsContent = () => {
   // Taxa de conversão (em um app real, isso viria de uma API)
@@ -18,11 +20,21 @@ const AnalyticsContent = () => {
       <Tabs defaultValue="sales" className="w-full">
         <TabsList>
           <TabsTrigger value="sales">Vendas</TabsTrigger>
+          <TabsTrigger value="appointments">Atendimentos</TabsTrigger>
+          <TabsTrigger value="conversion">Taxa de Conversão</TabsTrigger>
           <TabsTrigger value="ai-costs">Custos de IA</TabsTrigger>
         </TabsList>
         
         <TabsContent value="sales" className="space-y-6 pt-4">
           <Reports />
+        </TabsContent>
+        
+        <TabsContent value="appointments" className="space-y-6 pt-4">
+          <CompletedAppointments />
+        </TabsContent>
+        
+        <TabsContent value="conversion" className="space-y-6 pt-4">
+          <ConversionRates />
         </TabsContent>
         
         <TabsContent value="ai-costs" className="space-y-6 pt-4">
