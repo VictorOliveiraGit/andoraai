@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { Check, X } from "lucide-react";
 
 interface ClientRegistrationModalProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ const ClientRegistrationModal: React.FC<ClientRegistrationModalProps> = ({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -72,21 +74,29 @@ const ClientRegistrationModal: React.FC<ClientRegistrationModalProps> = ({
     e.preventDefault();
     
     if (validateForm()) {
-      onSave(formData);
-      setFormData({
-        nome: "",
-        email: "",
-        telefone: "",
-        plano: "Básico",
-        status: "Ativo",
-      });
-      toast.success("Cliente cadastrado com sucesso!");
-      onClose();
+      setIsSubmitting(true);
+      
+      // Simulate API call
+      setTimeout(() => {
+        onSave(formData);
+        setFormData({
+          nome: "",
+          email: "",
+          telefone: "",
+          plano: "Básico",
+          status: "Ativo",
+        });
+        toast.success("Cliente cadastrado com sucesso!");
+        setIsSubmitting(false);
+        onClose();
+      }, 500);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) onClose();
+    }}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Cadastrar Novo Cliente</DialogTitle>
@@ -185,10 +195,14 @@ const ClientRegistrationModal: React.FC<ClientRegistrationModalProps> = ({
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} className="gap-2">
+              <X className="h-4 w-4" />
               Cancelar
             </Button>
-            <Button type="submit">Salvar</Button>
+            <Button type="submit" disabled={isSubmitting} className="gap-2">
+              <Check className="h-4 w-4" />
+              {isSubmitting ? "Salvando..." : "Salvar"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

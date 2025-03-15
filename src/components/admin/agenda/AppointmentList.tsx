@@ -38,6 +38,75 @@ export const AppointmentList = ({
   const [newStatus, setNewStatus] = useState<AppointmentStatus>("scheduled");
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedAppointment, setEditedAppointment] = useState<Appointment | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+
+  const handleAppointmentClick = (appointment: Appointment) => {
+    setSelectedAppointment(appointment);
+    setNewStatus(appointment.status);
+    setIsStatusDialogOpen(true);
+  };
+
+  const handleStatusChange = () => {
+    if (selectedAppointment && onStatusChange) {
+      onStatusChange(selectedAppointment.id, newStatus);
+      toast.success(`Status atualizado para: ${getStatusName(newStatus)}`);
+      setIsStatusDialogOpen(false);
+    }
+  };
+
+  const handleEdit = () => {
+    if (selectedAppointment) {
+      setEditedAppointment({...selectedAppointment});
+      setIsEditMode(true);
+    }
+  };
+
+  const handleSaveEdit = () => {
+    if (editedAppointment && onAppointmentUpdate) {
+      onAppointmentUpdate(editedAppointment);
+      toast.success("Agendamento atualizado com sucesso!");
+      setIsEditMode(false);
+      setIsStatusDialogOpen(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+    setEditedAppointment(null);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedAppointment && onAppointmentUpdate) {
+      // In a real app, you'd likely have a separate delete function
+      // For now, we'll just update status to canceled
+      const updatedAppointment = {
+        ...selectedAppointment,
+        status: "canceled"
+      };
+      onAppointmentUpdate(updatedAppointment);
+      toast.success("Agendamento cancelado com sucesso!");
+      setDeleteConfirmOpen(false);
+      setIsStatusDialogOpen(false);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteConfirmOpen(true);
+  };
+
+  const getStatusName = (status: AppointmentStatus): string => {
+    const statusMap = {
+      scheduled: "Agendado",
+      pending: "Pendente",
+      completed: "Concluído",
+      "in-progress": "Em Atendimento",
+      canceled: "Cancelado",
+      delayed: "Atrasado",
+      pending_payment: "Aguardando Pagamento",
+      paid: "Pago"
+    };
+    return statusMap[status] || status;
+  };
 
   const filteredAppointments = appointments.filter(appointment => {
     if (!selectedDate) return false;
@@ -74,40 +143,6 @@ export const AppointmentList = ({
       default:
         return "Agendamentos";
     }
-  };
-
-  const handleAppointmentClick = (appointment: Appointment) => {
-    setSelectedAppointment(appointment);
-    setNewStatus(appointment.status);
-    setIsStatusDialogOpen(true);
-  };
-
-  const handleStatusChange = () => {
-    if (selectedAppointment && onStatusChange) {
-      onStatusChange(selectedAppointment.id, newStatus);
-      setIsStatusDialogOpen(false);
-    }
-  };
-
-  const handleEdit = () => {
-    if (selectedAppointment) {
-      setEditedAppointment({...selectedAppointment});
-      setIsEditMode(true);
-    }
-  };
-
-  const handleSaveEdit = () => {
-    if (editedAppointment && onAppointmentUpdate) {
-      onAppointmentUpdate(editedAppointment);
-      toast.success("Agendamento atualizado com sucesso!");
-      setIsEditMode(false);
-      setIsStatusDialogOpen(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditMode(false);
-    setEditedAppointment(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,8 +256,11 @@ export const AppointmentList = ({
               </>
             ) : (
               <>
+                <Button variant="destructive" onClick={handleDeleteClick}>
+                  Cancelar Agendamento
+                </Button>
                 <Button variant="outline" onClick={() => setIsStatusDialogOpen(false)}>
-                  Cancelar
+                  Fechar
                 </Button>
                 <Button variant="outline" onClick={handleEdit}>
                   <Pencil className="mr-2 h-4 w-4" />
@@ -233,6 +271,25 @@ export const AppointmentList = ({
                 </Button>
               </>
             )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancelar Agendamento</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja cancelar este agendamento? Esta ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
+              Voltar
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteConfirm}>
+              Confirmar Cancelamento
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

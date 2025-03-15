@@ -7,12 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { CreditCard, DollarSign, CalendarDays, AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { CreditCard, DollarSign, CalendarDays, AlertCircle, CheckCircle2, Clock, X, CreditCardIcon } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 const SubscriptionsContent = () => {
   const [autoRenew, setAutoRenew] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [premiumFeatures, setPremiumFeatures] = useState(false);
+  const [cancelPlanDialog, setCancelPlanDialog] = useState<number | null>(null);
+  const [reactivatePlanDialog, setReactivatePlanDialog] = useState<number | null>(null);
+  const [paymentMethodDialog, setPaymentMethodDialog] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("creditCard");
   
   const subscriptionPlans = [
     {
@@ -43,6 +48,33 @@ const SubscriptionsContent = () => {
   
   const handleSaveSettings = () => {
     toast.success("Configurações de assinatura salvas com sucesso!");
+  };
+
+  const handleCancelPlan = (planId: number) => {
+    setCancelPlanDialog(planId);
+  };
+
+  const confirmCancelPlan = () => {
+    toast.success("Plano cancelado com sucesso!");
+    setCancelPlanDialog(null);
+  };
+
+  const handleReactivatePlan = (planId: number) => {
+    setReactivatePlanDialog(planId);
+  };
+
+  const confirmReactivatePlan = () => {
+    toast.success("Plano reativado com sucesso!");
+    setReactivatePlanDialog(null);
+  };
+
+  const openPaymentMethodDialog = () => {
+    setPaymentMethodDialog(true);
+  };
+
+  const savePaymentMethod = () => {
+    toast.success("Método de pagamento atualizado com sucesso!");
+    setPaymentMethodDialog(false);
   };
   
   const getStatusBadge = (status) => {
@@ -103,12 +135,22 @@ const SubscriptionsContent = () => {
                   
                   <div className="mt-4 md:mt-0 flex flex-col gap-2">
                     {plan.status === "active" && (
-                      <Button variant="outline" size="sm" className="text-red-500 border-red-300 hover:bg-red-50">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-red-500 border-red-300 hover:bg-red-50"
+                        onClick={() => handleCancelPlan(plan.id)}
+                      >
                         Cancelar Plano
                       </Button>
                     )}
                     {plan.status === "canceled" && (
-                      <Button variant="outline" size="sm" className="text-green-500 border-green-300 hover:bg-green-50">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-green-500 border-green-300 hover:bg-green-50"
+                        onClick={() => handleReactivatePlan(plan.id)}
+                      >
                         Reativar Plano
                       </Button>
                     )}
@@ -166,15 +208,22 @@ const SubscriptionsContent = () => {
               
               <div className="pt-2 space-y-2">
                 <Label htmlFor="paymentMethod" className="font-medium">Método de Pagamento</Label>
-                <select 
-                  id="paymentMethod" 
-                  className="w-full p-2 border rounded-md bg-white"
-                >
-                  <option value="creditCard">Cartão de Crédito</option>
-                  <option value="debitCard">Cartão de Débito</option>
-                  <option value="bankTransfer">Transferência Bancária</option>
-                  <option value="pix">PIX</option>
-                </select>
+                <div className="flex gap-2">
+                  <select 
+                    id="paymentMethod" 
+                    className="w-full p-2 border rounded-md bg-white"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  >
+                    <option value="creditCard">Cartão de Crédito</option>
+                    <option value="debitCard">Cartão de Débito</option>
+                    <option value="bankTransfer">Transferência Bancária</option>
+                    <option value="pix">PIX</option>
+                  </select>
+                  <Button variant="outline" onClick={openPaymentMethodDialog}>
+                    Editar
+                  </Button>
+                </div>
               </div>
               
               <Button onClick={handleSaveSettings} className="w-full mt-2">
@@ -220,6 +269,99 @@ const SubscriptionsContent = () => {
           </Card>
         </div>
       </div>
+
+      {/* Cancel Plan Confirmation Dialog */}
+      <Dialog open={!!cancelPlanDialog} onOpenChange={() => setCancelPlanDialog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancelar Plano</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja cancelar este plano? Você perderá acesso aos recursos premium.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCancelPlanDialog(null)}>
+              Não, manter plano
+            </Button>
+            <Button variant="destructive" onClick={confirmCancelPlan}>
+              Sim, cancelar plano
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reactivate Plan Dialog */}
+      <Dialog open={!!reactivatePlanDialog} onOpenChange={() => setReactivatePlanDialog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reativar Plano</DialogTitle>
+            <DialogDescription>
+              Deseja reativar este plano? Sua cobrança será retomada no próximo ciclo de faturamento.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setReactivatePlanDialog(null)}>
+              Cancelar
+            </Button>
+            <Button variant="success" onClick={confirmReactivatePlan}>
+              Reativar Plano
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Payment Method Dialog */}
+      <Dialog open={paymentMethodDialog} onOpenChange={setPaymentMethodDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Atualizar Método de Pagamento</DialogTitle>
+            <DialogDescription>
+              Escolha um método de pagamento para suas assinaturas.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="cardNumber">Número do Cartão</Label>
+              <div className="flex items-center">
+                <CreditCardIcon className="w-4 h-4 mr-2 text-gray-500" />
+                <Input 
+                  id="cardNumber" 
+                  placeholder="0000 0000 0000 0000" 
+                  className="flex-1"
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="expiry">Validade</Label>
+                <Input id="expiry" placeholder="MM/AA" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="cvc">CVC</Label>
+                <Input id="cvc" placeholder="123" />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="cardHolder">Nome no Cartão</Label>
+              <Input id="cardHolder" placeholder="Nome completo" />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPaymentMethodDialog(false)}>
+              <X className="h-4 w-4 mr-2" />
+              Cancelar
+            </Button>
+            <Button onClick={savePaymentMethod}>
+              <CheckCircle2 className="h-4 w-4 mr-2" />
+              Salvar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
