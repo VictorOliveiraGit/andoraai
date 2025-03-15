@@ -1,17 +1,42 @@
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { ProfileAvatar } from "@/components/admin/ProfileAvatar";
+import { ProfileForm } from "@/components/admin/ProfileForm";
+import { useAdmin } from "@/contexts/AdminContext";
 
-const SettingsContent = () => (
-  <div className="space-y-6">
-    <h2 className="text-2xl font-bold">Configurações</h2>
-    <p className="text-gray-500">Configurações gerais da plataforma.</p>
-    
-    <Card>
-      <CardContent className="p-6 flex items-center justify-center">
-        <p className="text-muted-foreground">Configurações da aplicação serão exibidas aqui</p>
-      </CardContent>
-    </Card>
-  </div>
-);
+const SettingsContent = () => {
+  const { 
+    avatar, 
+    setAvatar, 
+    name, 
+    setName, 
+    email, 
+    setEmail, 
+    phone, 
+    setPhone 
+  } = useAdmin();
+  
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">Configurações da Conta</h2>
+      <Card className="p-6">
+        <div className="space-y-6">
+          <ProfileAvatar 
+            avatar={avatar}
+            setAvatar={setAvatar}
+          />
+          <ProfileForm
+            name={name}
+            setName={setName}
+            email={email}
+            setEmail={setEmail}
+            phone={phone}
+            setPhone={setPhone}
+          />
+        </div>
+      </Card>
+    </div>
+  );
+};
 
 export default SettingsContent;

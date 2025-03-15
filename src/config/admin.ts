@@ -1,12 +1,9 @@
-
 import {
   LayoutDashboard,
   ChartBarIcon,
   Settings,
   CreditCard,
   ShoppingCart,
-  Package,
-  Calendar
 } from "lucide-react";
 
 export const menuItems = [
@@ -19,11 +16,6 @@ export const menuItems = [
     id: "sales",
     label: "Vendas",
     icon: ShoppingCart,
-  },
-  {
-    id: "products",
-    label: "Produtos",
-    icon: Package,
   },
   {
     id: "reports",

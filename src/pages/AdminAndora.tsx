@@ -66,8 +66,6 @@ const AdminAndora = () => {
         return <AnalyticsContent />;
       case "subscription":
         return <SubscriptionsContent />;
-      case "security":
-        return <SecurityContent />;
       case "settings":
         return <SettingsContent />;
       default:

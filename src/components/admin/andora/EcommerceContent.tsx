@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, ArrowUpRight, ExternalLink, Mail, Phone, Check, X } from "lucide-react";
 import { toast } from "sonner";
 
-// Mock data for plan sales
 const planSalesData = [
   { 
     id: 1,
@@ -66,7 +64,6 @@ const planSalesData = [
   }
 ];
 
-// Mock data for subscriptions
 const subscriptionsData = [
   {
     id: 1,
@@ -151,7 +148,6 @@ const EcommerceContent = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedPlan, setSelectedPlan] = useState("all");
   
-  // Filter plan sales
   const filteredSales = planSalesData.filter(sale => {
     const matchesSearch = 
       sale.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -168,7 +164,6 @@ const EcommerceContent = () => {
     return matchesSearch && matchesStatus && matchesPlan;
   });
   
-  // Filter subscriptions
   const filteredSubscriptions = subscriptionsData.filter(subscription => {
     const matchesSearch = 
       subscription.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -185,13 +180,10 @@ const EcommerceContent = () => {
     return matchesSearch && matchesStatus && matchesPlan;
   });
   
-  // Handle sending activation link
   const handleSendActivationLink = (email, link) => {
-    // In a real app, this would call an API to send the email
     toast.success(`Link de ativação enviado para ${email}`);
   };
   
-  // Handle contact customer
   const handleContactCustomer = (type, contact) => {
     if (type === "email") {
       window.open(`mailto:${contact}`);
@@ -211,7 +203,6 @@ const EcommerceContent = () => {
           <TabsTrigger value="subscriptions">Assinaturas Ativas</TabsTrigger>
         </TabsList>
         
-        {/* Sales Tab */}
         <TabsContent value="sales" className="space-y-6 pt-4">
           <Card>
             <CardHeader>
@@ -287,9 +278,10 @@ const EcommerceContent = () => {
                         <td className="px-6 py-4">
                           <Badge 
                             variant={
-                              sale.status === "paid" ? "success" : 
-                              sale.status === "pending" ? "warning" : "destructive"
+                              sale.status === "paid" ? "default" : 
+                              sale.status === "pending" ? "secondary" : "destructive"
                             }
+                            className={sale.status === "paid" ? "bg-green-500 hover:bg-green-600" : sale.status === "pending" ? "bg-yellow-500 hover:bg-yellow-600" : ""}
                           >
                             {sale.status === "paid" ? "Pago" : 
                              sale.status === "pending" ? "Pendente" : "Falhou"}
@@ -378,7 +370,6 @@ const EcommerceContent = () => {
           </Card>
         </TabsContent>
         
-        {/* Subscriptions Tab */}
         <TabsContent value="subscriptions" className="space-y-6 pt-4">
           <Card>
             <CardHeader>
@@ -434,9 +425,10 @@ const EcommerceContent = () => {
                         </div>
                         <Badge 
                           variant={
-                            subscription.status === "active" ? "success" : 
-                            subscription.status === "suspended" ? "warning" : "destructive"
+                            subscription.status === "active" ? "default" : 
+                            subscription.status === "suspended" ? "secondary" : "destructive"
                           }
+                          className={subscription.status === "active" ? "bg-green-500 hover:bg-green-600" : subscription.status === "suspended" ? "bg-amber-500 hover:bg-amber-600" : ""}
                         >
                           {subscription.status === "active" ? "Ativo" : 
                            subscription.status === "suspended" ? "Suspenso" : "Cancelado"}
