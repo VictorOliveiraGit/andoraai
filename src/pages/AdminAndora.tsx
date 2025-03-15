@@ -74,7 +74,7 @@ const AdminAndora = () => {
   };
 
   return (
-    <div className="admin-andora">
+    <div className="admin-andora bg-white">
       {/* Render sidebar for tablet/desktop */}
       <AndoraSidebar
         activeSection={activeSection}
@@ -109,7 +109,7 @@ const AdminAndora = () => {
         </div>
         
         {/* Content Area */}
-        <div className="p-4 md:p-6 lg:p-8">
+        <div className="p-4 md:p-6 lg:p-8 bg-gray-50">
           {renderContent()}
         </div>
       </div>

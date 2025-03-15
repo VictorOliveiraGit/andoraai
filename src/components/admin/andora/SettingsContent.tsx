@@ -10,7 +10,26 @@ import { toast } from "sonner";
 import { ProfileAvatar } from "@/components/admin/ProfileAvatar";
 import { ProfileForm } from "@/components/admin/ProfileForm";
 import { useAdmin } from "@/contexts/AdminContext";
-import { Shield, Globe, Bell, Mail, Smartphone, Moon, Sun, Key, Bot, Headset, ServerIcon, Users } from "lucide-react";
+import { 
+  Shield, 
+  Globe, 
+  Bell, 
+  Mail, 
+  Smartphone, 
+  Moon, 
+  Key, 
+  Bot, 
+  Headset, 
+  ServerIcon, 
+  Users, 
+  Database, 
+  LineChart, 
+  Calendar, 
+  FileLock2, 
+  Network, 
+  UserCog, 
+  BarChart 
+} from "lucide-react";
 
 const SettingsContent = () => {
   const { 
@@ -32,6 +51,12 @@ const SettingsContent = () => {
   const [autoBackup, setAutoBackup] = useState(true);
   const [aiAssistant, setAiAssistant] = useState(true);
   const [supportAccess, setSupportAccess] = useState(false);
+  const [dataRetention, setDataRetention] = useState(true);
+  const [analyticsTracking, setAnalyticsTracking] = useState(true);
+  const [auditLogs, setAuditLogs] = useState(true);
+  const [ssoEnabled, setSsoEnabled] = useState(false);
+  const [apiAccess, setApiAccess] = useState(false);
+  const [multitenancy, setMultitenancy] = useState(false);
   
   const handleSaveGeneralSettings = () => {
     toast.success("Configurações gerais salvas com sucesso!");
@@ -48,18 +73,23 @@ const SettingsContent = () => {
   const handleSaveSystemSettings = () => {
     toast.success("Configurações do sistema salvas com sucesso!");
   };
+
+  const handleSaveAdvancedSettings = () => {
+    toast.success("Configurações avançadas salvas com sucesso!");
+  };
   
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Configurações</h2>
       
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid grid-cols-5 mb-4">
+        <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-1 mb-4 bg-gray-100">
           <TabsTrigger value="profile">Perfil</TabsTrigger>
           <TabsTrigger value="general">Geral</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
           <TabsTrigger value="security">Segurança</TabsTrigger>
           <TabsTrigger value="system">Sistema</TabsTrigger>
+          <TabsTrigger value="advanced">Avançado</TabsTrigger>
         </TabsList>
         
         {/* Profile Tab */}
@@ -137,6 +167,25 @@ const SettingsContent = () => {
                       <option value="America/New_York">New York (GMT-4)</option>
                       <option value="Europe/London">London (GMT+1)</option>
                       <option value="Asia/Tokyo">Tokyo (GMT+9)</option>
+                    </select>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={18} className="text-muted-foreground" />
+                        <Label>Formato de Data</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Escolha o formato de data preferido
+                      </p>
+                    </div>
+                    <select 
+                      className="p-2 border rounded-md bg-white"
+                    >
+                      <option value="dd/mm/yyyy">DD/MM/AAAA</option>
+                      <option value="mm/dd/yyyy">MM/DD/AAAA</option>
+                      <option value="yyyy-mm-dd">AAAA-MM-DD</option>
                     </select>
                   </div>
                 </div>
@@ -279,6 +328,23 @@ const SettingsContent = () => {
                       aria-label="Ativar autenticação de dois fatores"
                     />
                   </div>
+                  
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <FileLock2 size={18} className="text-muted-foreground" />
+                        <Label>Login Único (SSO)</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Permite login através de provedores externos
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={ssoEnabled}
+                      onCheckedChange={setSsoEnabled}
+                      aria-label="Ativar SSO"
+                    />
+                  </div>
                 </div>
                 
                 <Button 
@@ -351,6 +417,23 @@ const SettingsContent = () => {
                     />
                   </div>
 
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Database size={18} className="text-muted-foreground" />
+                        <Label>Retenção de Dados</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Armazena histórico completo de dados
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={dataRetention}
+                      onCheckedChange={setDataRetention}
+                      aria-label="Ativar retenção de dados"
+                    />
+                  </div>
+
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Users size={18} className="text-muted-foreground" />
@@ -373,6 +456,110 @@ const SettingsContent = () => {
                   className="w-full mt-6"
                 >
                   Salvar Configurações do Sistema
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+        
+        {/* Advanced Tab */}
+        <TabsContent value="advanced">
+          <Card className="p-6 bg-white">
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium mb-4">Configurações Avançadas</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <LineChart size={18} className="text-muted-foreground" />
+                        <Label>Rastreamento de Analytics</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Coleta dados de uso para analytics
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={analyticsTracking}
+                      onCheckedChange={setAnalyticsTracking}
+                      aria-label="Ativar analytics"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <BarChart size={18} className="text-muted-foreground" />
+                        <Label>Logs de Auditoria</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Registra todas as ações de usuários
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={auditLogs}
+                      onCheckedChange={setAuditLogs}
+                      aria-label="Ativar logs de auditoria"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Network size={18} className="text-muted-foreground" />
+                        <Label>Acesso à API</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Permite integração com sistemas externos
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={apiAccess}
+                      onCheckedChange={setApiAccess}
+                      aria-label="Permitir acesso à API"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <UserCog size={18} className="text-muted-foreground" />
+                        <Label>Multi-tenancy</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Suporte para múltiplas organizações
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={multitenancy}
+                      onCheckedChange={setMultitenancy}
+                      aria-label="Ativar multi-tenancy"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <ServerIcon size={18} className="text-muted-foreground" />
+                      <Label htmlFor="cache-config">Configuração de Cache</Label>
+                    </div>
+                    <select 
+                      id="cache-config"
+                      className="w-full p-2 border rounded-md bg-white"
+                    >
+                      <option value="none">Sem cache</option>
+                      <option value="minimal">Mínimo (1 hora)</option>
+                      <option value="standard">Padrão (6 horas)</option>
+                      <option value="aggressive">Agressivo (24 horas)</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <Button 
+                  onClick={handleSaveAdvancedSettings}
+                  className="w-full mt-6"
+                >
+                  Salvar Configurações Avançadas
                 </Button>
               </div>
             </div>

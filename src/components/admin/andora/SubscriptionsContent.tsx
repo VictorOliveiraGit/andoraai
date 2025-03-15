@@ -59,7 +59,7 @@ const SubscriptionsContent = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-gray-50">
       <h2 className="text-2xl font-bold">Assinaturas</h2>
       <p className="text-gray-500">Gerencie suas assinaturas e configurações de pagamento.</p>
       
