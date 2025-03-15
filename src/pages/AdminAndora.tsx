@@ -16,13 +16,10 @@ import { menuItems } from "@/config/admin";
 // Import content components
 import DashboardContent from "@/components/admin/andora/DashboardContent";
 import EcommerceContent from "@/components/admin/andora/EcommerceContent";
-import ProductsContent from "@/components/admin/andora/ProductsContent";
-import { Customers } from "@/components/admin/Customers";
 import SubscriptionsContent from "@/components/admin/andora/SubscriptionsContent";
 import SecurityContent from "@/components/admin/andora/SecurityContent";
 import AnalyticsContent from "@/components/admin/andora/AnalyticsContent";
 import SettingsContent from "@/components/admin/andora/SettingsContent";
-import { UserManagement } from "@/components/admin/UserManagement";
 
 // Import navigation components
 import AndoraSidebar from "@/components/admin/andora/AndoraSidebar";
@@ -65,18 +62,12 @@ const AdminAndora = () => {
         return <DashboardContent />;
       case "sales":
         return <EcommerceContent />;
-      case "products": 
-        return <ProductsContent />;
-      case "customers":
-        return <Customers />;
-      case "users":
-        return <UserManagement />;
+      case "reports":
+        return <AnalyticsContent />;
       case "subscription":
         return <SubscriptionsContent />;
       case "security":
         return <SecurityContent />;
-      case "reports":
-        return <AnalyticsContent />;
       case "settings":
         return <SettingsContent />;
       default:

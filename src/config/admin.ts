@@ -1,3 +1,4 @@
+
 import {
   LayoutDashboard,
   ChartBarIcon,
@@ -13,11 +14,6 @@ export const menuItems = [
     id: "dashboard",
     label: "Dashboard",
     icon: LayoutDashboard,
-  },
-  {
-    id: "agenda",
-    label: "Agenda",
-    icon: Calendar,
   },
   {
     id: "sales",
