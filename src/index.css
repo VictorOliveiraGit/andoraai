@@ -124,6 +124,14 @@
   overflow-y: auto; /* Ensure vertical scrolling is possible */
 }
 
+/* Admin Andora content styles - force white background on settings */
+.admin-andora .bg-white,
+.admin-andora .card,
+.admin-andora [role="tabpanel"],
+.admin-andora [data-state] {
+  background-color: white !important;
+}
+
 /* Apply primary background to the landing page */
 body:not(:has(.admin-page)):not(:has(.admin-andora)) {
   background-color: hsl(var(--primary));

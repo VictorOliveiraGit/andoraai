@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { menuItems } from "@/config/admin";
+import { AdminProvider } from "@/contexts/AdminContext";
 
 // Import content components
 import DashboardContent from "@/components/admin/andora/DashboardContent";
@@ -74,56 +75,58 @@ const AdminAndora = () => {
   };
 
   return (
-    <div className="admin-andora bg-white">
-      {/* Render sidebar for tablet/desktop */}
-      <AndoraSidebar
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        handleLogout={handleLogout}
-        isMobile={isMobile}
-      />
-      
-      {/* Main content */}
-      <div className={cn(
-        "min-h-screen bg-gray-50 transition-all duration-300",
-        isMobile 
-          ? "pb-16" // Add padding for mobile bottom nav
-          : isSidebarOpen
-            ? "md:ml-64" 
-            : "md:ml-20"
-      )}>
-        {/* Top Bar */}
-        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 md:px-8 px-6 py-6 flex justify-between items-center">
-          {isMobile && (
-            <div className="flex items-center">
-              <h2 className="text-lg font-bold">Andora Admin - {menuItems.find(item => item.id === activeSection)?.label}</h2>
-            </div>
-          )}
-          {!isMobile && (
-            <div>
-              <h2 className="text-lg font-bold">{menuItems.find(item => item.id === activeSection)?.label}</h2>
-            </div>
-          )}
+    <AdminProvider>
+      <div className="admin-andora bg-white">
+        {/* Render sidebar for tablet/desktop */}
+        <AndoraSidebar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          isSidebarOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          handleLogout={handleLogout}
+          isMobile={isMobile}
+        />
+        
+        {/* Main content */}
+        <div className={cn(
+          "min-h-screen bg-gray-50 transition-all duration-300",
+          isMobile 
+            ? "pb-16" // Add padding for mobile bottom nav
+            : isSidebarOpen
+              ? "md:ml-64" 
+              : "md:ml-20"
+        )}>
+          {/* Top Bar */}
+          <div className="sticky top-0 z-20 bg-white border-b border-gray-200 md:px-8 px-6 py-6 flex justify-between items-center">
+            {isMobile && (
+              <div className="flex items-center">
+                <h2 className="text-lg font-bold">Andora Admin - {menuItems.find(item => item.id === activeSection)?.label}</h2>
+              </div>
+            )}
+            {!isMobile && (
+              <div>
+                <h2 className="text-lg font-bold">{menuItems.find(item => item.id === activeSection)?.label}</h2>
+              </div>
+            )}
+          </div>
+          
+          {/* Content Area */}
+          <div className="p-4 md:p-6 lg:p-8 bg-gray-50">
+            {renderContent()}
+          </div>
         </div>
         
-        {/* Content Area */}
-        <div className="p-4 md:p-6 lg:p-8 bg-gray-50">
-          {renderContent()}
-        </div>
+        {/* Mobile Bottom Drawer Navigation */}
+        <AndoraMobileNav
+          activeSection={activeSection}
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+          selectSection={selectSection}
+          handleLogout={handleLogout}
+          isMobile={isMobile}
+        />
       </div>
-      
-      {/* Mobile Bottom Drawer Navigation */}
-      <AndoraMobileNav
-        activeSection={activeSection}
-        isDrawerOpen={isDrawerOpen}
-        setIsDrawerOpen={setIsDrawerOpen}
-        selectSection={selectSection}
-        handleLogout={handleLogout}
-        isMobile={isMobile}
-      />
-    </div>
+    </AdminProvider>
   );
 };
 
