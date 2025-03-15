@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { ProfileAvatar } from "@/components/admin/ProfileAvatar";
 import { ProfileForm } from "@/components/admin/ProfileForm";
 import { useAdmin } from "@/contexts/AdminContext";
-import { Shield, Globe, Bell, Mail, Smartphone, Moon, Sun, Key } from "lucide-react";
+import { Shield, Globe, Bell, Mail, Smartphone, Moon, Sun, Key, Bot, Headset, ServerIcon, Users } from "lucide-react";
 
 const SettingsContent = () => {
   const { 
@@ -29,6 +29,9 @@ const SettingsContent = () => {
   const [smsNotifications, setSmsNotifications] = useState(false);
   const [language, setLanguage] = useState("pt-BR");
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
+  const [autoBackup, setAutoBackup] = useState(true);
+  const [aiAssistant, setAiAssistant] = useState(true);
+  const [supportAccess, setSupportAccess] = useState(false);
   
   const handleSaveGeneralSettings = () => {
     toast.success("Configurações gerais salvas com sucesso!");
@@ -41,22 +44,27 @@ const SettingsContent = () => {
   const handleSaveSecuritySettings = () => {
     toast.success("Configurações de segurança salvas com sucesso!");
   };
+
+  const handleSaveSystemSettings = () => {
+    toast.success("Configurações do sistema salvas com sucesso!");
+  };
   
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Configurações</h2>
       
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid grid-cols-4 mb-4">
+        <TabsList className="grid grid-cols-5 mb-4">
           <TabsTrigger value="profile">Perfil</TabsTrigger>
           <TabsTrigger value="general">Geral</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
           <TabsTrigger value="security">Segurança</TabsTrigger>
+          <TabsTrigger value="system">Sistema</TabsTrigger>
         </TabsList>
         
         {/* Profile Tab */}
         <TabsContent value="profile">
-          <Card className="p-6">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <ProfileAvatar 
                 avatar={avatar}
@@ -76,7 +84,7 @@ const SettingsContent = () => {
         
         {/* General Tab */}
         <TabsContent value="general">
-          <Card className="p-6">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações Gerais</h3>
@@ -108,7 +116,7 @@ const SettingsContent = () => {
                       id="language"
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-2 border rounded-md bg-white"
                     >
                       <option value="pt-BR">Português (Brasil)</option>
                       <option value="en-US">English (US)</option>
@@ -123,7 +131,7 @@ const SettingsContent = () => {
                     </div>
                     <select 
                       id="timezone"
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-2 border rounded-md bg-white"
                     >
                       <option value="America/Sao_Paulo">Brasília (GMT-3)</option>
                       <option value="America/New_York">New York (GMT-4)</option>
@@ -146,7 +154,7 @@ const SettingsContent = () => {
         
         {/* Notifications Tab */}
         <TabsContent value="notifications">
-          <Card className="p-6">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações de Notificações</h3>
@@ -216,7 +224,7 @@ const SettingsContent = () => {
         
         {/* Security Tab */}
         <TabsContent value="security">
-          <Card className="p-6">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações de Segurança</h3>
@@ -231,6 +239,7 @@ const SettingsContent = () => {
                       id="current-password"
                       type="password"
                       placeholder="Digite sua senha atual"
+                      className="bg-white"
                     />
                   </div>
                   
@@ -240,6 +249,7 @@ const SettingsContent = () => {
                       id="new-password"
                       type="password"
                       placeholder="Digite uma nova senha"
+                      className="bg-white"
                     />
                   </div>
                   
@@ -249,6 +259,7 @@ const SettingsContent = () => {
                       id="confirm-password"
                       type="password"
                       placeholder="Confirme sua nova senha"
+                      className="bg-white"
                     />
                   </div>
                   
@@ -275,6 +286,93 @@ const SettingsContent = () => {
                   className="w-full mt-6"
                 >
                   Atualizar Configurações de Segurança
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+
+        {/* System Tab */}
+        <TabsContent value="system">
+          <Card className="p-6 bg-white">
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium mb-4">Configurações do Sistema</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <ServerIcon size={18} className="text-muted-foreground" />
+                        <Label>Backup Automático</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Realiza backup automático dos dados diariamente
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={autoBackup}
+                      onCheckedChange={setAutoBackup}
+                      aria-label="Ativar backup automático"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Bot size={18} className="text-muted-foreground" />
+                        <Label>Assistente IA</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Ativa o assistente de inteligência artificial
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={aiAssistant}
+                      onCheckedChange={setAiAssistant}
+                      aria-label="Ativar assistente IA"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Headset size={18} className="text-muted-foreground" />
+                        <Label>Acesso ao Suporte</Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Permite acesso ao suporte técnico remoto
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={supportAccess}
+                      onCheckedChange={setSupportAccess}
+                      aria-label="Permitir acesso ao suporte"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Users size={18} className="text-muted-foreground" />
+                      <Label htmlFor="user-limit">Limite de Usuários</Label>
+                    </div>
+                    <select 
+                      id="user-limit"
+                      className="w-full p-2 border rounded-md bg-white"
+                    >
+                      <option value="5">5 usuários</option>
+                      <option value="10">10 usuários</option>
+                      <option value="20">20 usuários</option>
+                      <option value="unlimited">Ilimitado</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <Button 
+                  onClick={handleSaveSystemSettings}
+                  className="w-full mt-6"
+                >
+                  Salvar Configurações do Sistema
                 </Button>
               </div>
             </div>
