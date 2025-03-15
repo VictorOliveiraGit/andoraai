@@ -28,7 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagement";
-import { Reports } from "@/components/admin/Reports";
+import AnalyticsContent from "@/components/admin/andora/AnalyticsContent";
 import { Settings as SettingsComponent } from "@/components/admin/Settings";
 import { Subscription } from "@/components/admin/Subscription";
 import { Sales } from "@/components/admin/Sales";
@@ -83,7 +83,7 @@ const AdminContent = () => {
       case "users":
         return <UserManagement />;
       case "reports":
-        return <Reports />;
+        return <AnalyticsContent />;
       case "subscription":
         return <Subscription />;
       case "sales":
