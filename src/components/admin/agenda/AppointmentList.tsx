@@ -1,3 +1,4 @@
+
 import { Pencil, Save, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
@@ -81,7 +82,7 @@ export const AppointmentList = ({
       // For now, we'll just update status to canceled
       const updatedAppointment = {
         ...selectedAppointment,
-        status: "canceled"
+        status: "canceled" as AppointmentStatus
       };
       onAppointmentUpdate(updatedAppointment);
       toast.success("Agendamento cancelado com sucesso!");
@@ -103,7 +104,9 @@ export const AppointmentList = ({
       canceled: "Cancelado",
       delayed: "Atrasado",
       pending_payment: "Aguardando Pagamento",
-      paid: "Pago"
+      paid: "Pago",
+      confirmed: "Confirmado",
+      no_show: "Não Compareceu"
     };
     return statusMap[status] || status;
   };
