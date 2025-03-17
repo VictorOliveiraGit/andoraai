@@ -1,17 +1,15 @@
 
+import { menuItems as defaultMenuItems } from "@/config/admin";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, LogOut } from "lucide-react";
-import { menuItems } from "@/config/admin";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 
 interface AndoraMobileNavProps {
@@ -21,6 +19,7 @@ interface AndoraMobileNavProps {
   selectSection: (sectionId: string) => void;
   handleLogout: () => void;
   isMobile: boolean;
+  menuItems?: typeof defaultMenuItems;
 }
 
 const AndoraMobileNav = ({
@@ -29,20 +28,25 @@ const AndoraMobileNav = ({
   setIsDrawerOpen,
   selectSection,
   handleLogout,
-  isMobile
+  isMobile,
+  menuItems = defaultMenuItems
 }: AndoraMobileNavProps) => {
   if (!isMobile) return null;
-  
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 md:hidden p-2">
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <DrawerTrigger asChild className="w-full">
-          <Button variant="ghost" className="w-full flex items-center gap-2 justify-center py-2">
-            <span className="text-primary font-medium">{menuItems.find(item => item.id === activeSection)?.label}</span>
-            <ChevronUp className="h-5 w-5 text-primary" />
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent className="h-[80vh] overflow-y-auto">
+        <Button
+          variant="ghost"
+          className="w-full flex items-center gap-2 justify-center py-2"
+          onClick={() => setIsDrawerOpen(true)}
+        >
+          <span className="text-gray-900 font-medium">
+            {menuItems.find((item) => item.id === activeSection)?.label}
+          </span>
+          <ChevronUp className="h-5 w-5 text-gray-500" />
+        </Button>
+        <DrawerContent className="h-[85vh] overflow-y-auto">
           <DrawerHeader className="text-left px-4 py-2 border-b">
             <DrawerTitle>Menu de Navegação</DrawerTitle>
           </DrawerHeader>
@@ -55,7 +59,7 @@ const AndoraMobileNav = ({
                   variant={isActive ? "default" : "outline"}
                   className={cn(
                     "h-20 flex flex-col items-center justify-center gap-2",
-                    isActive ? "bg-primary text-white" : ""
+                    isActive ? "bg-gray-900 text-white" : ""
                   )}
                   onClick={() => selectSection(item.id)}
                 >

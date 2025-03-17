@@ -74,6 +74,9 @@ const AdminAndora = () => {
     }
   };
 
+  // Filter menu items for Andora (exclude 'agenda')
+  const andoraMenuItems = menuItems.filter(item => item.id !== 'agenda' && item.id !== 'users');
+
   return (
     <AdminProvider>
       <div className="admin-andora bg-white">
@@ -85,6 +88,7 @@ const AdminAndora = () => {
           toggleSidebar={toggleSidebar}
           handleLogout={handleLogout}
           isMobile={isMobile}
+          menuItems={andoraMenuItems}
         />
         
         {/* Main content */}
@@ -100,12 +104,12 @@ const AdminAndora = () => {
           <div className="sticky top-0 z-20 bg-white border-b border-gray-200 md:px-8 px-6 py-6 flex justify-between items-center">
             {isMobile && (
               <div className="flex items-center">
-                <h2 className="text-lg font-bold">Andora Admin - {menuItems.find(item => item.id === activeSection)?.label}</h2>
+                <h2 className="text-lg font-bold">Andora Admin - {andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
               </div>
             )}
             {!isMobile && (
               <div>
-                <h2 className="text-lg font-bold">{menuItems.find(item => item.id === activeSection)?.label}</h2>
+                <h2 className="text-lg font-bold">{andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
               </div>
             )}
           </div>
@@ -124,6 +128,7 @@ const AdminAndora = () => {
           selectSection={selectSection}
           handleLogout={handleLogout}
           isMobile={isMobile}
+          menuItems={andoraMenuItems}
         />
       </div>
     </AdminProvider>
