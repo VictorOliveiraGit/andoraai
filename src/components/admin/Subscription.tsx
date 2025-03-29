@@ -1,9 +1,20 @@
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreditCard, Shield, Zap, Check, ArrowUp, ArrowDown, Info, BadgeCheck, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from "@/components/ui/alert-dialog";
 import SubscriptionDetailsModal from "./subscription/SubscriptionDetailsModal";
 
 type PlanType = 'basic' | 'pro' | 'enterprise';
@@ -13,6 +24,8 @@ export const Subscription = () => {
   const [currentPlan, setCurrentPlan] = useState<PlanType>('pro'); // Assuming 'pro' is the current plan
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
+  const [isDowngradeDialogOpen, setIsDowngradeDialogOpen] = useState(false);
+  const [planToDowngrade, setPlanToDowngrade] = useState<PlanType | null>(null);
   
   const handleSubscribe = (planType: PlanType) => {
     if (planType === currentPlan) {
@@ -20,19 +33,30 @@ export const Subscription = () => {
       return;
     }
 
-    if (planType === 'basic' && currentPlan !== 'basic') {
-      toast.warning("Você está fazendo downgrade para um plano com menos recursos.");
-    } else if (
-      (planType === 'pro' && currentPlan === 'enterprise') || 
-      (planType === 'basic' && currentPlan === 'pro')
-    ) {
-      toast.warning("Você está fazendo downgrade para um plano com menos recursos.");
-    } else {
-      toast.success("Upgrade de plano solicitado com sucesso!");
+    // If this is a downgrade, show confirmation dialog
+    if (isDowngrade(planType)) {
+      setPlanToDowngrade(planType);
+      setIsDowngradeDialogOpen(true);
+      return;
     }
     
-    // In a real application, this would redirect to a payment page
-    toast.info("Redirecionando para o checkout...");
+    // For upgrades, proceed directly
+    if (isUpgrade(planType)) {
+      toast.success("Upgrade de plano solicitado com sucesso!");
+      // In a real application, this would redirect to a payment page
+      toast.info("Redirecionando para o checkout...");
+    }
+  };
+
+  const confirmDowngrade = () => {
+    if (!planToDowngrade) return;
+    
+    toast.warning("Você está fazendo downgrade para um plano com menos recursos.");
+    // In a real application, this would redirect to a downgrade confirmation page
+    toast.info("Redirecionando para a confirmação de downgrade...");
+    
+    setIsDowngradeDialogOpen(false);
+    setPlanToDowngrade(null);
   };
 
   const handleViewDetails = (planType: PlanType) => {
@@ -63,7 +87,7 @@ export const Subscription = () => {
   const getPlanDetails = (planType: PlanType) => {
     const plans = {
       basic: {
-        type: 'basic',
+        type: 'basic' as PlanType,
         name: 'Básico',
         price: 29,
         status: 'active' as const,
@@ -76,7 +100,7 @@ export const Subscription = () => {
         ]
       },
       pro: {
-        type: 'pro',
+        type: 'pro' as PlanType,
         name: 'Pro',
         price: 59,
         status: 'active' as const,
@@ -90,7 +114,7 @@ export const Subscription = () => {
         ]
       },
       enterprise: {
-        type: 'enterprise',
+        type: 'enterprise' as PlanType,
         name: 'Enterprise',
         price: 99,
         status: 'active' as const,
@@ -631,6 +655,66 @@ export const Subscription = () => {
           </div>
         </Card>
       </div>
+
+      {/* Downgrade Confirmation Dialog */}
+      <AlertDialog 
+        open={isDowngradeDialogOpen} 
+        onOpenChange={setIsDowngradeDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tem certeza que deseja fazer downgrade?</AlertDialogTitle>
+            <AlertDialogDescription>
+              <div className="space-y-4">
+                <p>Reduzir seu plano resultará na perda imediata de recursos e funcionalidades importantes.</p>
+                
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-800">
+                  <h4 className="font-semibold mb-2">Você perderá acesso a:</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {planToDowngrade === 'basic' && currentPlan === 'pro' && (
+                      <>
+                        <li>Relatórios avançados</li>
+                        <li>Suporte prioritário</li>
+                        <li>API access</li>
+                        <li>Limite de usuários reduzido para 100</li>
+                      </>
+                    )}
+                    {planToDowngrade === 'basic' && currentPlan === 'enterprise' && (
+                      <>
+                        <li>Relatórios personalizados</li>
+                        <li>Suporte 24/7</li>
+                        <li>API dedicada</li>
+                        <li>Setup personalizado</li>
+                        <li>Limite de usuários reduzido para 100</li>
+                      </>
+                    )}
+                    {planToDowngrade === 'pro' && currentPlan === 'enterprise' && (
+                      <>
+                        <li>Relatórios personalizados</li>
+                        <li>Suporte 24/7</li>
+                        <li>API dedicada</li>
+                        <li>Setup personalizado</li>
+                        <li>Limite de usuários reduzido para 1000</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+                
+                <p className="font-medium">Essa ação não poderá ser revertida automaticamente.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDowngrade}
+              className="bg-amber-500 hover:bg-amber-600 text-white"
+            >
+              Sim, fazer downgrade
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Subscription Details Modal */}
       {selectedPlan && (

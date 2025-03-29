@@ -6,7 +6,7 @@
  * providing a premium admin experience with enhanced visual design.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -80,7 +80,7 @@ const AdminAndora = () => {
 
   return (
     <AdminProvider>
-      <div className="admin-andora bg-white">
+      <div className="admin-andora bg-white dark:bg-gray-900 transition-colors duration-200">
         {/* Render sidebar for tablet/desktop */}
         <AndoraSidebar
           activeSection={activeSection}
@@ -94,7 +94,7 @@ const AdminAndora = () => {
         
         {/* Main content */}
         <div className={cn(
-          "min-h-screen bg-gray-50 transition-all duration-300",
+          "min-h-screen bg-gray-50 dark:bg-gray-900 transition-all duration-300",
           isMobile 
             ? "pb-16" // Add padding for mobile bottom nav
             : isSidebarOpen
@@ -102,21 +102,21 @@ const AdminAndora = () => {
               : "md:ml-20"
         )}>
           {/* Top Bar */}
-          <div className="sticky top-0 z-20 bg-white border-b border-gray-200 md:px-8 px-6 py-6 flex justify-between items-center">
+          <div className="sticky top-0 z-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 md:px-8 px-6 py-6 flex justify-between items-center">
             {isMobile && (
               <div className="flex items-center">
-                <h2 className="text-lg font-bold">Andora Admin - {andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
+                <h2 className="text-lg font-bold dark:text-white">Andora Admin - {andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
               </div>
             )}
             {!isMobile && (
               <div>
-                <h2 className="text-lg font-bold">{andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
+                <h2 className="text-lg font-bold dark:text-white">{andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
               </div>
             )}
           </div>
           
           {/* Content Area */}
-          <div className="p-4 md:p-6 lg:p-8 bg-gray-50">
+          <div className="p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900">
             {renderContent()}
           </div>
         </div>
