@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -14,8 +15,7 @@ import {
   Globe, 
   Bell, 
   Mail, 
-  Smartphone, 
-  Moon, 
+  Smartphone,
   Key, 
   Bot, 
   Headset, 
@@ -42,7 +42,6 @@ export const Settings = () => {
     setPhone 
   } = useAdmin();
   
-  const [darkMode, setDarkMode] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [smsNotifications, setSmsNotifications] = useState(false);
   const [language, setLanguage] = useState("pt-BR");
@@ -56,26 +55,6 @@ export const Settings = () => {
   const [ssoEnabled, setSsoEnabled] = useState(false);
   const [apiAccess, setApiAccess] = useState(false);
   const [multitenancy, setMultitenancy] = useState(false);
-  
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('bg-gray-900', 'text-white');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('bg-gray-900', 'text-white');
-    }
-
-    return () => {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('bg-gray-900', 'text-white');
-    };
-  }, [darkMode]);
-
-  const handleToggleDarkMode = (checked: boolean) => {
-    setDarkMode(checked);
-    toast.success(checked ? "Modo escuro ativado!" : "Modo claro ativado!");
-  };
   
   const handleSaveGeneralSettings = () => {
     toast.success("Configurações gerais salvas com sucesso!");
@@ -98,21 +77,21 @@ export const Settings = () => {
   };
   
   return (
-    <div className="space-y-6 dark:bg-gray-900 transition-colors duration-200">
-      <h2 className="text-2xl font-bold dark:text-white">Configurações</h2>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">Configurações</h2>
       
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-1 mb-4 bg-gray-100 dark:bg-gray-800">
-          <TabsTrigger value="profile" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Perfil</TabsTrigger>
-          <TabsTrigger value="general" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Geral</TabsTrigger>
-          <TabsTrigger value="notifications" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Notificações</TabsTrigger>
-          <TabsTrigger value="security" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Segurança</TabsTrigger>
-          <TabsTrigger value="system" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Sistema</TabsTrigger>
-          <TabsTrigger value="advanced" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Avançado</TabsTrigger>
+        <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-1 mb-4 bg-gray-100">
+          <TabsTrigger value="profile">Perfil</TabsTrigger>
+          <TabsTrigger value="general">Geral</TabsTrigger>
+          <TabsTrigger value="notifications">Notificações</TabsTrigger>
+          <TabsTrigger value="security">Segurança</TabsTrigger>
+          <TabsTrigger value="system">Sistema</TabsTrigger>
+          <TabsTrigger value="advanced">Avançado</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <ProfileAvatar 
                 avatar={avatar}
@@ -131,39 +110,22 @@ export const Settings = () => {
         </TabsContent>
         
         <TabsContent value="general">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-medium mb-4 dark:text-white">Configurações Gerais</h3>
+                <h3 className="text-lg font-medium mb-4">Configurações Gerais</h3>
                 
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <Moon size={18} className="text-muted-foreground dark:text-gray-300" />
-                        <Label className="dark:text-white">Modo Escuro</Label>
-                      </div>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        Ative para usar o tema escuro no painel admin
-                      </p>
-                    </div>
-                    <Switch 
-                      checked={darkMode}
-                      onCheckedChange={handleToggleDarkMode}
-                      aria-label="Ativar modo escuro"
-                    />
-                  </div>
-                  
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <Globe size={18} className="text-muted-foreground dark:text-gray-300" />
-                      <Label htmlFor="language" className="dark:text-white">Idioma</Label>
+                      <Globe size={18} className="text-muted-foreground" />
+                      <Label htmlFor="language">Idioma</Label>
                     </div>
                     <select 
                       id="language"
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full p-2 border rounded-md bg-white"
                     >
                       <option value="pt-BR">Português (Brasil)</option>
                       <option value="en-US">English (US)</option>
@@ -173,12 +135,12 @@ export const Settings = () => {
                   
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <Smartphone size={18} className="text-muted-foreground dark:text-gray-300" />
-                      <Label htmlFor="timezone" className="dark:text-white">Fuso Horário</Label>
+                      <Smartphone size={18} className="text-muted-foreground" />
+                      <Label htmlFor="timezone">Fuso Horário</Label>
                     </div>
                     <select 
                       id="timezone"
-                      className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full p-2 border rounded-md bg-white"
                     >
                       <option value="America/Sao_Paulo">Brasília (GMT-3)</option>
                       <option value="America/New_York">New York (GMT-4)</option>
@@ -190,15 +152,15 @@ export const Settings = () => {
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <Calendar size={18} className="text-muted-foreground dark:text-gray-300" />
-                        <Label className="dark:text-white">Formato de Data</Label>
+                        <Calendar size={18} className="text-muted-foreground" />
+                        <Label>Formato de Data</Label>
                       </div>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         Escolha o formato de data preferido
                       </p>
                     </div>
                     <select 
-                      className="p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="p-2 border rounded-md bg-white"
                     >
                       <option value="dd/mm/yyyy">DD/MM/AAAA</option>
                       <option value="mm/dd/yyyy">MM/DD/AAAA</option>
@@ -209,7 +171,7 @@ export const Settings = () => {
                 
                 <Button 
                   onClick={handleSaveGeneralSettings}
-                  className="w-full mt-6 dark:bg-primary dark:text-white"
+                  className="w-full mt-6"
                 >
                   Salvar Configurações Gerais
                 </Button>
@@ -219,7 +181,7 @@ export const Settings = () => {
         </TabsContent>
         
         <TabsContent value="notifications">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações de Notificações</h3>
@@ -288,7 +250,7 @@ export const Settings = () => {
         </TabsContent>
         
         <TabsContent value="security">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações de Segurança</h3>
@@ -374,7 +336,7 @@ export const Settings = () => {
         </TabsContent>
 
         <TabsContent value="system">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações do Sistema</h3>
@@ -477,7 +439,7 @@ export const Settings = () => {
         </TabsContent>
         
         <TabsContent value="advanced">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Configurações Avançadas</h3>
