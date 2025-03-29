@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,6 +25,28 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.75rem;
+  }
+  
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
   }
 }
 
@@ -73,6 +96,15 @@
     background-color: rgba(0, 0, 0, 0.1);
   }
   
+  /* Dark mode scrollbar styles */
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
   /* Previne o scroll e mantém a largura quando o modal está aberto */
   .modal-open {
     overflow: hidden;
@@ -94,6 +126,13 @@
   input, select, textarea {
     @apply bg-background;
     opacity: 1 !important;
+  }
+  
+  .dark input, .dark select, .dark textarea {
+    color: white !important;
+  }
+  
+  input, select, textarea {
     color: #000000 !important;
   }
   
@@ -101,6 +140,10 @@
   input::placeholder, select::placeholder, textarea::placeholder {
     color: #6b7280;
     opacity: 1;
+  }
+  
+  .dark input::placeholder, .dark select::placeholder, .dark textarea::placeholder {
+    color: #9ca3af;
   }
 }
 
@@ -114,9 +157,13 @@
   overflow-y: auto; /* Ensure vertical scrolling is possible */
 }
 
+.dark .admin-page {
+  background-color: #111827;
+  color: white;
+}
+
 /* Admin Andora specific styles */
 .admin-andora {
-  background-color: white;
   min-height: 100vh;
   width: 100%;
   position: relative;
@@ -124,7 +171,23 @@
   overflow-y: auto; /* Ensure vertical scrolling is possible */
 }
 
-/* Admin Andora content styles - force white background on settings */
+/* Isentar modais laterais do modo escuro */
+.drawer-content, 
+.sheet-content,
+[data-side="right"] {
+  background-color: white !important;
+  color: #000000 !important;
+}
+
+/* Admin Andora content styles - force background and text colors based on theme */
+.dark .admin-andora .bg-white,
+.dark .admin-andora .card,
+.dark .admin-andora [role="tabpanel"],
+.dark .admin-andora [data-state] {
+  background-color: #1f2937 !important;
+  color: white !important;
+}
+
 .admin-andora .bg-white,
 .admin-andora .card,
 .admin-andora [role="tabpanel"],

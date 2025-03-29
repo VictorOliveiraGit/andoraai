@@ -55,6 +55,35 @@ const AdminAndora = () => {
     setIsDrawerOpen(false);
   };
 
+  // Get dark mode status from localStorage or settings component
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
+
+  // Effect to sync dark mode from localStorage and update document class
+  useEffect(() => {
+    const handleDarkModeChange = (e) => {
+      if (e.key === 'darkMode') {
+        const newDarkMode = JSON.parse(e.newValue || 'false');
+        setIsDarkMode(newDarkMode);
+      }
+    };
+
+    window.addEventListener('storage', handleDarkModeChange);
+    
+    // Update document class based on dark mode status
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    return () => {
+      window.removeEventListener('storage', handleDarkModeChange);
+    };
+  }, [isDarkMode]);
+
   // Render main content based on active section
   const renderContent = () => {
     switch(activeSection) {
@@ -80,7 +109,10 @@ const AdminAndora = () => {
 
   return (
     <AdminProvider>
-      <div className="admin-andora bg-white dark:bg-gray-900 transition-colors duration-200">
+      <div className={cn(
+        "admin-andora transition-colors duration-200 min-h-screen",
+        isDarkMode ? "dark bg-gray-900 text-white" : "bg-white text-gray-900"
+      )}>
         {/* Render sidebar for tablet/desktop */}
         <AndoraSidebar
           activeSection={activeSection}
@@ -94,7 +126,8 @@ const AdminAndora = () => {
         
         {/* Main content */}
         <div className={cn(
-          "min-h-screen bg-gray-50 dark:bg-gray-900 transition-all duration-300",
+          "min-h-screen transition-all duration-300",
+          isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900",
           isMobile 
             ? "pb-16" // Add padding for mobile bottom nav
             : isSidebarOpen
@@ -102,21 +135,27 @@ const AdminAndora = () => {
               : "md:ml-20"
         )}>
           {/* Top Bar */}
-          <div className="sticky top-0 z-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 md:px-8 px-6 py-6 flex justify-between items-center">
+          <div className={cn(
+            "sticky top-0 z-20 border-b md:px-8 px-6 py-6 flex justify-between items-center",
+            isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+          )}>
             {isMobile && (
               <div className="flex items-center">
-                <h2 className="text-lg font-bold dark:text-white">Andora Admin - {andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
+                <h2 className="text-lg font-bold">Andora Admin - {andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
               </div>
             )}
             {!isMobile && (
               <div>
-                <h2 className="text-lg font-bold dark:text-white">{andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
+                <h2 className="text-lg font-bold">{andoraMenuItems.find(item => item.id === activeSection)?.label}</h2>
               </div>
             )}
           </div>
           
           {/* Content Area */}
-          <div className="p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900">
+          <div className={cn(
+            "p-4 md:p-6 lg:p-8",
+            isDarkMode ? "bg-gray-900" : "bg-gray-50"
+          )}>
             {renderContent()}
           </div>
         </div>

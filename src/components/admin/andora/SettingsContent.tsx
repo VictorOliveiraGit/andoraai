@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -42,7 +43,12 @@ const SettingsContent = () => {
     setPhone 
   } = useAdmin();
   
-  const [darkMode, setDarkMode] = useState(false);
+  // Initialize dark mode from localStorage
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
+  
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [smsNotifications, setSmsNotifications] = useState(false);
   const [language, setLanguage] = useState("pt-BR");
@@ -57,18 +63,22 @@ const SettingsContent = () => {
   const [apiAccess, setApiAccess] = useState(false);
   const [multitenancy, setMultitenancy] = useState(false);
   
+  // Update dark mode effect - save to localStorage and apply to HTML element
   useEffect(() => {
+    // Save to localStorage
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    
+    // Apply to HTML element and body
     if (darkMode) {
       document.documentElement.classList.add('dark');
-      document.body.classList.add('bg-gray-900', 'text-white');
+      document.body.classList.add('dark', 'bg-gray-900', 'text-white');
     } else {
       document.documentElement.classList.remove('dark');
-      document.body.classList.remove('bg-gray-900', 'text-white');
+      document.body.classList.remove('dark', 'bg-gray-900', 'text-white');
     }
 
     return () => {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('bg-gray-900', 'text-white');
+      // No cleanup needed for localStorage
     };
   }, [darkMode]);
 
@@ -98,8 +108,8 @@ const SettingsContent = () => {
   };
   
   return (
-    <div className="space-y-6 dark:bg-gray-900 transition-colors duration-200">
-      <h2 className="text-2xl font-bold dark:text-white">Configurações</h2>
+    <div className="space-y-6 transition-colors duration-200">
+      <h2 className="text-2xl font-bold">Configurações</h2>
       
       <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-1 mb-4 bg-gray-100 dark:bg-gray-800">
