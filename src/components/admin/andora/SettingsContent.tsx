@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -16,7 +15,6 @@ import {
   Bell, 
   Mail, 
   Smartphone, 
-  Moon, 
   Key, 
   Bot, 
   Headset, 
@@ -43,12 +41,6 @@ const SettingsContent = () => {
     setPhone 
   } = useAdmin();
   
-  // Initialize dark mode from localStorage
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    return savedMode ? JSON.parse(savedMode) : false;
-  });
-  
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [smsNotifications, setSmsNotifications] = useState(false);
   const [language, setLanguage] = useState("pt-BR");
@@ -62,30 +54,6 @@ const SettingsContent = () => {
   const [ssoEnabled, setSsoEnabled] = useState(false);
   const [apiAccess, setApiAccess] = useState(false);
   const [multitenancy, setMultitenancy] = useState(false);
-  
-  // Update dark mode effect - save to localStorage and apply to HTML element
-  useEffect(() => {
-    // Save to localStorage
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-    
-    // Apply to HTML element and body
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark', 'bg-gray-900', 'text-white');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark', 'bg-gray-900', 'text-white');
-    }
-
-    return () => {
-      // No cleanup needed for localStorage
-    };
-  }, [darkMode]);
-
-  const handleToggleDarkMode = (checked: boolean) => {
-    setDarkMode(checked);
-    toast.success(checked ? "Modo escuro ativado!" : "Modo claro ativado!");
-  };
   
   const handleSaveGeneralSettings = () => {
     toast.success("Configurações gerais salvas com sucesso!");
@@ -147,23 +115,6 @@ const SettingsContent = () => {
                 <h3 className="text-lg font-medium mb-4 dark:text-white">Configurações Gerais</h3>
                 
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <Moon size={18} className="text-muted-foreground dark:text-gray-300" />
-                        <Label className="dark:text-white">Modo Escuro</Label>
-                      </div>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        Ative para usar o tema escuro no painel admin
-                      </p>
-                    </div>
-                    <Switch 
-                      checked={darkMode}
-                      onCheckedChange={handleToggleDarkMode}
-                      aria-label="Ativar modo escuro"
-                    />
-                  </div>
-                  
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Globe size={18} className="text-muted-foreground dark:text-gray-300" />
