@@ -1,16 +1,18 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CreditCard, Shield, Zap, Check, ArrowUp, ArrowDown, Info, BadgeCheck } from "lucide-react";
+import { CreditCard, Shield, Zap, Check, ArrowUp, ArrowDown, Info, BadgeCheck, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import SubscriptionDetailsModal from "./subscription/SubscriptionDetailsModal";
 
 type PlanType = 'basic' | 'pro' | 'enterprise';
 
 export const Subscription = () => {
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   const [currentPlan, setCurrentPlan] = useState<PlanType>('pro'); // Assuming 'pro' is the current plan
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
   
   const handleSubscribe = (planType: PlanType) => {
     if (planType === currentPlan) {
@@ -33,6 +35,11 @@ export const Subscription = () => {
     toast.info("Redirecionando para o checkout...");
   };
 
+  const handleViewDetails = (planType: PlanType) => {
+    setSelectedPlan(planType);
+    setIsDetailsModalOpen(true);
+  };
+
   const handleMouseEnter = (planType: string) => {
     setHoveredPlan(planType);
   };
@@ -51,6 +58,55 @@ export const Subscription = () => {
     if (currentPlan === 'basic') return plan === 'pro' || plan === 'enterprise';
     if (currentPlan === 'pro') return plan === 'enterprise';
     return false;
+  };
+
+  const getPlanDetails = (planType: PlanType) => {
+    const plans = {
+      basic: {
+        type: 'basic',
+        name: 'Básico',
+        price: 29,
+        status: 'active' as const,
+        startDate: '2023-11-15',
+        nextBillingDate: '2024-01-15',
+        features: [
+          'Até 100 usuários',
+          'Relatórios básicos',
+          'Suporte por email'
+        ]
+      },
+      pro: {
+        type: 'pro',
+        name: 'Pro',
+        price: 59,
+        status: 'active' as const,
+        startDate: '2023-11-15',
+        nextBillingDate: '2024-01-15',
+        features: [
+          'Até 1000 usuários',
+          'Relatórios avançados',
+          'Suporte prioritário',
+          'API access'
+        ]
+      },
+      enterprise: {
+        type: 'enterprise',
+        name: 'Enterprise',
+        price: 99,
+        status: 'active' as const,
+        startDate: '2023-11-15',
+        nextBillingDate: '2024-01-15',
+        features: [
+          'Usuários ilimitados',
+          'Relatórios personalizados',
+          'Suporte 24/7',
+          'API dedicated',
+          'Setup personalizado'
+        ]
+      }
+    };
+    
+    return plans[planType];
   };
 
   const getResourceComparisonInfo = (plan: PlanType): { 
@@ -290,33 +346,53 @@ export const Subscription = () => {
             </div>
           )}
           
-          <div className="mt-6">
+          <div className="mt-6 space-y-2">
             {currentPlan === 'basic' ? (
-              <Button 
-                className="w-full bg-green-100 hover:bg-green-100 text-green-700 cursor-default"
-                disabled
-              >
-                <BadgeCheck className="mr-2 w-5 h-5" />
-                Plano Atual
-              </Button>
+              <>
+                <Button 
+                  className="w-full bg-green-100 hover:bg-green-100 text-green-700 cursor-default"
+                  disabled
+                >
+                  <BadgeCheck className="mr-2 w-5 h-5" />
+                  Plano Atual
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => handleViewDetails('basic')}
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Ver Detalhes
+                </Button>
+              </>
             ) : (
-              <Button 
-                className={`w-full ${
-                  isDowngrade('basic') 
-                    ? "bg-amber-500 hover:bg-amber-600 text-white"
-                    : "bg-white hover:bg-white/90 text-primary border border-primary/20"
-                }`}
-                onClick={() => handleSubscribe('basic')}
-              >
-                {isDowngrade('basic') ? (
-                  <>
-                    <ArrowDown className="mr-2 w-5 h-5" />
-                    Fazer Downgrade
-                  </>
-                ) : (
-                  'Assinar Plano Básico'
-                )}
-              </Button>
+              <>
+                <Button 
+                  className={`w-full ${
+                    isDowngrade('basic') 
+                      ? "bg-amber-500 hover:bg-amber-600 text-white"
+                      : "bg-white hover:bg-white/90 text-primary border border-primary/20"
+                  }`}
+                  onClick={() => handleSubscribe('basic')}
+                >
+                  {isDowngrade('basic') ? (
+                    <>
+                      <ArrowDown className="mr-2 w-5 h-5" />
+                      Fazer Downgrade
+                    </>
+                  ) : (
+                    'Assinar Plano Básico'
+                  )}
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => handleViewDetails('basic')}
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Ver Detalhes
+                </Button>
+              </>
             )}
           </div>
         </Card>
@@ -392,36 +468,56 @@ export const Subscription = () => {
             </div>
           )}
           
-          <div className="mt-6">
+          <div className="mt-6 space-y-2">
             {currentPlan === 'pro' ? (
-              <Button 
-                className="w-full bg-green-700 hover:bg-green-700 text-white cursor-default"
-                disabled
-              >
-                <BadgeCheck className="mr-2 w-5 h-5" />
-                Plano Atual
-              </Button>
+              <>
+                <Button 
+                  className="w-full bg-green-700 hover:bg-green-700 text-white cursor-default"
+                  disabled
+                >
+                  <BadgeCheck className="mr-2 w-5 h-5" />
+                  Plano Atual
+                </Button>
+                <Button 
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => handleViewDetails('pro')}
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Ver Detalhes
+                </Button>
+              </>
             ) : (
-              <Button 
-                className={`w-full ${
-                  isDowngrade('pro')
-                    ? "bg-amber-500 hover:bg-amber-600 text-white"
-                    : "bg-secondary hover:bg-secondary/90 text-primary"
-                }`}
-                onClick={() => handleSubscribe('pro')}
-              >
-                {isDowngrade('pro') ? (
-                  <>
-                    <ArrowDown className="mr-2 w-5 h-5" />
-                    Fazer Downgrade
-                  </>
-                ) : (
-                  <>
-                    <ArrowUp className="mr-2 w-5 h-5" />
-                    Fazer Upgrade
-                  </>
-                )}
-              </Button>
+              <>
+                <Button 
+                  className={`w-full ${
+                    isDowngrade('pro')
+                      ? "bg-amber-500 hover:bg-amber-600 text-white"
+                      : "bg-secondary hover:bg-secondary/90 text-primary"
+                  }`}
+                  onClick={() => handleSubscribe('pro')}
+                >
+                  {isDowngrade('pro') ? (
+                    <>
+                      <ArrowDown className="mr-2 w-5 h-5" />
+                      Fazer Downgrade
+                    </>
+                  ) : (
+                    <>
+                      <ArrowUp className="mr-2 w-5 h-5" />
+                      Fazer Upgrade
+                    </>
+                  )}
+                </Button>
+                <Button 
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => handleViewDetails('pro')}
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Ver Detalhes
+                </Button>
+              </>
             )}
           </div>
         </Card>
@@ -494,27 +590,56 @@ export const Subscription = () => {
             </div>
           )}
           
-          <div className="mt-6">
+          <div className="mt-6 space-y-2">
             {currentPlan === 'enterprise' ? (
-              <Button 
-                className="w-full bg-green-100 hover:bg-green-100 text-green-700 cursor-default"
-                disabled
-              >
-                <BadgeCheck className="mr-2 w-5 h-5" />
-                Plano Atual
-              </Button>
+              <>
+                <Button 
+                  className="w-full bg-green-100 hover:bg-green-100 text-green-700 cursor-default"
+                  disabled
+                >
+                  <BadgeCheck className="mr-2 w-5 h-5" />
+                  Plano Atual
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => handleViewDetails('enterprise')}
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Ver Detalhes
+                </Button>
+              </>
             ) : (
-              <Button 
-                className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
-                onClick={() => handleSubscribe('enterprise')}
-              >
-                <ArrowUp className="mr-2 w-5 h-5" />
-                Fazer Upgrade
-              </Button>
+              <>
+                <Button 
+                  className="w-full bg-white hover:bg-white/90 text-primary border border-primary/20"
+                  onClick={() => handleSubscribe('enterprise')}
+                >
+                  <ArrowUp className="mr-2 w-5 h-5" />
+                  Fazer Upgrade
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => handleViewDetails('enterprise')}
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Ver Detalhes
+                </Button>
+              </>
             )}
           </div>
         </Card>
       </div>
+
+      {/* Subscription Details Modal */}
+      {selectedPlan && (
+        <SubscriptionDetailsModal 
+          isOpen={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          plan={getPlanDetails(selectedPlan)}
+        />
+      )}
     </div>
   );
 };

@@ -17,7 +17,6 @@ import { AdminProvider } from "@/contexts/AdminContext";
 // Import content components
 import DashboardContent from "@/components/admin/andora/DashboardContent";
 import EcommerceContent from "@/components/admin/andora/EcommerceContent";
-import SubscriptionsContent from "@/components/admin/andora/SubscriptionsContent";
 import SecurityContent from "@/components/admin/andora/SecurityContent";
 import AnalyticsContent from "@/components/admin/andora/AnalyticsContent";
 import SettingsContent from "@/components/admin/andora/SettingsContent";
@@ -65,8 +64,6 @@ const AdminAndora = () => {
         return <EcommerceContent />;
       case "reports":
         return <AnalyticsContent />;
-      case "subscription":
-        return <SubscriptionsContent />;
       case "settings":
         return <SettingsContent />;
       default:
@@ -74,8 +71,12 @@ const AdminAndora = () => {
     }
   };
 
-  // Filter menu items for Andora (exclude 'agenda')
-  const andoraMenuItems = menuItems.filter(item => item.id !== 'agenda' && item.id !== 'users');
+  // Filter menu items for Andora (exclude 'agenda', 'users', and 'subscription')
+  const andoraMenuItems = menuItems.filter(item => 
+    item.id !== 'agenda' && 
+    item.id !== 'users' && 
+    item.id !== 'subscription'
+  );
 
   return (
     <AdminProvider>
