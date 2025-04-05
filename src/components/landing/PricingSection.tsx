@@ -21,53 +21,13 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="precos" className="py-16 md:py-20 px-4 md:px-6 relative">
-      {/* Tech-inspired background with AI elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/80 to-primary/95 z-0"></div>
-        
-        {/* Circuit and code pattern background */}
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6')] bg-cover bg-right opacity-20"></div>
-        </div>
-        
-        {/* AI Neural network paths */}
-        <div className="absolute inset-0 z-0">
-          <svg className="w-full h-full opacity-10" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100,100 C150,150 250,50 300,100 S400,150 500,100 S650,50 700,100" stroke="#c6ba77" strokeWidth="2" fill="none" />
-            <path d="M100,200 C200,250 300,150 400,200 S500,250 600,200 S700,150 750,200" stroke="#c6ba77" strokeWidth="2" fill="none" />
-            <path d="M50,300 C150,350 250,250 350,300 S450,350 550,300 S650,250 750,300" stroke="#c6ba77" strokeWidth="2" fill="none" />
-            
-            <circle cx="100" cy="100" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="300" cy="100" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="500" cy="100" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="700" cy="100" r="5" fill="#c6ba77" opacity="0.8" />
-            
-            <circle cx="100" cy="200" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="400" cy="200" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="600" cy="200" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="750" cy="200" r="5" fill="#c6ba77" opacity="0.8" />
-            
-            <circle cx="50" cy="300" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="350" cy="300" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="550" cy="300" r="5" fill="#c6ba77" opacity="0.8" />
-            <circle cx="750" cy="300" r="5" fill="#c6ba77" opacity="0.8" />
-          </svg>
-        </div>
-        
-        {/* Floating tech particles */}
-        <div className="absolute top-10 left-1/4 w-3 h-3 rounded-full bg-secondary/50 animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/4 w-5 h-5 rounded-full bg-secondary/40 animate-pulse" style={{ animationDelay: "1.2s" }}></div>
-        <div className="absolute bottom-1/4 left-1/3 w-4 h-4 rounded-full bg-secondary/60 animate-pulse" style={{ animationDelay: "0.7s" }}></div>
-        <div className="absolute bottom-10 right-1/3 w-6 h-6 rounded-full bg-secondary/30 animate-pulse" style={{ animationDelay: "1.5s" }}></div>
-      </div>
-      
-      <div className="container mx-auto space-y-8 md:space-y-10 relative z-10">
+    <section id="precos" className="py-16 md:py-20 px-4 md:px-6 gradient-plans relative">
+      <div className="container mx-auto space-y-8 md:space-y-10">
         <h2 className="text-2xl md:text-3xl font-bold text-white text-center">Planos de Assinatura</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
           <Card 
-            className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg backdrop-blur-sm bg-white/95 ${
+            className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
               hoveredPlan === 'basic' ? 'transform scale-105' : ''
             }`}
             onMouseEnter={() => handleMouseEnter('basic')}
@@ -113,7 +73,7 @@ const PricingSection = () => {
           </Card>
 
           <Card 
-            className={`p-6 flex flex-col h-full border-2 border-secondary bg-gradient-to-b from-primary to-primary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl backdrop-blur-sm ${
+            className={`p-6 flex flex-col h-full border-2 border-secondary bg-gradient-to-b from-primary to-primary/90 text-white shadow-xl transition-all duration-300 hover:shadow-2xl ${
               hoveredPlan === 'pro' ? 'transform scale-105' : ''
             }`}
             onMouseEnter={() => handleMouseEnter('pro')}
@@ -163,7 +123,7 @@ const PricingSection = () => {
           </Card>
 
           <Card 
-            className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg backdrop-blur-sm bg-white/95 ${
+            className={`p-6 flex flex-col h-full border border-primary/20 transition-all duration-300 hover:shadow-lg ${
               hoveredPlan === 'enterprise' ? 'transform scale-105' : ''
             }`}
             onMouseEnter={() => handleMouseEnter('enterprise')}

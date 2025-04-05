@@ -1,24 +1,27 @@
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 const AnimateOnScroll = () => {
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fadeIn');
+          entry.target.classList.add("visible");
         }
       });
-    }, { threshold: 0.1 });
-    
-    const animateElements = document.querySelectorAll('.animate-on-scroll');
-    animateElements.forEach((el) => observer.observe(el));
-    
-    return () => {
-      animateElements.forEach((el) => observer.unobserve(el));
     };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.1,
+    });
+
+    document.querySelectorAll(".animate-on-scroll").forEach((element) => {
+      observer.observe(element);
+    });
+
+    return () => observer.disconnect();
   }, []);
-  
+
   return null;
 };
 
