@@ -5,6 +5,24 @@ import { Button } from "@/components/ui/button";
 const HeroSection = () => {
   return (
     <section id="inicio" className="pt-24 md:pt-32 pb-20 px-4 md:px-6 text-foreground relative overflow-hidden">
+      {/* Tech/AI particle background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-primary/80 mix-blend-multiply z-0"></div>
+        <div className="absolute inset-0 z-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7')] bg-cover bg-center"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-primary via-transparent to-primary/90"></div>
+        </div>
+        
+        {/* AI circuit patterns */}
+        <div className="absolute top-1/4 right-1/4 w-1/3 h-1/3 rounded-full bg-secondary/20 blur-3xl"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-1/4 h-1/4 rounded-full bg-secondary/10 blur-2xl"></div>
+        
+        {/* Animated tech elements */}
+        <div className="absolute top-20 left-10 w-8 h-8 rounded-full bg-secondary/30 animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-12 h-12 rounded-full bg-secondary/20 animate-pulse" style={{ animationDelay: "1s" }}></div>
+        <div className="absolute bottom-40 left-1/4 w-6 h-6 rounded-full bg-secondary/40 animate-pulse" style={{ animationDelay: "1.5s" }}></div>
+      </div>
+      
       <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
         <div className="text-left relative z-10">
           <h1 className="text-3xl md:text-6xl font-codec-bold mb-6 animate-fadeIn leading-tight text-white">
@@ -18,7 +36,7 @@ const HeroSection = () => {
           </p>
         </div>
         <div className="relative hidden md:block">
-          <div className="bg-white p-6 rounded-xl shadow-xl transform md:translate-y-10">
+          <div className="bg-white p-6 rounded-xl shadow-xl transform md:translate-y-10 relative z-10">
             <div className="text-center mb-4">
               <h3 className="text-gray-800 text-lg font-medium">Analytics Dashboard</h3>
             </div>
