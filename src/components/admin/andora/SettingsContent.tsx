@@ -41,6 +41,7 @@ const SettingsContent = () => {
     setPhone 
   } = useAdmin();
   
+  const [activeTab, setActiveTab] = useState("profile");
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [smsNotifications, setSmsNotifications] = useState(false);
   const [language, setLanguage] = useState("pt-BR");
@@ -75,22 +76,26 @@ const SettingsContent = () => {
     toast.success("Configurações avançadas salvas com sucesso!");
   };
   
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+  };
+  
   return (
     <div className="space-y-6 transition-colors duration-200">
       <h2 className="text-2xl font-bold">Configurações</h2>
       
-      <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-1 mb-4 bg-gray-100 dark:bg-gray-800">
-          <TabsTrigger value="profile" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Perfil</TabsTrigger>
-          <TabsTrigger value="general" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Geral</TabsTrigger>
-          <TabsTrigger value="notifications" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Notificações</TabsTrigger>
-          <TabsTrigger value="security" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Segurança</TabsTrigger>
-          <TabsTrigger value="system" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Sistema</TabsTrigger>
-          <TabsTrigger value="advanced" className="dark:text-gray-200 dark:data-[state=active]:bg-gray-700">Avançado</TabsTrigger>
+      <Tabs defaultValue="profile" value={activeTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="w-full overflow-x-auto flex flex-nowrap mb-4 bg-gray-100 p-1">
+          <TabsTrigger value="profile" className="flex-shrink-0">Perfil</TabsTrigger>
+          <TabsTrigger value="general" className="flex-shrink-0">Geral</TabsTrigger>
+          <TabsTrigger value="notifications" className="flex-shrink-0">Notificações</TabsTrigger>
+          <TabsTrigger value="security" className="flex-shrink-0">Segurança</TabsTrigger>
+          <TabsTrigger value="system" className="flex-shrink-0">Sistema</TabsTrigger>
+          <TabsTrigger value="advanced" className="flex-shrink-0">Avançado</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <ProfileAvatar 
                 avatar={avatar}
@@ -109,7 +114,7 @@ const SettingsContent = () => {
         </TabsContent>
         
         <TabsContent value="general">
-          <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <Card className="p-6 bg-white">
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4 dark:text-white">Configurações Gerais</h3>

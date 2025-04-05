@@ -120,7 +120,7 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto w-[95vw] p-4 md:p-6">
           <DialogHeader>
             <DialogTitle>Detalhes da Assinatura - {plan.name}</DialogTitle>
             <DialogDescription>
@@ -129,10 +129,10 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
           </DialogHeader>
 
           <Tabs defaultValue="details" value={activeTab} onValueChange={setActiveTab} className="w-full mt-4">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="details">Detalhes</TabsTrigger>
-              <TabsTrigger value="history">Histórico</TabsTrigger>
-              <TabsTrigger value="payment">Configurações</TabsTrigger>
+            <TabsList className="w-full flex flex-nowrap overflow-x-auto mb-4">
+              <TabsTrigger value="details" className="flex-shrink-0">Detalhes</TabsTrigger>
+              <TabsTrigger value="history" className="flex-shrink-0">Histórico</TabsTrigger>
+              <TabsTrigger value="payment" className="flex-shrink-0">Configurações</TabsTrigger>
             </TabsList>
             
             {/* Detalhes da Assinatura */}
@@ -193,11 +193,11 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
                 </Card>
               </div>
               
-              <div className="flex justify-end space-x-2 pt-2">
-                <Button variant="outline" onClick={() => setActiveTab("history")}>
+              <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-2">
+                <Button variant="outline" onClick={() => setActiveTab("history")} className="w-full sm:w-auto">
                   Ver Histórico <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-                <Button onClick={() => setActiveTab("payment")}>
+                <Button onClick={() => setActiveTab("payment")} className="w-full sm:w-auto">
                   Configurações de Pagamento <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -206,11 +206,39 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
             {/* Histórico de Pagamentos */}
             <TabsContent value="history" className="space-y-4 pt-4">
               <Card>
-                <CardContent className="p-6">
+                <CardContent className="p-4 md:p-6">
                   <h3 className="font-semibold mb-4">Histórico Completo de Pagamentos</h3>
                   
                   <div className="relative overflow-x-auto">
-                    <table className="w-full text-sm text-left">
+                    <div className="md:hidden">
+                      {/* Mobile view - card-based list */}
+                      <div className="space-y-4">
+                        {paymentHistory.map((payment) => (
+                          <div key={payment.id} className="bg-white border rounded-lg p-4">
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="font-medium">{payment.id}</span>
+                              {getStatusBadge(payment.status)}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                <p className="text-gray-500">Data:</p>
+                                <p>{new Date(payment.date).toLocaleDateString('pt-BR')}</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-500">Plano:</p>
+                                <p>{payment.planName}</p>
+                              </div>
+                              <div className="col-span-2">
+                                <p className="text-gray-500">Valor:</p>
+                                <p className="font-medium">R$ {payment.amount.toFixed(2)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <table className="w-full text-sm text-left hidden md:table">
                       <thead className="text-xs uppercase bg-gray-50">
                         <tr>
                           <th className="px-4 py-3">ID</th>
@@ -255,11 +283,11 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
                 </CardContent>
               </Card>
               
-              <div className="flex justify-between pt-2">
-                <Button variant="outline" onClick={() => setActiveTab("details")}>
+              <div className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 sm:space-x-2 pt-2">
+                <Button variant="outline" onClick={() => setActiveTab("details")} className="w-full sm:w-auto">
                   Voltar para Detalhes
                 </Button>
-                <Button onClick={() => setActiveTab("payment")}>
+                <Button onClick={() => setActiveTab("payment")} className="w-full sm:w-auto">
                   Configurações de Pagamento <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -268,7 +296,7 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
             {/* Configurações de Pagamento */}
             <TabsContent value="payment" className="space-y-4 pt-4">
               <Card>
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="p-4 md:p-6 space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="autoRenew" className="font-medium">Renovação Automática</Label>
@@ -295,7 +323,7 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
                   
                   <div className="pt-2 space-y-2">
                     <Label htmlFor="paymentMethod" className="font-medium">Método de Pagamento</Label>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <select 
                         id="paymentMethod" 
                         className="w-full p-2 border rounded-md bg-white"
@@ -307,7 +335,7 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
                         <option value="bankTransfer">Transferência Bancária</option>
                         <option value="pix">PIX</option>
                       </select>
-                      <Button variant="outline" onClick={openPaymentMethodDialog}>
+                      <Button variant="outline" onClick={openPaymentMethodDialog} className="sm:w-auto">
                         Editar
                       </Button>
                     </div>
@@ -331,7 +359,7 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
 
       {/* Payment Method Dialog */}
       <Dialog open={paymentMethodDialog} onOpenChange={setPaymentMethodDialog}>
-        <DialogContent>
+        <DialogContent className="w-[95vw] max-w-md">
           <DialogHeader>
             <DialogTitle>Atualizar Método de Pagamento</DialogTitle>
             <DialogDescription>
@@ -369,12 +397,12 @@ const SubscriptionDetailsModal = ({ isOpen, onClose, plan }: SubscriptionDetails
             </div>
           </div>
           
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button variant="outline" onClick={() => setPaymentMethodDialog(false)}>
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
+            <Button variant="outline" onClick={() => setPaymentMethodDialog(false)} className="w-full sm:w-auto">
               <X className="h-4 w-4 mr-2" />
               Cancelar
             </Button>
-            <Button onClick={savePaymentMethod}>
+            <Button onClick={savePaymentMethod} className="w-full sm:w-auto">
               <CheckCircle2 className="h-4 w-4 mr-2" />
               Salvar
             </Button>
