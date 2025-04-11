@@ -36,14 +36,14 @@ const HeroSection = () => {
             Transforme suas vendas com IA no WhatsApp. Em tempo real. No automático.
           </h1>
           <p className="text-base md:text-xl mb-8 animate-fadeIn font-codec text-white/90 max-w-lg">
-            Andora automatiza conversas, qualifica leads e fecha vendas — enquanto você dorme. Sem programação e com resultados imediatos.
+            Andora.AI automatiza conversas, qualifica leads e fecha vendas — enquanto você dorme. Sem programação e com resultados imediatos.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90 group transition-all duration-300 animate-fadeIn">
               Testar Agora
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 animate-fadeIn">
+            <Button size="lg" variant="outline" className="bg-primary border-white/30 text-white hover:bg-white/10 hover:text-white animate-fadeIn">
               Ver Como Funciona
             </Button>
           </div>

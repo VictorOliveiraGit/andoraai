@@ -60,7 +60,7 @@ const PricingSection = () => {
 
       <div className="container mx-auto space-y-8 md:space-y-10 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary animate-on-scroll">Planos de Assinatura</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-secondarys animate-on-scroll">Planos de Assinatura</h2>
           <p className="text-muted-foreground mt-4 animate-on-scroll">
             Escolha o plano ideal para o seu negócio e comece a transformar suas conversas em vendas
           </p>
@@ -255,8 +255,8 @@ const PricingSection = () => {
 
         <div className="flex justify-center mt-8">
           <Card className="p-4 border border-secondary/30 bg-white/50 backdrop-blur-sm max-w-lg">
-            <p className="text-center text-sm text-muted-foreground">
-              Todos os planos incluem <span className="font-semibold text-primary">7 dias de teste grátis</span>. 
+            <p className="text-center text-sm text-secondary font-semibold">
+              Todos os planos incluem <span className="font-semibold text-sm text-primary">7 dias de teste grátis</span>. 
               Cancele a qualquer momento. Precisa de um plano personalizado?{" "}
               <a href="#contato" className="text-secondary font-medium hover:underline">Entre em contato</a>.
             </p>

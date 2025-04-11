@@ -32,7 +32,7 @@ const HowItWorksSection = () => {
     <section className="py-16 md:py-24 px-4 md:px-6 bg-white">
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-codec-bold mb-4 animate-on-scroll">
+          <h2 className="text-2xl md:text-3xl text-primary font-codec-bold mb-4 animate-on-scroll">
             Como Funciona
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-on-scroll">
@@ -56,7 +56,7 @@ const HowItWorksSection = () => {
                 <div className="bg-primary/5 w-16 h-16 rounded-full flex items-center justify-center mb-4">
                   {step.icon}
                 </div>
-                <h3 className="text-xl font-codec mb-3">{step.title}</h3>
+                <h3 className="text-xl text-primary font-codec mb-3">{step.title}</h3>
                 <p className="text-muted-foreground mb-4">{step.description}</p>
                 <span className="inline-block bg-secondary/10 text-secondary py-1 px-3 rounded-full text-sm font-medium">
                   {step.highlight}
