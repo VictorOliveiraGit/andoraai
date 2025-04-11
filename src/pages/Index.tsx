@@ -12,7 +12,7 @@ import FixedNavigation from "@/components/landing/FixedNavigation";
 
 const Index = () => {
   return (
-    <div className="min-h-screen font-glacial overflow-x-hidden w-full max-w-[100vw]" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+    <div className="min-h-screen font-glacial overflow-x-hidden w-full max-w-full">
       <FixedNavigation />
       <AnimateOnScroll />
       <div id="inicio">
