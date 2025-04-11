@@ -7,16 +7,20 @@ import PricingSection from "@/components/landing/PricingSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import CTASection from "@/components/landing/CTASection";
 import AnimateOnScroll from "@/components/landing/AnimateOnScroll";
+import HowItWorksSection from "@/components/landing/HowItWorksSection";
+import FixedNavigation from "@/components/landing/FixedNavigation";
 
 const Index = () => {
   return (
     <div className="min-h-screen font-glacial">
       <Header />
       <AnimateOnScroll />
+      <FixedNavigation />
       <HeroSection />
+      <HowItWorksSection />
       <FeaturesSection />
-      <PricingSection />
       <TestimonialsSection />
+      <PricingSection />
       <CTASection />
       <Footer />
     </div>
