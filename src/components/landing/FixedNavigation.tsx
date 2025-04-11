@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
@@ -62,11 +61,9 @@ const FixedNavigation = () => {
     const element = document.getElementById(id);
     if (element) {
       const offset = 100; // Account for fixed header
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
       
       window.scrollTo({
-        top: offsetPosition,
+        top: element.offsetTop - offset,
         behavior: 'smooth'
       });
       

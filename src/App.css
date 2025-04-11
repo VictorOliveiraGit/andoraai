@@ -3,10 +3,10 @@
   max-width: 100% !important;
   margin: 0 auto;
   text-align: center;
-  overflow-x: hidden !important; /* Ensure no horizontal overflow */
-  overflow-y: auto; /* Ensure root container allows scrolling */
-  padding: 0 !important; /* Remove padding that might cause margin */
-  width: 100vw !important; /* Ensure full width */
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  padding: 0 !important;
+  width: 100% !important;
 }
 
 .logo {
@@ -48,14 +48,14 @@
 /* Ensure content scrolls properly across all devices */
 html, body {
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden !important; /* Prevent horizontal scrolling */
-  max-width: 100vw !important; /* Prevent overflow */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
   margin: 0 !important;
   padding: 0 !important;
-  width: 100vw !important; /* Ensure full width */
-  position: relative !important; /* Establish positioning context */
-  box-sizing: border-box !important; /* Include padding in width calculations */
+  width: 100% !important;
+  position: relative !important;
+  box-sizing: border-box !important;
 }
 
 /* Reset box-sizing for all elements */
@@ -115,4 +115,13 @@ html, body {
   max-width: 95vw !important;
   width: 100% !important;
   margin: 0 auto !important;
+}
+
+/* Add scroll margin for fixed header */
+.scroll-mt-16 {
+  scroll-margin-top: 4rem;
+}
+
+.scroll-mt-20 {
+  scroll-margin-top: 5rem;
 }

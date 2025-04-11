@@ -34,11 +34,11 @@
   }
   
   html {
-    scroll-behavior: smooth; /* Add smooth scrolling behavior to the html element */
-    /* macOS-like scrollbar for Firefox */
+    scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-    overflow-x: hidden; /* Prevent any horizontal overflow */
+    overflow-x: hidden;
+    overflow-y: auto !important;
     width: 100%;
     max-width: 100%;
   }
@@ -46,12 +46,12 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-    overflow-y: auto !important; /* Ensure vertical scrolling is always possible */
-    overflow-x: hidden !important; /* Prevent horizontal scrolling to fix the purple margin */
-    margin: 0 !important; /* Remove default margin */
-    padding: 0 !important; /* Remove default padding */
-    width: 100% !important; /* Ensure body takes full width */
-    max-width: 100vw !important; /* Prevent overflow */
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
     position: relative;
   }
   
@@ -83,13 +83,13 @@
     background-color: rgba(0, 0, 0, 0.1);
   }
   
-  /* Previne o scroll e mantém a largura quando o modal está aberto */
+  /* Prevent padding-right when modal is open */
   .modal-open {
     overflow: hidden;
-    padding-right: 17px; /* Largura padrão da scrollbar */
+    padding-right: 0 !important;
   }
 
-  /* Assegure que os dialogs e seus conteúdos têm fundo sólido */
+  /* Ensure dialogs and their contents have solid backgrounds */
   [role="dialog"] {
     @apply bg-background;
   }
@@ -100,7 +100,7 @@
     z-index: 1000 !important;
   }
 
-  /* Assegure que os inputs têm fundo sólido e texto preto */
+  /* Ensure inputs have solid backgrounds and black text */
   input, select, textarea {
     @apply bg-background;
     opacity: 1 !important;
@@ -110,7 +110,7 @@
     color: #000000 !important;
   }
   
-  /* Assegure que o texto de placeholder seja cinza mas o texto digitado seja preto */
+  /* Ensure placeholder text is gray but typed text is black */
   input::placeholder, select::placeholder, textarea::placeholder {
     color: #6b7280;
     opacity: 1;

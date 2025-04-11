@@ -12,28 +12,28 @@ import FixedNavigation from "@/components/landing/FixedNavigation";
 
 const Index = () => {
   return (
-    <div className="min-h-screen font-glacial overflow-x-hidden w-full max-w-full">
+    <div className="min-h-screen font-glacial w-full">
       <FixedNavigation />
       <AnimateOnScroll />
-      <div id="inicio" className="max-w-[100vw] overflow-hidden">
+      <div id="inicio" className="scroll-mt-20">
         <HeroSection />
       </div>
-      <div id="como-funciona" className="max-w-[100vw] overflow-hidden">
+      <div id="como-funciona" className="scroll-mt-20">
         <HowItWorksSection />
       </div>
-      <div id="recursos" className="max-w-[100vw] overflow-hidden">
+      <div id="recursos" className="scroll-mt-20">
         <FeaturesSection />
       </div>
-      <div id="depoimentos" className="max-w-[100vw] overflow-hidden">
+      <div id="depoimentos" className="scroll-mt-20">
         <TestimonialsSection />
       </div>
-      <div id="precos" className="max-w-[100vw] overflow-hidden">
+      <div id="precos" className="scroll-mt-20">
         <PricingSection />
       </div>
-      <div className="max-w-[100vw] overflow-hidden">
+      <div>
         <CTASection />
       </div>
-      <div className="max-w-[100vw] overflow-hidden">
+      <div>
         <Footer />
       </div>
     </div>
