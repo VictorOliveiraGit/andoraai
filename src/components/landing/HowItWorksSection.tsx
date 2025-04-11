@@ -30,8 +30,8 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white overflow-x-hidden w-full">
-      <div className="container mx-auto overflow-hidden">
+    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white w-full max-w-[100vw] overflow-hidden">
+      <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl text-primary font-codec-bold mb-4 animate-on-scroll">
             Como Funciona
@@ -45,11 +45,11 @@ const HowItWorksSection = () => {
           {/* Connection line */}
           <div className="absolute top-24 left-1/2 w-0.5 h-[calc(100%-6rem)] bg-gray-200 hidden md:block"></div>
           
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 relative">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 relative">
             {steps.map((step, index) => (
               <div 
                 key={index} 
-                className={`bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow animate-on-scroll relative ${index % 2 !== 0 ? 'md:translate-y-16' : ''}`}
+                className={`bg-white p-4 md:p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow animate-on-scroll relative ${index % 2 !== 0 ? 'md:translate-y-16' : ''}`}
               >
                 {/* Connection dot */}
                 <div className="absolute top-10 -right-3 w-6 h-6 rounded-full bg-secondary hidden md:block"></div>
@@ -57,9 +57,9 @@ const HowItWorksSection = () => {
                 <div className="bg-primary/5 w-16 h-16 rounded-full flex items-center justify-center mb-4">
                   {step.icon}
                 </div>
-                <h3 className="text-xl text-primary font-codec mb-3">{step.title}</h3>
-                <p className="text-muted-foreground mb-4">{step.description}</p>
-                <span className="inline-block bg-secondary/10 text-secondary py-1 px-3 rounded-full text-sm font-medium">
+                <h3 className="text-lg md:text-xl text-primary font-codec mb-2 md:mb-3">{step.title}</h3>
+                <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4">{step.description}</p>
+                <span className="inline-block bg-secondary/10 text-secondary py-1 px-3 rounded-full text-xs md:text-sm font-medium">
                   {step.highlight}
                 </span>
               </div>

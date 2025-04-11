@@ -6,6 +6,7 @@
   overflow-x: hidden !important; /* Ensure no horizontal overflow */
   overflow-y: auto; /* Ensure root container allows scrolling */
   padding: 0 !important; /* Remove padding that might cause margin */
+  width: 100vw !important; /* Ensure full width */
 }
 
 .logo {
@@ -52,6 +53,48 @@ html, body {
   max-width: 100vw !important; /* Prevent overflow */
   margin: 0 !important;
   padding: 0 !important;
+  width: 100vw !important; /* Ensure full width */
+  position: relative !important; /* Establish positioning context */
+  box-sizing: border-box !important; /* Include padding in width calculations */
+}
+
+/* Reset box-sizing for all elements */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+
+/* Remove any potential side margins/spacing */
+.container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px !important;
+  }
 }
 
 /* Improve scrolling on mobile devices */
@@ -59,4 +102,17 @@ html, body {
   body {
     -webkit-overflow-scrolling: touch;
   }
+  
+  /* Ensure modals stay within screen */
+  [role="dialog"] {
+    max-width: 95vw !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* Ensure modal content is properly styled */
+.dialog-content {
+  max-width: 95vw !important;
+  width: 100% !important;
+  margin: 0 auto !important;
 }

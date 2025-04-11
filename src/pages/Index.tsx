@@ -15,23 +15,27 @@ const Index = () => {
     <div className="min-h-screen font-glacial overflow-x-hidden w-full max-w-full">
       <FixedNavigation />
       <AnimateOnScroll />
-      <div id="inicio">
+      <div id="inicio" className="max-w-[100vw] overflow-hidden">
         <HeroSection />
       </div>
-      <div id="como-funciona">
+      <div id="como-funciona" className="max-w-[100vw] overflow-hidden">
         <HowItWorksSection />
       </div>
-      <div id="recursos">
+      <div id="recursos" className="max-w-[100vw] overflow-hidden">
         <FeaturesSection />
       </div>
-      <div id="depoimentos">
+      <div id="depoimentos" className="max-w-[100vw] overflow-hidden">
         <TestimonialsSection />
       </div>
-      <div id="precos">
+      <div id="precos" className="max-w-[100vw] overflow-hidden">
         <PricingSection />
       </div>
-      <CTASection />
-      <Footer />
+      <div className="max-w-[100vw] overflow-hidden">
+        <CTASection />
+      </div>
+      <div className="max-w-[100vw] overflow-hidden">
+        <Footer />
+      </div>
     </div>
   );
 };
