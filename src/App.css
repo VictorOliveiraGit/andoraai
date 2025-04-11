@@ -4,8 +4,8 @@
   margin: 0 auto;
   text-align: center;
   overflow-x: hidden !important; /* Ensure no horizontal overflow */
-  overflow-y: auto; /* Ensure root container allows scrolling */
   padding: 0 !important; /* Remove padding that might cause margin */
+  width: 100% !important;
 }
 
 .logo {
@@ -47,7 +47,7 @@
 /* Ensure content scrolls properly across all devices */
 html, body {
   height: 100%;
-  overflow-y: auto;
+  width: 100%;
   overflow-x: hidden !important; /* Prevent horizontal scrolling */
   max-width: 100vw !important; /* Prevent overflow */
   margin: 0 !important;
@@ -58,5 +58,29 @@ html, body {
 @media (max-width: 768px) {
   body {
     -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Fix container width */
+.container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
   }
 }

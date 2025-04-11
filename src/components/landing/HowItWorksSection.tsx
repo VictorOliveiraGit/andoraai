@@ -30,8 +30,8 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white overflow-x-hidden w-full">
-      <div className="container mx-auto overflow-hidden">
+    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white w-full">
+      <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl text-primary font-codec-bold mb-4 animate-on-scroll">
             Como Funciona
@@ -45,7 +45,7 @@ const HowItWorksSection = () => {
           {/* Connection line */}
           <div className="absolute top-24 left-1/2 w-0.5 h-[calc(100%-6rem)] bg-gray-200 hidden md:block"></div>
           
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 relative">
             {steps.map((step, index) => (
               <div 
                 key={index} 
@@ -57,7 +57,7 @@ const HowItWorksSection = () => {
                 <div className="bg-primary/5 w-16 h-16 rounded-full flex items-center justify-center mb-4">
                   {step.icon}
                 </div>
-                <h3 className="text-xl text-primary font-codec mb-3">{step.title}</h3>
+                <h3 className="text-xl text-primary font-medium mb-3">{step.title}</h3>
                 <p className="text-muted-foreground mb-4">{step.description}</p>
                 <span className="inline-block bg-secondary/10 text-secondary py-1 px-3 rounded-full text-sm font-medium">
                   {step.highlight}

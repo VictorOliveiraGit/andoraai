@@ -12,8 +12,8 @@ import FixedNavigation from "@/components/landing/FixedNavigation";
 
 const Index = () => {
   return (
-    <div className="min-h-screen font-glacial overflow-x-hidden w-full max-w-full">
-      <FixedNavigation />
+    <div className="min-h-screen font-glacial overflow-x-hidden w-full">
+      <Header />
       <AnimateOnScroll />
       <div id="inicio">
         <HeroSection />
