@@ -8,17 +8,26 @@ import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import CTASection from "@/components/landing/CTASection";
 import AnimateOnScroll from "@/components/landing/AnimateOnScroll";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
+import FixedNavigation from "@/components/landing/FixedNavigation";
 
 const Index = () => {
   return (
     <div className="min-h-screen font-glacial">
-      <Header />
+      <FixedNavigation />
       <AnimateOnScroll />
-      <HeroSection />
+      <div id="inicio">
+        <HeroSection />
+      </div>
       <HowItWorksSection />
-      <FeaturesSection />
-      <TestimonialsSection />
-      <PricingSection />
+      <div id="recursos">
+        <FeaturesSection />
+      </div>
+      <div id="depoimentos">
+        <TestimonialsSection />
+      </div>
+      <div id="precos">
+        <PricingSection />
+      </div>
       <CTASection />
       <Footer />
     </div>

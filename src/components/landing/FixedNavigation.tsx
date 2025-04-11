@@ -7,10 +7,33 @@ import logo from '../../../public/logo-andora.svg';
 const FixedNavigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      
+      // Determine active section
+      const sections = [
+        { id: 'inicio', ref: document.getElementById('inicio') },
+        { id: 'como-funciona', ref: document.getElementById('como-funciona') },
+        { id: 'recursos', ref: document.getElementById('recursos') },
+        { id: 'depoimentos', ref: document.getElementById('depoimentos') },
+        { id: 'precos', ref: document.getElementById('precos') }
+      ];
+      
+      const currentPosition = window.scrollY + 100;
+      for (const section of sections) {
+        if (section.ref) {
+          const offsetTop = section.ref.offsetTop;
+          const offsetHeight = section.ref.offsetHeight;
+          
+          if (currentPosition >= offsetTop && currentPosition < offsetTop + offsetHeight) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -36,7 +59,7 @@ const FixedNavigation = () => {
   const handleLoginButton = () => {
     const headerElement = document.getElementById('header');
     if (headerElement) {
-      const loginButton = headerElement.querySelector('button[modalTrigger=true]') as HTMLButtonElement;
+      const loginButton = headerElement.querySelector('button[modalTrigger=true]') as HTMLElement;
       if (loginButton) {
         loginButton.click();
       }
@@ -53,51 +76,45 @@ const FixedNavigation = () => {
           
           <nav className="hidden md:flex items-center space-x-8">
             <button 
+              onClick={() => scrollToSection('inicio')}
+              className={`text-sm font-medium transition-colors ${
+                activeSection === 'inicio' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+              }`}
+            >
+              Início
+            </button>
+            <button 
+              onClick={() => scrollToSection('como-funciona')}
+              className={`text-sm font-medium transition-colors ${
+                activeSection === 'como-funciona' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+              }`}
+            >
+              Como Funciona
+            </button>
+            <button 
               onClick={() => scrollToSection('recursos')}
-              className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                activeSection === 'recursos' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+              }`}
             >
               Funcionalidades
             </button>
             <button 
               onClick={() => scrollToSection('depoimentos')}
-              className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                activeSection === 'depoimentos' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+              }`}
             >
               Depoimentos
             </button>
             <button 
               onClick={() => scrollToSection('precos')}
-              className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                activeSection === 'precos' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+              }`}
             >
               Preços
             </button>
-
-            <div className="relative group">
-              <button className="flex items-center text-sm font-medium text-gray-700 hover:text-primary transition-colors">
-                Recursos <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                <div className="py-1">
-                  <button 
-                    onClick={() => scrollToSection('inicio')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                  >
-                    WhatsApp Bot
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('recursos')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                  >
-                    Integração com CRM
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('recursos')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                  >
-                    Automações
-                  </button>
-                </div>
-              </div>
-            </div>
           </nav>
           
           <div className="hidden md:flex items-center space-x-4">
@@ -130,6 +147,18 @@ const FixedNavigation = () => {
       {/* Mobile menu */}
       <div className={`md:hidden absolute w-full bg-white shadow-lg transition-all duration-300 ${mobileMenuOpen ? 'max-h-96 border-t' : 'max-h-0 overflow-hidden'}`}>
         <div className="container mx-auto px-4 py-4 space-y-4">
+          <button 
+            onClick={() => scrollToSection('inicio')}
+            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+          >
+            Início
+          </button>
+          <button 
+            onClick={() => scrollToSection('como-funciona')}
+            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+          >
+            Como Funciona
+          </button>
           <button 
             onClick={() => scrollToSection('recursos')}
             className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"

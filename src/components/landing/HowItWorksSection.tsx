@@ -1,3 +1,4 @@
+
 import { ArrowRight, MessageSquare, Bot, Zap, Database } from "lucide-react";
 
 const HowItWorksSection = () => {
@@ -29,7 +30,7 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 px-4 md:px-6 bg-white">
+    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl text-primary font-codec-bold mb-4 animate-on-scroll">

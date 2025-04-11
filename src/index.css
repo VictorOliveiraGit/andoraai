@@ -44,6 +44,11 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
     overflow-y: auto !important; /* Ensure vertical scrolling is always possible */
+    overflow-x: hidden; /* Prevent horizontal scrolling to fix the purple margin */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    width: 100%; /* Ensure body takes full width */
+    max-width: 100vw; /* Prevent overflow */
   }
   
   /* Apple macOS style scrollbars for Webkit browsers */
@@ -149,6 +154,17 @@ body:not(:has(.admin-page)):not(:has(.admin-andora)) {
   color: hsl(var(--primary-foreground));
   min-height: 100vh;
   overflow-y: auto; /* Ensure vertical scrolling is possible */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  max-width: 100vw; /* Prevent overflow */
+}
+
+/* Fix root and container widths */
+#root, .container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 /* Gradient backgrounds */
