@@ -12,13 +12,15 @@ import FixedNavigation from "@/components/landing/FixedNavigation";
 
 const Index = () => {
   return (
-    <div className="min-h-screen font-glacial">
+    <div className="min-h-screen font-glacial overflow-x-hidden w-full max-w-full">
       <FixedNavigation />
       <AnimateOnScroll />
       <div id="inicio">
         <HeroSection />
       </div>
-      <HowItWorksSection />
+      <div id="como-funciona">
+        <HowItWorksSection />
+      </div>
       <div id="recursos">
         <FeaturesSection />
       </div>

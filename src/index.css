@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,6 +30,7 @@
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
   
   html {
@@ -38,17 +38,21 @@
     /* macOS-like scrollbar for Firefox */
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    overflow-x: hidden; /* Prevent any horizontal overflow */
+    width: 100%;
+    max-width: 100%;
   }
   
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
     overflow-y: auto !important; /* Ensure vertical scrolling is always possible */
-    overflow-x: hidden; /* Prevent horizontal scrolling to fix the purple margin */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    width: 100%; /* Ensure body takes full width */
-    max-width: 100vw; /* Prevent overflow */
+    overflow-x: hidden !important; /* Prevent horizontal scrolling to fix the purple margin */
+    margin: 0 !important; /* Remove default margin */
+    padding: 0 !important; /* Remove default padding */
+    width: 100% !important; /* Ensure body takes full width */
+    max-width: 100vw !important; /* Prevent overflow */
+    position: relative;
   }
   
   /* Apple macOS style scrollbars for Webkit browsers */
@@ -154,17 +158,17 @@ body:not(:has(.admin-page)):not(:has(.admin-andora)) {
   color: hsl(var(--primary-foreground));
   min-height: 100vh;
   overflow-y: auto; /* Ensure vertical scrolling is possible */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  max-width: 100vw; /* Prevent overflow */
+  overflow-x: hidden !important; /* Prevent horizontal scrolling */
+  max-width: 100vw !important; /* Prevent overflow */
 }
 
 /* Fix root and container widths */
 #root, .container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  overflow-x: hidden;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
 }
 
 /* Gradient backgrounds */

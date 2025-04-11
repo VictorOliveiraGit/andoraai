@@ -30,8 +30,8 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white">
-      <div className="container mx-auto">
+    <section id="como-funciona" className="py-16 md:py-24 px-4 md:px-6 bg-white overflow-x-hidden w-full">
+      <div className="container mx-auto overflow-hidden">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl text-primary font-codec-bold mb-4 animate-on-scroll">
             Como Funciona
