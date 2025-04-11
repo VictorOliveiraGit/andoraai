@@ -61,19 +61,11 @@ const CTASection = () => {
             Andora automatiza conversas, qualifica leads e fecha vendas — enquanto você se concentra no que realmente importa.
           </p>
           
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
-            <Button
-              size="lg"
-              className="animate-on-scroll bg-secondary text-primary hover:bg-secondary/90 w-full sm:w-auto group transition-all duration-300"
-            >
-              Começar Gratuitamente
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">          
             <Button
               size="lg"
               variant="outline"
-              className="animate-on-scroll bg-transparent border border-white/30 text-white hover:bg-white/10 w-full sm:w-auto group"
+              className="animate-on-scroll bg-transparent border border-white/30 text-white hover:bg-white/10 w-full sm:w-auto group hover:text-white"
             >
               <MessageSquare className="mr-2 w-4 h-4" />
               Agendar Demonstração
