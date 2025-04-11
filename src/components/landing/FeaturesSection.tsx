@@ -1,5 +1,4 @@
-
-import { Check, Users, BarChart, Zap, MessageSquare } from "lucide-react";
+import { Check, Users, BarChart, Zap, MessageSquare, ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface Feature {

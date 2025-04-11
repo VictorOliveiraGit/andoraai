@@ -1,5 +1,4 @@
-
-import { ArrowRight, MessageSquare, Robot, Zap, Database } from "lucide-react";
+import { ArrowRight, MessageSquare, Bot, Zap, Database } from "lucide-react";
 
 const HowItWorksSection = () => {
   const steps = [
@@ -10,7 +9,7 @@ const HowItWorksSection = () => {
       highlight: "Sem atrito"
     },
     {
-      icon: <Robot className="w-10 h-10 text-secondary" />,
+      icon: <Bot className="w-10 h-10 text-secondary" />,
       title: "A IA responde, filtra e qualifica",
       description: "Nossa IA entende a intenção do cliente, responde perguntas e qualifica leads prontos para compra.",
       highlight: "24/7 Automático"

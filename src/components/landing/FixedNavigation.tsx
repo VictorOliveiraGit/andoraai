@@ -33,6 +33,16 @@ const FixedNavigation = () => {
     }
   };
 
+  const handleLoginButton = () => {
+    const headerElement = document.getElementById('header');
+    if (headerElement) {
+      const loginButton = headerElement.querySelector('button[modalTrigger=true]') as HTMLButtonElement;
+      if (loginButton) {
+        loginButton.click();
+      }
+    }
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 shadow-sm backdrop-blur-sm' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4">
@@ -93,7 +103,7 @@ const FixedNavigation = () => {
           <div className="hidden md:flex items-center space-x-4">
             <Button 
               variant="ghost" 
-              onClick={() => document.getElementById('header')?.querySelector('button[modalTrigger=true]')?.click()}
+              onClick={handleLoginButton}
               className="text-gray-700 hover:bg-gray-100"
             >
               Entrar
@@ -139,7 +149,7 @@ const FixedNavigation = () => {
             Preços
           </button>
           <button 
-            onClick={() => document.getElementById('header')?.querySelector('button[modalTrigger=true]')?.click()}
+            onClick={handleLoginButton}
             className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
           >
             Entrar
