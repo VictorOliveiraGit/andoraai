@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
@@ -108,10 +109,10 @@ const FixedNavigation = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 shadow-sm backdrop-blur-sm' : 'bg-transparent'}`}>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <div className="flex items-center">
-            <img src={logo} alt="Andora" className="h-8 md:h-10" />
+            <img src={logo} alt="Andora" className="h-8 md:h-10 ml-2" />
           </div>
           
           <nav className="hidden md:flex items-center space-x-8">
@@ -166,7 +167,7 @@ const FixedNavigation = () => {
               Entrar
             </Button>
             <Button 
-              className="bg-primary text-white hover:bg-primary/90"
+              className="bg-primary text-white hover:bg-primary/90 mr-2"
               onClick={() => setIsLoginOpen(true)}
             >
               Começar grátis
@@ -174,7 +175,7 @@ const FixedNavigation = () => {
           </div>
           
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2 mr-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <div className={`w-6 h-0.5 bg-gray-800 transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
@@ -185,50 +186,59 @@ const FixedNavigation = () => {
       </div>
       
       {/* Mobile menu */}
-      <div className={`md:hidden absolute w-full bg-white shadow-lg transition-all duration-300 ${mobileMenuOpen ? 'max-h-96 border-t' : 'max-h-0 overflow-hidden'}`}>
-        <div className="container mx-auto px-4 py-4 space-y-4">
+      <div className={`md:hidden absolute w-full bg-white shadow-lg transition-all duration-300 ${mobileMenuOpen ? 'max-h-screen border-t' : 'max-h-0 overflow-hidden'}`}>
+        <div className="container mx-auto px-6 py-4 space-y-4">
           <button 
             onClick={() => scrollToSection('inicio')}
-            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+            className="block w-full text-left py-3 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
           >
             Início
           </button>
           <button 
             onClick={() => scrollToSection('como-funciona')}
-            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+            className="block w-full text-left py-3 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
           >
             Como Funciona
           </button>
           <button 
             onClick={() => scrollToSection('recursos')}
-            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+            className="block w-full text-left py-3 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
           >
             Funcionalidades
           </button>
           <button 
             onClick={() => scrollToSection('depoimentos')}
-            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+            className="block w-full text-left py-3 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
           >
             Depoimentos
           </button>
           <button 
             onClick={() => scrollToSection('precos')}
-            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
+            className="block w-full text-left py-3 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
           >
             Preços
           </button>
-          <button 
-            onClick={() => setIsLoginOpen(true)}
-            className="block w-full text-left py-2 text-gray-700 hover:text-primary transition-colors border-b border-gray-100"
-          >
-            Entrar
-          </button>
-          <Button 
-            className="w-full bg-primary text-white hover:bg-primary/90"
-            onClick={() => setIsLoginOpen(true)}
-          >
-            Começar grátis
-          </Button>
+          <div className="flex flex-col space-y-3 pt-2">
+            <Button 
+              variant="outline"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsLoginOpen(true);
+              }}
+              className="w-full text-gray-700 hover:text-primary"
+            >
+              Entrar
+            </Button>
+            <Button 
+              className="w-full bg-primary text-white hover:bg-primary/90"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsLoginOpen(true);
+              }}
+            >
+              Começar grátis
+            </Button>
+          </div>
         </div>
       </div>
 

@@ -110,10 +110,10 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
-      <nav className="container mx-auto px-6 py-4">
+      <nav className="container mx-auto px-6 md:px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <Link to="/" className="text-2xl font-bold text-gray-700">
+            <Link to="/" className="text-2xl font-bold text-gray-700 ml-2">
               <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
             </Link>
 
@@ -178,14 +178,14 @@ const Header = () => {
             </Button>
             <Button 
               onClick={() => setIsContactOpen(true)}
-              className="bg-primary text-white hover:bg-primary/90"
+              className="bg-primary text-white hover:bg-primary/90 mr-2"
             >
               Fale com nossa equipe
             </Button>
           </div>
 
           <button
-            className="md:hidden text-gray-700"
+            className="md:hidden p-2 mr-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X /> : <Menu />}
@@ -195,18 +195,18 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4">
             <div className="flex flex-col space-y-4">
-              <div className="py-2 border-b border-gray-200">
+              <div className="py-3 border-b border-gray-200">
                 <button 
-                  className="flex items-center justify-between w-full text-gray-700"
+                  className="flex items-center justify-between w-full text-gray-700 px-2"
                   onClick={() => toggleDropdown("produtos")}
                 >
                   <span>Produtos</span>
                   <ChevronDown size={16} />
                 </button>
                 {activeDropdown === "produtos" && (
-                  <div className="mt-2 pl-4 space-y-2">
+                  <div className="mt-2 pl-4 space-y-3 pt-2">
                     {dropdownMenus.produtos.map((item, idx) => (
-                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900">
+                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900 py-1">
                         {item.title}
                       </a>
                     ))}
@@ -214,18 +214,18 @@ const Header = () => {
                 )}
               </div>
 
-              <div className="py-2 border-b border-gray-200">
+              <div className="py-3 border-b border-gray-200">
                 <button 
-                  className="flex items-center justify-between w-full text-gray-700"
+                  className="flex items-center justify-between w-full text-gray-700 px-2"
                   onClick={() => toggleDropdown("solucoes")}
                 >
                   <span>Soluções</span>
                   <ChevronDown size={16} />
                 </button>
                 {activeDropdown === "solucoes" && (
-                  <div className="mt-2 pl-4 space-y-2">
+                  <div className="mt-2 pl-4 space-y-3 pt-2">
                     {dropdownMenus.solucoes.map((item, idx) => (
-                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900">
+                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900 py-1">
                         {item.title}
                       </a>
                     ))}
@@ -233,34 +233,37 @@ const Header = () => {
                 )}
               </div>
 
-              <a href="#recursos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+              <a href="#recursos" className="text-gray-700 hover:text-gray-900 py-3 border-b border-gray-200 px-2">
                 Recursos
               </a>
-              <a href="#precos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+              <a href="#precos" className="text-gray-700 hover:text-gray-900 py-3 border-b border-gray-200 px-2">
                 Preços
               </a>
-              <Link to="/about" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+              <Link to="/about" className="text-gray-700 hover:text-gray-900 py-3 border-b border-gray-200 px-2">
                 Sobre
               </Link>
-              <Button 
-                variant="ghost" 
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setIsLoginOpen(true);
-                }}
-                className="text-gray-700 hover:bg-gray-100"
-              >
-                Entrar
-              </Button>
-              <Button 
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setIsContactOpen(true);
-                }}
-                className="bg-primary text-white hover:bg-primary/90"
-              >
-                Fale com nossa equipe
-              </Button>
+              
+              <div className="flex flex-col space-y-3 pt-2">
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsLoginOpen(true);
+                  }}
+                  className="w-full text-gray-700 hover:text-primary"
+                >
+                  Entrar
+                </Button>
+                <Button 
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsContactOpen(true);
+                  }}
+                  className="w-full bg-primary text-white hover:bg-primary/90"
+                >
+                  Fale com nossa equipe
+                </Button>
+              </div>
             </div>
           </div>
         )}
