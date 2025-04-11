@@ -26,7 +26,6 @@ const Header = () => {
     confirmPassword: ""
   });
   const [activeDropdown, setActiveDropdown] = useState("");
-  const [activeSection, setActiveSection] = useState('inicio');
 
   useEffect(() => {
     if (isContactOpen || isLoginOpen || isRegisterOpen) {
@@ -34,56 +33,13 @@ const Header = () => {
     } else {
       document.body.classList.remove('modal-open');
     }
-
-    const handleScroll = () => {
-      const sections = [
-        { id: 'inicio', ref: document.getElementById('inicio') },
-        { id: 'como-funciona', ref: document.getElementById('como-funciona') },
-        { id: 'recursos', ref: document.getElementById('recursos') },
-        { id: 'depoimentos', ref: document.getElementById('depoimentos') },
-        { id: 'precos', ref: document.getElementById('precos') }
-      ];
-      
-      const currentPosition = window.scrollY + 100;
-      for (const section of sections) {
-        if (section.ref) {
-          const offsetTop = section.ref.offsetTop;
-          const offsetHeight = section.ref.offsetHeight;
-          
-          if (currentPosition >= offsetTop && currentPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, [isContactOpen, isLoginOpen, isRegisterOpen]);
 
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-      
-      setIsMenuOpen(false);
-    }
-  };
-
   const menuItems = [
-    { label: "Início", href: "#inicio", id: "inicio" },
-    { label: "Como Funciona", href: "#como-funciona", id: "como-funciona" },
-    { label: "Recursos", href: "#recursos", id: "recursos" },
-    { label: "Depoimentos", href: "#depoimentos", id: "depoimentos" },
-    { label: "Preços", href: "#precos", id: "precos" }
+    { label: "Início", href: "#inicio" },
+    { label: "Recursos", href: "#recursos" },
+    { label: "Depoimentos", href: "#depoimentos" },
+    { label: "Contato", href: "#contato" },
   ];
 
   const sourceOptions = [
@@ -109,9 +65,10 @@ const Header = () => {
     ],
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Check user credentials and redirect to appropriate admin panel
     if (username === "admin" && password === "admin") {
       setIsLoginOpen(false);
       toast.success("Login realizado com sucesso! Redirecionando para Admin Andora.");
@@ -127,11 +84,12 @@ const Header = () => {
     }
   };
 
-  const handleSocialLogin = (provider) => {
+  const handleSocialLogin = (provider: string) => {
     toast.success(`Redirecionando para login com ${provider}...`);
+    // Implementação de integração de login social seria feita aqui
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     if (registerData.password !== registerData.confirmPassword) {
       toast.error("As senhas não coincidem!");
@@ -142,7 +100,7 @@ const Header = () => {
     setIsLoginOpen(true);
   };
 
-  const toggleDropdown = (dropdown) => {
+  const toggleDropdown = (dropdown: string) => {
     if (activeDropdown === dropdown) {
       setActiveDropdown("");
     } else {
@@ -151,26 +109,62 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
-      <nav className="container mx-auto px-4 sm:px-6 py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
+      <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <Link to="/" className="flex items-center">
-              <img src={logo} alt="Logo Andora" height="20" className="h-8 md:h-10 w-auto" />
+            <Link to="/" className="text-2xl font-bold text-gray-700">
+              <img src={logo} alt="Logo Andora" height="20" className='max-w-[70px]'/>
             </Link>
 
-            <div className="hidden md:flex items-center space-x-6">
-              {menuItems.map((item) => (
+            <div className="hidden md:flex items-center space-x-8">
+              <div className="relative">
                 <button 
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`text-sm font-medium transition-colors ${
-                    activeSection === item.id ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
-                  }`}
+                  className="text-gray-700 flex items-center gap-1 hover:opacity-80 transition-colors"
+                  onClick={() => toggleDropdown("produtos")}
                 >
-                  {item.label}
+                  Produtos <ChevronDown size={16} />
                 </button>
-              ))}
+                {activeDropdown === "produtos" && (
+                  <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg p-4 z-50">
+                    {dropdownMenus.produtos.map((item, idx) => (
+                      <a key={idx} href="#" className="block p-2 hover:bg-gray-50 rounded-md">
+                        <p className="font-medium text-gray-900">{item.title}</p>
+                        <p className="text-sm text-gray-500">{item.description}</p>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button 
+                  className="text-gray-700 flex items-center gap-1 hover:opacity-80 transition-colors"
+                  onClick={() => toggleDropdown("solucoes")}
+                >
+                  Soluções <ChevronDown size={16} />
+                </button>
+                {activeDropdown === "solucoes" && (
+                  <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg p-4 z-50">
+                    {dropdownMenus.solucoes.map((item, idx) => (
+                      <a key={idx} href="#" className="block p-2 hover:bg-gray-50 rounded-md">
+                        <p className="font-medium text-gray-900">{item.title}</p>
+                        <p className="text-sm text-gray-500">{item.description}</p>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <a href="#recursos" className="text-gray-700 hover:opacity-80 transition-colors">
+                Recursos
+              </a>
+              <a href="#precos" className="text-gray-700 hover:opacity-80 transition-colors">
+                Preços
+              </a>
+              <Link to="/about" className="text-gray-700 hover:opacity-80 transition-colors">
+                Sobre
+              </Link>
             </div>
           </div>
 
@@ -179,7 +173,6 @@ const Header = () => {
               variant="ghost" 
               onClick={() => setIsLoginOpen(true)}
               className="text-gray-700 hover:bg-gray-100"
-              modalTrigger={true}
             >
               Entrar
             </Button>
@@ -192,38 +185,70 @@ const Header = () => {
           </div>
 
           <button
-            className="md:hidden p-2 rounded-md"
+            className="md:hidden text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
           >
-            {isMenuOpen ? (
-              <X className="h-6 w-6 text-gray-700" />
-            ) : (
-              <Menu className="h-6 w-6 text-gray-700" />
-            )}
+            {isMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden py-4 mt-2">
-            <div className="flex flex-col space-y-3">
-              {menuItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="text-gray-700 hover:text-primary py-2 text-left"
+          <div className="md:hidden py-4">
+            <div className="flex flex-col space-y-4">
+              <div className="py-2 border-b border-gray-200">
+                <button 
+                  className="flex items-center justify-between w-full text-gray-700"
+                  onClick={() => toggleDropdown("produtos")}
                 >
-                  {item.label}
+                  <span>Produtos</span>
+                  <ChevronDown size={16} />
                 </button>
-              ))}
-              <hr className="my-2" />
+                {activeDropdown === "produtos" && (
+                  <div className="mt-2 pl-4 space-y-2">
+                    {dropdownMenus.produtos.map((item, idx) => (
+                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900">
+                        {item.title}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="py-2 border-b border-gray-200">
+                <button 
+                  className="flex items-center justify-between w-full text-gray-700"
+                  onClick={() => toggleDropdown("solucoes")}
+                >
+                  <span>Soluções</span>
+                  <ChevronDown size={16} />
+                </button>
+                {activeDropdown === "solucoes" && (
+                  <div className="mt-2 pl-4 space-y-2">
+                    {dropdownMenus.solucoes.map((item, idx) => (
+                      <a key={idx} href="#" className="block text-gray-600 hover:text-gray-900">
+                        {item.title}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <a href="#recursos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+                Recursos
+              </a>
+              <a href="#precos" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+                Preços
+              </a>
+              <Link to="/about" className="text-gray-700 hover:text-gray-900 py-2 border-b border-gray-200">
+                Sobre
+              </Link>
               <Button 
                 variant="ghost" 
                 onClick={() => {
                   setIsMenuOpen(false);
                   setIsLoginOpen(true);
                 }}
-                className="justify-start text-gray-700 hover:bg-gray-100"
+                className="text-gray-700 hover:bg-gray-100"
               >
                 Entrar
               </Button>
@@ -303,6 +328,7 @@ const Header = () => {
           </DialogHeader>
           
           <div className="space-y-4">
+            {/* Opções de Login Social */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
@@ -402,6 +428,7 @@ const Header = () => {
           </DialogHeader>
           
           <div className="space-y-4">
+            {/* Opções de Registro Social */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
