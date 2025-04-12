@@ -8,7 +8,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { menuItems } from "@/config/admin";
@@ -40,7 +40,11 @@ const AdminAndora = () => {
 
   // Handle logout
   const handleLogout = () => {
-    toast.success("Logout realizado com sucesso!");
+    toast({
+      title: "Sucesso",
+      description: "Logout realizado com sucesso!",
+      closable: true,
+    });
     navigate("/");
   };
   

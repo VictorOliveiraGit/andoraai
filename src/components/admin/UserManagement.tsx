@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserCheck, UserX, Link as LinkIcon, Plus, User } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { users } from "@/config/admin";
 import {
   Dialog,
@@ -30,7 +30,11 @@ export const UserManagement = () => {
 
   const confirmActivation = () => {
     if (userActivationDialog) {
-      toast.success("Link de ativação enviado com sucesso!");
+      toast({
+        title: "Sucesso",
+        description: "Link de ativação enviado com sucesso!",
+        closable: true,
+      });
       setUserActivationDialog(null);
     }
   };
@@ -40,7 +44,11 @@ export const UserManagement = () => {
   };
 
   const handleSaveUser = () => {
-    toast.success(`Usuário ${newUserData.name} adicionado com sucesso!`);
+    toast({
+      title: "Sucesso",
+      description: `Usuário ${newUserData.name} adicionado com sucesso!`,
+      closable: true,
+    });
     setNewUserData({ name: "", email: "" });
     setOpenUserDialog(false);
   };

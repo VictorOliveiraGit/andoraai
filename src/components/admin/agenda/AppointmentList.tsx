@@ -1,301 +1,196 @@
 
-import { Pencil, Save, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
-import { formatPhoneNumber } from "@/utils/appointment-utils";
-import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
 import { useState } from "react";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle,
-  DialogFooter,
-  DialogDescription 
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Appointment, AppointmentStatus } from "@/types/appointment";
 import { AppointmentItem } from "./AppointmentItem";
-import { AppointmentEditForm } from "./AppointmentEditForm";
 import { AppointmentStatusForm } from "./AppointmentStatusForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AppointmentEditForm } from "./AppointmentEditForm";
+import { CalendarRange, Clock } from "lucide-react";
 
 interface AppointmentListProps {
   appointments: Appointment[];
-  selectedDate: Date | undefined;
+  selectedDate?: Date;
   view: "day" | "week" | "month";
-  onStatusChange?: (id: number, status: AppointmentStatus) => void;
-  onAppointmentUpdate?: (appointment: Appointment) => void;
+  onStatusChange: (id: number, newStatus: AppointmentStatus) => void;
+  onAppointmentUpdate: (appointment: Appointment) => void;
+  isLoading?: boolean;
 }
 
 export const AppointmentList = ({ 
   appointments, 
   selectedDate, 
   view, 
-  onStatusChange,
-  onAppointmentUpdate 
+  onStatusChange, 
+  onAppointmentUpdate,
+  isLoading = false,
 }: AppointmentListProps) => {
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
-  const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
-  const [newStatus, setNewStatus] = useState<AppointmentStatus>("scheduled");
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editedAppointment, setEditedAppointment] = useState<Appointment | null>(null);
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [statusModalId, setStatusModalId] = useState<number | null>(null);
+  const [editModalId, setEditModalId] = useState<number | null>(null);
+  
+  const filteredAppointments = selectedDate 
+    ? appointments.filter(appointment => {
+        const appDate = new Date(appointment.date);
+        
+        if (view === "day") {
+          return (
+            appDate.getDate() === selectedDate.getDate() &&
+            appDate.getMonth() === selectedDate.getMonth() &&
+            appDate.getFullYear() === selectedDate.getFullYear()
+          );
+        } else if (view === "week") {
+          const startOfWeek = new Date(selectedDate);
+          startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
+          
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+          
+          return appDate >= startOfWeek && appDate <= endOfWeek;
+        } else {
+          return (
+            appDate.getMonth() === selectedDate.getMonth() &&
+            appDate.getFullYear() === selectedDate.getFullYear()
+          );
+        }
+      })
+    : appointments;
 
-  const handleAppointmentClick = (appointment: Appointment) => {
-    setSelectedAppointment(appointment);
-    setNewStatus(appointment.status);
-    setIsStatusDialogOpen(true);
-  };
-
-  const handleStatusChange = () => {
-    if (selectedAppointment && onStatusChange) {
-      onStatusChange(selectedAppointment.id, newStatus);
-      toast.success(`Status atualizado para: ${getStatusName(newStatus)}`);
-      setIsStatusDialogOpen(false);
+  // Group appointments by date
+  const appointmentsByDate = filteredAppointments.reduce<{[key: string]: Appointment[]}>((acc, appointment) => {
+    const dateKey = appointment.date.toISOString().split('T')[0];
+    if (!acc[dateKey]) {
+      acc[dateKey] = [];
     }
+    acc[dateKey].push(appointment);
+    return acc;
+  }, {});
+
+  const openStatusModal = (id: number) => {
+    setStatusModalId(id);
   };
 
-  const handleEdit = () => {
-    if (selectedAppointment) {
-      setEditedAppointment({...selectedAppointment});
-      setIsEditMode(true);
-    }
+  const closeStatusModal = () => {
+    setStatusModalId(null);
   };
-
-  const handleSaveEdit = () => {
-    if (editedAppointment && onAppointmentUpdate) {
-      onAppointmentUpdate(editedAppointment);
-      toast.success("Agendamento atualizado com sucesso!");
-      setIsEditMode(false);
-      setIsStatusDialogOpen(false);
-    }
+  
+  const openEditModal = (id: number) => {
+    setEditModalId(id);
   };
-
-  const handleCancelEdit = () => {
-    setIsEditMode(false);
-    setEditedAppointment(null);
+  
+  const closeEditModal = () => {
+    setEditModalId(null);
   };
+  
+  const appointmentToEdit = appointments.find(a => a.id === editModalId);
 
-  const handleDeleteConfirm = () => {
-    if (selectedAppointment && onAppointmentUpdate) {
-      // In a real app, you'd likely have a separate delete function
-      // For now, we'll just update status to canceled
-      const updatedAppointment = {
-        ...selectedAppointment,
-        status: "canceled" as AppointmentStatus
-      };
-      onAppointmentUpdate(updatedAppointment);
-      toast.success("Agendamento cancelado com sucesso!");
-      setDeleteConfirmOpen(false);
-      setIsStatusDialogOpen(false);
-    }
-  };
-
-  const handleDeleteClick = () => {
-    setDeleteConfirmOpen(true);
-  };
-
-  const getStatusName = (status: AppointmentStatus): string => {
-    const statusMap = {
-      scheduled: "Agendado",
-      pending: "Pendente",
-      completed: "Concluído",
-      "in-progress": "Em Atendimento",
-      canceled: "Cancelado",
-      delayed: "Atrasado",
-      pending_payment: "Aguardando Pagamento",
-      paid: "Pago",
-      confirmed: "Confirmado",
-      no_show: "Não Compareceu"
-    };
-    return statusMap[status] || status;
-  };
-
-  const filteredAppointments = appointments.filter(appointment => {
-    if (!selectedDate) return false;
-    
-    const appointmentDate = new Date(appointment.date);
-    
-    if (view === "day") {
-      return (
-        appointmentDate.getDate() === selectedDate.getDate() &&
-        appointmentDate.getMonth() === selectedDate.getMonth() &&
-        appointmentDate.getFullYear() === selectedDate.getFullYear()
-      );
-    } else if (view === "week") {
-      const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 });
-      const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 0 });
-      return isWithinInterval(appointmentDate, { start: weekStart, end: weekEnd });
-    } else if (view === "month") {
-      const monthStart = startOfMonth(selectedDate);
-      const monthEnd = endOfMonth(selectedDate);
-      return isWithinInterval(appointmentDate, { start: monthStart, end: monthEnd });
-    }
-    
-    return false;
-  });
-
-  const getViewTitle = () => {
-    switch (view) {
-      case "day":
-        return "Agendamentos do Dia";
-      case "week":
-        return "Agendamentos da Semana";
-      case "month":
-        return "Agendamentos do Mês";
-      default:
-        return "Agendamentos";
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedAppointment) return;
-    
-    const { name, value } = e.target;
-    setEditedAppointment({
-      ...editedAppointment,
-      [name]: value,
-    });
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedAppointment) return;
-    
-    const formattedValue = formatPhoneNumber(e.target.value);
-    setEditedAppointment({
-      ...editedAppointment,
-      phoneNumber: formattedValue,
-    });
-  };
-
-  const handleStatusSelect = (value: AppointmentStatus) => {
-    setNewStatus(value);
-  };
-
-  const handleEditStatusChange = (value: AppointmentStatus) => {
-    if (editedAppointment) {
-      setEditedAppointment({
-        ...editedAppointment,
-        status: value
-      });
-    }
-  };
-
-  const handlePaymentChange = (value: PaymentStatus) => {
-    if (editedAppointment) {
-      setEditedAppointment({
-        ...editedAppointment,
-        payment: value
-      });
-    }
+  // Format date key for display
+  const formatDateHeading = (dateKey: string) => {
+    const date = new Date(dateKey);
+    return new Intl.DateTimeFormat('pt-BR', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }).format(date);
   };
 
   return (
-    <>
-      <Card className="md:col-span-4">
-        <CardHeader>
-          <CardTitle>{getViewTitle()}</CardTitle>
+    <div className="md:col-span-5 space-y-4">
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-medium">
+            <div className="flex items-center gap-2">
+              <CalendarRange className="h-5 w-5 text-muted-foreground" />
+              <span>Agendamentos</span>
+            </div>
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {filteredAppointments.length > 0 ? (
-              filteredAppointments.map((appointment) => (
-                <AppointmentItem 
-                  key={appointment.id}
-                  appointment={appointment}
-                  onClick={handleAppointmentClick}
-                />
-              ))
-            ) : (
-              <div className="text-center py-6 text-muted-foreground">
-                Nenhum agendamento para este {view === "day" ? "dia" : view === "week" ? "semana" : "mês"}
-              </div>
-            )}
-          </div>
+        <CardContent className="pt-0">
+          <Tabs defaultValue="all" className="mb-4">
+            <TabsList className="grid grid-cols-2 h-auto">
+              <TabsTrigger value="all">Todos</TabsTrigger>
+              <TabsTrigger value="today">Hoje</TabsTrigger>
+            </TabsList>
+            <TabsContent value="all" className="mt-4">
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <Clock className="h-8 w-8 animate-spin text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">Carregando agendamentos...</p>
+                </div>
+              ) : Object.keys(appointmentsByDate).length > 0 ? (
+                Object.keys(appointmentsByDate)
+                  .sort()
+                  .map(dateKey => (
+                    <div key={dateKey} className="mb-6">
+                      <h3 className="font-medium text-muted-foreground mb-3 capitalize">
+                        {formatDateHeading(dateKey)}
+                      </h3>
+                      <div className="space-y-3">
+                        {appointmentsByDate[dateKey].map(appointment => (
+                          <AppointmentItem
+                            key={appointment.id}
+                            appointment={appointment}
+                            onStatusClick={() => openStatusModal(appointment.id)}
+                            onEditClick={() => openEditModal(appointment.id)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">Nenhum agendamento encontrado.</p>
+                </div>
+              )}
+            </TabsContent>
+            <TabsContent value="today" className="mt-4">
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <Clock className="h-8 w-8 animate-spin text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">Carregando agendamentos...</p>
+                </div>
+              ) : (() => {
+                const today = new Date().toISOString().split('T')[0];
+                return appointmentsByDate[today] ? (
+                  <div className="space-y-3">
+                    {appointmentsByDate[today].map(appointment => (
+                      <AppointmentItem
+                        key={appointment.id}
+                        appointment={appointment}
+                        onStatusClick={() => openStatusModal(appointment.id)}
+                        onEditClick={() => openEditModal(appointment.id)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Nenhum agendamento para hoje.</p>
+                  </div>
+                );
+              })()}
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
 
-      <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>
-              {isEditMode ? "Editar Agendamento" : "Alterar Status do Agendamento"}
-            </DialogTitle>
-            <DialogDescription>
-              {isEditMode 
-                ? "Edite os detalhes do agendamento abaixo"
-                : "Selecione o novo status ou edite os detalhes do agendamento"
-              }
-            </DialogDescription>
-          </DialogHeader>
-          
-          {isEditMode && editedAppointment ? (
-            <AppointmentEditForm 
-              appointment={editedAppointment}
-              onInputChange={handleInputChange}
-              onPhoneChange={handlePhoneChange}
-              onStatusChange={handleEditStatusChange}
-              onPaymentChange={handlePaymentChange}
-            />
-          ) : selectedAppointment ? (
-            <AppointmentStatusForm 
-              appointment={selectedAppointment}
-              newStatus={newStatus}
-              onStatusChange={handleStatusSelect}
-            />
-          ) : null}
-          
-          <DialogFooter>
-            {isEditMode ? (
-              <>
-                <Button variant="outline" onClick={handleCancelEdit}>
-                  <X className="mr-2 h-4 w-4" />
-                  Cancelar
-                </Button>
-                <Button onClick={handleSaveEdit}>
-                  <Save className="mr-2 h-4 w-4" />
-                  Salvar
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="destructive" onClick={handleDeleteClick}>
-                  Cancelar Agendamento
-                </Button>
-                <Button variant="outline" onClick={() => setIsStatusDialogOpen(false)}>
-                  Fechar
-                </Button>
-                <Button variant="outline" onClick={handleEdit}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Editar
-                </Button>
-                <Button onClick={handleStatusChange}>
-                  Salvar Status
-                </Button>
-              </>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Cancelar Agendamento</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja cancelar este agendamento? Esta ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
-              Voltar
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm}>
-              Confirmar Cancelamento
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+      {/* Status Change Modal */}
+      {statusModalId && (
+        <AppointmentStatusForm
+          appointment={appointments.find(a => a.id === statusModalId)!}
+          onClose={closeStatusModal}
+          onStatusChange={onStatusChange}
+        />
+      )}
+      
+      {/* Edit Appointment Modal */}
+      {editModalId && appointmentToEdit && (
+        <AppointmentEditForm
+          appointment={appointmentToEdit}
+          isOpen={true}
+          onClose={closeEditModal}
+          onSubmit={onAppointmentUpdate}
+        />
+      )}
+    </div>
   );
 };

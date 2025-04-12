@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
+import { Appointment, AppointmentStatus } from "@/types/appointment";
 import { AdminProvider } from "@/contexts/AdminContext";
 import { AppointmentHeader } from "@/components/admin/appointments/AppointmentHeader";
 import { AppointmentFilters } from "@/components/admin/appointments/AppointmentFilters";
 import { AppointmentCard } from "@/components/admin/appointments/AppointmentCard";
+import { agendaApi } from "@/api/apiClient";
+import { mapApiAppointmentToAppointment } from "@/utils/appointment-mappers";
+import { toast } from "@/hooks/use-toast";
 
 const AppointmentsPage = () => {
   const navigate = useNavigate();
@@ -19,55 +22,33 @@ const AppointmentsPage = () => {
   const [filterPayment, setFilterPayment] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // In a real app, we'd fetch from an API
-  // For this example, we'll use some sample data
+  // Fetch appointments from API
   useEffect(() => {
-    const sampleAppointments: Appointment[] = [
-      {
-        id: 1,
-        title: "Consulta Dr. Silva",
-        date: new Date(),
-        status: "scheduled",
-        clientName: "João Pedro",
-        phoneNumber: "(11) 98765-4321",
-        time: "14:30",
-        payment: "pending"
-      },
-      {
-        id: 2,
-        title: "Exame de Rotina",
-        date: new Date(),
-        status: "pending",
-        clientName: "Maria Santos",
-        phoneNumber: "(11) 91234-5678",
-        time: "15:45",
-        payment: "paid"
-      },
-      {
-        id: 3,
-        title: "Consulta de Retorno",
-        date: new Date(Date.now() + 86400000), // Tomorrow
-        status: "confirmed",
-        clientName: "Carlos Silva",
-        phoneNumber: "(11) 98888-7777",
-        time: "10:00",
-        payment: "paid"
-      },
-      {
-        id: 4,
-        title: "Terapia",
-        date: new Date(Date.now() - 86400000), // Yesterday
-        status: "completed",
-        clientName: "Amanda Lima",
-        phoneNumber: "(11) 97777-6666",
-        time: "11:30",
-        payment: "not_required"
+    const fetchAppointments = async () => {
+      try {
+        setIsLoading(true);
+        const apiAppointments = await agendaApi.getAppointments();
+        
+        // Map API appointments to our application format
+        const mappedAppointments = apiAppointments.map(mapApiAppointmentToAppointment);
+        setAppointments(mappedAppointments);
+        setFilteredAppointments(mappedAppointments);
+      } catch (error) {
+        console.error("Failed to fetch appointments:", error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar os agendamentos",
+          variant: "destructive",
+          closable: true,
+        });
+      } finally {
+        setIsLoading(false);
       }
-    ];
+    };
     
-    setAppointments(sampleAppointments);
-    setFilteredAppointments(sampleAppointments);
+    fetchAppointments();
   }, []);
 
   // Apply filters
@@ -147,7 +128,11 @@ const AppointmentsPage = () => {
 
           {/* Appointments List */}
           <div className="space-y-4">
-            {filteredAppointments.length > 0 ? (
+            {isLoading ? (
+              <Card className="p-8 text-center">
+                <p className="text-muted-foreground">Carregando agendamentos...</p>
+              </Card>
+            ) : filteredAppointments.length > 0 ? (
               filteredAppointments.map((appointment) => (
                 <AppointmentCard 
                   key={appointment.id} 

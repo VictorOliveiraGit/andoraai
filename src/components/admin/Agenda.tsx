@@ -1,51 +1,62 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, ListFilter, ExternalLink } from "lucide-react";
-import { toast } from "sonner";
-import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
+import { toast } from "@/hooks/use-toast";
+import { Appointment, AppointmentStatus } from "@/types/appointment";
 import { AppointmentForm } from "./agenda/AppointmentForm";
 import { AppointmentList } from "./agenda/AppointmentList";
 import { CalendarView } from "./agenda/CalendarView";
 import { useNavigate } from "react-router-dom";
+import { agendaApi } from "@/api/apiClient";
+import { mapApiAppointmentToAppointment } from "@/utils/appointment-mappers";
 
 export const Agenda = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [view, setView] = useState<"day" | "week" | "month">("month");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   
-  // Store appointments in state
-  const [appointments, setAppointments] = useState<Appointment[]>([
-    {
-      id: 1,
-      title: "Consulta Dr. Silva",
-      date: new Date(),
-      status: "scheduled",
-      clientName: "João Pedro",
-      phoneNumber: "(11) 98765-4321",
-      time: "14:30",
-      payment: "pending"
-    },
-    {
-      id: 2,
-      title: "Exame de Rotina",
-      date: new Date(),
-      status: "pending",
-      clientName: "Maria Santos",
-      phoneNumber: "(11) 91234-5678",
-      time: "15:45",
-      payment: "paid"
-    }
-  ]);
+  // Fetch appointments from API
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        setIsLoading(true);
+        const apiAppointments = await agendaApi.getAppointments();
+        
+        // Map API appointments to our application format
+        const mappedAppointments = apiAppointments.map(mapApiAppointmentToAppointment);
+        setAppointments(mappedAppointments);
+      } catch (error) {
+        console.error("Failed to fetch appointments:", error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar os agendamentos",
+          variant: "destructive",
+          closable: true,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchAppointments();
+  }, []);
   
   // Handle form submission
   const handleAppointmentSubmit = (newAppointment: Appointment) => {
-    // Add the new appointment to the list
+    // In a real implementation, this would send the data to the API
+    // For now, we'll just add it to the local state
     setAppointments(prev => [...prev, newAppointment]);
     
     // Show success message
-    toast.success("Agendamento criado com sucesso!");
+    toast({
+      title: "Sucesso",
+      description: "Agendamento criado com sucesso!",
+      closable: true,
+    });
     
     // Close modal
     setIsModalOpen(false);
@@ -53,6 +64,7 @@ export const Agenda = () => {
 
   // Handle status change
   const handleStatusChange = (id: number, newStatus: AppointmentStatus) => {
+    // In a real implementation, this would update the API
     setAppointments(prev => 
       prev.map(appointment => 
         appointment.id === id 
@@ -61,11 +73,16 @@ export const Agenda = () => {
       )
     );
     
-    toast.success("Status atualizado com sucesso!");
+    toast({
+      title: "Sucesso",
+      description: "Status atualizado com sucesso!",
+      closable: true,
+    });
   };
 
   // Handle appointment update
   const handleAppointmentUpdate = (updatedAppointment: Appointment) => {
+    // In a real implementation, this would update the API
     setAppointments(prev => 
       prev.map(appointment => 
         appointment.id === updatedAppointment.id 
@@ -73,6 +90,12 @@ export const Agenda = () => {
           : appointment
       )
     );
+
+    toast({
+      title: "Sucesso",
+      description: "Agendamento atualizado com sucesso!",
+      closable: true,
+    });
   };
 
   // Navigate to full appointments page
@@ -117,6 +140,7 @@ export const Agenda = () => {
           view={view}
           onStatusChange={handleStatusChange}
           onAppointmentUpdate={handleAppointmentUpdate}
+          isLoading={isLoading}
         />
       </div>
 
