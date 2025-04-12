@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 import type {
@@ -147,6 +148,8 @@ function toast({ ...props }: Toast) {
       type: "UPDATE_TOAST",
       toast: { ...props, id },
     })
+  
+  // Enhanced dismiss functionality
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
 
   dispatch({
@@ -155,6 +158,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
+      closable: true, // Add a closable flag
       onOpenChange: (open) => {
         if (!open) dismiss()
       },

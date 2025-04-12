@@ -1,4 +1,5 @@
 
+import { X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
@@ -8,14 +9,13 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
-import { X } from "lucide-react"
 
 export function Toaster() {
   const { toasts } = useToast()
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {toasts.map(function ({ id, title, description, action, closable, ...props }) {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
@@ -25,9 +25,11 @@ export function Toaster() {
               )}
             </div>
             {action}
-            <ToastClose className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 hover:text-foreground hover:bg-accent transition-colors">
-              <X className="h-4 w-4" />
-            </ToastClose>
+            {closable && (
+              <ToastClose>
+                <X className="h-4 w-4" />
+              </ToastClose>
+            )}
           </Toast>
         )
       })}
