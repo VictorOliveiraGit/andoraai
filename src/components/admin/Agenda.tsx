@@ -1,17 +1,19 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, ListFilter, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
 import { AppointmentForm } from "./agenda/AppointmentForm";
 import { AppointmentList } from "./agenda/AppointmentList";
 import { CalendarView } from "./agenda/CalendarView";
+import { useNavigate } from "react-router-dom";
 
 export const Agenda = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [view, setView] = useState<"day" | "week" | "month">("month");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   
   // Store appointments in state
   const [appointments, setAppointments] = useState<Appointment[]>([
@@ -73,14 +75,30 @@ export const Agenda = () => {
     );
   };
 
+  // Navigate to full appointments page
+  const handleViewAllAppointments = () => {
+    navigate("/admin/appointments");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Agenda</h2>
-        <Button className="flex items-center gap-2" onClick={() => setIsModalOpen(true)}>
-          <Plus size={20} />
-          Novo Agendamento
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-2"
+            onClick={handleViewAllAppointments}
+          >
+            <ListFilter size={18} />
+            <span className="hidden sm:inline">Ver Todos</span>
+            <ExternalLink size={16} className="sm:ml-1" />
+          </Button>
+          <Button className="flex items-center gap-2" onClick={() => setIsModalOpen(true)}>
+            <Plus size={18} />
+            <span className="hidden sm:inline">Novo Agendamento</span>
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">

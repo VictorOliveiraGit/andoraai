@@ -99,17 +99,17 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <form onSubmit={handleSubmit}>
-          <DialogHeader>
+          <DialogHeader className="space-y-1">
             <DialogTitle>Novo Agendamento</DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-xs">
               Preencha os detalhes abaixo para criar um novo agendamento.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+          <div className="grid gap-3 py-3">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="title" className="text-right text-sm">
                 Título
               </Label>
               <Input
@@ -118,85 +118,91 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
                 value={newAppointment.title}
                 onChange={handleInputChange}
                 placeholder="Título do agendamento"
-                className="col-span-3"
+                className="col-span-3 h-8"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="clientName" className="text-right">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="clientName" className="text-right text-sm">
                 Cliente
               </Label>
-              <div className="col-span-3 flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
+              <div className="col-span-3 flex items-center gap-1">
+                <User className="h-3 w-3 text-muted-foreground" />
                 <Input
                   id="clientName"
                   name="clientName"
                   value={newAppointment.clientName}
                   onChange={handleInputChange}
                   placeholder="Nome do cliente"
-                  className="flex-1"
+                  className="flex-1 h-8"
                   required
                 />
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phoneNumber" className="text-right">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="phoneNumber" className="text-right text-sm">
                 Telefone
               </Label>
-              <div className="col-span-3 flex items-center gap-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
+              <div className="col-span-3 flex items-center gap-1">
+                <Phone className="h-3 w-3 text-muted-foreground" />
                 <Input
                   id="phoneNumber"
                   name="phoneNumber"
                   value={newAppointment.phoneNumber}
                   onChange={handlePhoneChange}
                   placeholder="(00) 00000-0000"
-                  className="flex-1"
+                  className="flex-1 h-8"
                   maxLength={15}
                   required
                 />
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label className="text-right text-sm">
                 Data
               </Label>
-              <div className="col-span-3 border rounded-md p-3">
+              <div className="col-span-3 border rounded-md p-1">
                 <Calendar
                   mode="single"
                   selected={newAppointment.date}
                   onSelect={handleDateSelect}
                   locale={ptBR}
-                  className="rounded-md"
+                  className="rounded-md pointer-events-auto"
+                  classNames={{
+                    caption: "text-xs",
+                    day: "text-xs h-7 w-7",
+                    nav_button: "h-6 w-6",
+                    head_cell: "text-xs font-normal"
+                  }}
                 />
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="time" className="text-right">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="time" className="text-right text-sm">
                 Horário
               </Label>
-              <div className="col-span-3 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-muted-foreground" />
+              <div className="col-span-3 flex items-center gap-1">
+                <Clock className="h-3 w-3 text-muted-foreground" />
                 <Input
                   id="time"
                   name="time"
                   type="time"
                   value={newAppointment.time}
                   onChange={handleInputChange}
-                  className="flex-1"
+                  className="flex-1 h-8"
                   required
                 />
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="status" className="text-right text-sm">
                 Status
               </Label>
               <Select 
                 value={newAppointment.status} 
                 onValueChange={handleStatusChange}
               >
-                <SelectTrigger className="col-span-3 w-full">
+                <SelectTrigger className="col-span-3 w-full h-8">
                   <SelectValue placeholder="Selecione o status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -207,17 +213,17 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="payment" className="text-right">
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="payment" className="text-right text-sm">
                 Pagamento
               </Label>
-              <div className="col-span-3 flex items-center gap-2">
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <div className="col-span-3 flex items-center gap-1">
+                <CreditCard className="h-3 w-3 text-muted-foreground" />
                 <Select 
                   value={newAppointment.payment || "not_required"} 
                   onValueChange={handlePaymentChange}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full h-8">
                     <SelectValue placeholder="Status do pagamento" />
                   </SelectTrigger>
                   <SelectContent>
@@ -229,11 +235,11 @@ export const AppointmentForm = ({ isOpen, onClose, onSubmit }: AppointmentFormPr
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+          <DialogFooter className="mt-2">
+            <Button type="button" variant="outline" onClick={onClose} size="sm">
               Cancelar
             </Button>
-            <Button type="submit">Salvar Agendamento</Button>
+            <Button type="submit" size="sm">Salvar Agendamento</Button>
           </DialogFooter>
         </form>
       </DialogContent>
