@@ -6,15 +6,21 @@ import { Clock, DollarSign } from "lucide-react";
 
 interface AppointmentStatusFormProps {
   appointment: Appointment;
-  newStatus: AppointmentStatus;
-  onStatusChange: (value: AppointmentStatus) => void;
+  onClose: () => void;
+  onStatusChange: (id: number, newStatus: AppointmentStatus) => void;
 }
 
 export const AppointmentStatusForm = ({
   appointment,
-  newStatus,
+  onClose,
   onStatusChange,
 }: AppointmentStatusFormProps) => {
+  // Create a local status handler that maps to the expected function signature
+  const handleStatusChange = (value: AppointmentStatus) => {
+    onStatusChange(appointment.id, value);
+    onClose();
+  };
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -31,7 +37,7 @@ export const AppointmentStatusForm = ({
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Status</label>
-            <Select value={newStatus} onValueChange={onStatusChange}>
+            <Select defaultValue={appointment.status} onValueChange={handleStatusChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o status" />
               </SelectTrigger>

@@ -6,15 +6,28 @@ import { PaymentStatusBadge } from "./PaymentStatusBadge";
 
 interface AppointmentItemProps {
   appointment: Appointment;
-  onClick: (appointment: Appointment) => void;
+  onClick?: (appointment: Appointment) => void;
+  onStatusClick?: () => void;
+  onEditClick?: () => void;
 }
 
-export const AppointmentItem = ({ appointment, onClick }: AppointmentItemProps) => {
+export const AppointmentItem = ({ 
+  appointment, 
+  onClick, 
+  onStatusClick, 
+  onEditClick 
+}: AppointmentItemProps) => {
+  const handleClick = () => {
+    if (onClick) onClick(appointment);
+    // If specific click handlers are provided, don't trigger the generic onClick
+    if (!onStatusClick && !onEditClick) return;
+  };
+
   return (
     <div
       key={appointment.id}
       className="flex flex-col space-y-2 p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-      onClick={() => onClick(appointment)}
+      onClick={handleClick}
     >
       <div className="flex items-center justify-between">
         <span className="font-medium">{appointment.time}</span>
@@ -30,6 +43,34 @@ export const AppointmentItem = ({ appointment, onClick }: AppointmentItemProps) 
       {appointment.payment && appointment.payment !== "not_required" && (
         <div className="mt-2">
           <PaymentStatusBadge payment={appointment.payment} />
+        </div>
+      )}
+      
+      {/* Add action buttons if click handlers are provided */}
+      {(onStatusClick || onEditClick) && (
+        <div className="flex justify-end gap-2 mt-2">
+          {onStatusClick && (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                onStatusClick();
+              }}
+              className="text-xs text-blue-500 hover:underline"
+            >
+              Alterar Status
+            </button>
+          )}
+          {onEditClick && (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditClick();
+              }}
+              className="text-xs text-blue-500 hover:underline"
+            >
+              Editar
+            </button>
+          )}
         </div>
       )}
     </div>

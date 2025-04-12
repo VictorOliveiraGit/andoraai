@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppointmentEditForm } from "./AppointmentEditForm";
 import { CalendarRange, Clock } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface AppointmentListProps {
   appointments: Appointment[];
@@ -175,11 +176,15 @@ export const AppointmentList = ({
 
       {/* Status Change Modal */}
       {statusModalId && (
-        <AppointmentStatusForm
-          appointment={appointments.find(a => a.id === statusModalId)!}
-          onClose={closeStatusModal}
-          onStatusChange={onStatusChange}
-        />
+        <Dialog open={true} onOpenChange={() => closeStatusModal()}>
+          <DialogContent>
+            <AppointmentStatusForm
+              appointment={appointments.find(a => a.id === statusModalId)!}
+              onClose={closeStatusModal}
+              onStatusChange={onStatusChange}
+            />
+          </DialogContent>
+        </Dialog>
       )}
       
       {/* Edit Appointment Modal */}
