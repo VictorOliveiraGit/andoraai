@@ -1,4 +1,3 @@
-
 import * as React from "react"
 
 import type {
@@ -14,6 +13,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  closable?: boolean
 }
 
 const actionTypes = {
@@ -91,8 +91,6 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -149,7 +147,6 @@ function toast({ ...props }: Toast) {
       toast: { ...props, id },
     })
   
-  // Enhanced dismiss functionality
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
 
   dispatch({
@@ -158,7 +155,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      closable: true, // Add a closable flag
+      closable: true,
       onOpenChange: (open) => {
         if (!open) dismiss()
       },
