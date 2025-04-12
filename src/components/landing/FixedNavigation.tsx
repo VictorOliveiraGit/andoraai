@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import logo from '../../../public/logo-andora.svg';
+import LogoVariado from '../../../public/logotipo_variado.png'
 import {
   Dialog,
   DialogContent,
@@ -117,7 +118,7 @@ const FixedNavigation = () => {
       <div className="container mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <div className="flex items-center">
-            <img src={logo} alt="Andora" className="h-8 md:h-10 ml-2" />
+            <img src={LogoVariado} alt="Andora" className="h-8 md:h-10 ml-2" />
           </div>
           
           <nav className="hidden md:flex items-center space-x-8">
@@ -167,7 +168,7 @@ const FixedNavigation = () => {
             <Button 
               variant="ghost" 
               onClick={() => setIsLoginOpen(true)}
-              className={`${isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
+              className={`${isScrolled ? 'text-gray-700 hover:bg-primary hover:text-white' : 'text-white hover:bg-white'}`}
             >
               Entrar
             </Button>
@@ -175,7 +176,7 @@ const FixedNavigation = () => {
               className={`${isScrolled ? 'bg-primary text-white hover:bg-primary/90' : 'bg-white text-primary hover:bg-white/90'} mr-2`}
               onClick={() => setIsLoginOpen(true)}
             >
-              Começar grátis
+              Fale Conosco
             </Button>
           </div>
           
@@ -241,7 +242,7 @@ const FixedNavigation = () => {
                 setIsLoginOpen(true);
               }}
             >
-              Começar grátis
+              Fala Conosco
             </Button>
           </div>
         </div>

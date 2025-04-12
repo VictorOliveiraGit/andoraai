@@ -2,6 +2,7 @@
 import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from '../../public/logo-andora.svg';
+import LogoVariado from '../../public/logotipo_variado.png'
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 pb-12 border-b border-white/10">
           <div>
-            <img src={logo} alt="Andora" className="mb-4 h-12" />
+            <img src={LogoVariado} alt="Andora" className="mb-4 h-12" />
             <p className="text-sm text-white/80 mb-6">
               Transformamos o WhatsApp em uma máquina de vendas com Inteligência Artificial.
             </p>
