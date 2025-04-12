@@ -13,11 +13,11 @@ export const PaymentStatusBadge = ({ payment }: PaymentStatusBadgeProps) => {
   const getPaymentColor = (payment: PaymentStatus) => {
     switch (payment) {
       case "pending":
-        return "bg-amber-100 text-amber-800";
+        return "bg-amber-100 text-amber-800 border-amber-200";
       case "paid":
-        return "bg-emerald-100 text-emerald-800";
+        return "bg-emerald-100 text-emerald-800 border-emerald-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -44,7 +44,7 @@ export const PaymentStatusBadge = ({ payment }: PaymentStatusBadgeProps) => {
   };
 
   return (
-    <span className={cn("px-2 py-1 rounded-full text-xs font-medium flex items-center", getPaymentColor(payment))}>
+    <span className={cn("px-2.5 py-1 rounded-full text-xs font-medium flex items-center border", getPaymentColor(payment))}>
       {getPaymentIcon(payment)}
       {getPaymentLabel(payment)}
     </span>
