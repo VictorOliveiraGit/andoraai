@@ -130,17 +130,23 @@ const AppointmentsPage = () => {
     setSearchQuery("");
   };
 
+  // Navigate back to agenda page
+  const handleBackToAgenda = () => {
+    navigate("/admin");
+  };
+
   return (
     <AdminProvider>
       <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
+          {/* Header with Back Button */}
           <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center">
               <Button 
                 variant="ghost" 
                 className="mr-4 p-2" 
-                onClick={() => navigate("/admin")}
+                onClick={handleBackToAgenda}
+                aria-label="Voltar para agenda"
               >
                 <ArrowLeft size={20} />
               </Button>
@@ -162,17 +168,18 @@ const AppointmentsPage = () => {
                 size="icon"
                 onClick={() => setShowFilters(!showFilters)}
                 className={showFilters ? "bg-primary/10" : ""}
+                aria-label="Mostrar filtros"
               >
                 <Filter size={18} />
               </Button>
             </div>
           </div>
 
-          {/* Filters */}
+          {/* Filters Section - Made More Responsive */}
           {showFilters && (
             <Card className="mb-6">
               <CardHeader className="pb-2">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                   <CardTitle className="text-lg">Filtros</CardTitle>
                   <Button 
                     variant="ghost" 
@@ -181,12 +188,12 @@ const AppointmentsPage = () => {
                     className="h-8 gap-1 text-sm"
                   >
                     <X size={16} />
-                    Limpar filtros
+                    <span className="hidden sm:inline">Limpar filtros</span>
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Date Filter */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Data</label>
@@ -198,7 +205,7 @@ const AppointmentsPage = () => {
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {filterDate ? (
-                            format(filterDate, "dd 'de' MMMM, yyyy", { locale: ptBR })
+                            format(filterDate, "dd 'de' MMM, yyyy", { locale: ptBR })
                           ) : (
                             <span>Escolha uma data</span>
                           )}
@@ -260,11 +267,11 @@ const AppointmentsPage = () => {
             </Card>
           )}
 
-          {/* Appointments List */}
+          {/* Appointments List - Made More Responsive */}
           <div className="space-y-4">
             {filteredAppointments.length > 0 ? (
               filteredAppointments.map((appointment) => (
-                <Card key={appointment.id} className="overflow-hidden">
+                <Card key={appointment.id} className="overflow-hidden hover:shadow-md transition-shadow">
                   <div className="flex flex-col sm:flex-row">
                     {/* Date sidebar */}
                     <div className="bg-primary/5 p-4 sm:w-48 flex flex-row sm:flex-col justify-between sm:justify-center items-center sm:items-start gap-2 border-b sm:border-b-0 sm:border-r border-gray-200">
@@ -298,7 +305,7 @@ const AppointmentsPage = () => {
                           </div>
                         </div>
                         
-                        <div className="flex flex-wrap gap-2 sm:text-right mt-2 sm:mt-0">
+                        <div className="flex flex-wrap gap-2 sm:justify-end mt-2 sm:mt-0">
                           <AppointmentStatusBadge status={appointment.status} />
                           {appointment.payment !== "not_required" && (
                             <PaymentStatusBadge payment={appointment.payment} />
@@ -321,6 +328,17 @@ const AppointmentsPage = () => {
                 </Button>
               </Card>
             )}
+          </div>
+          
+          {/* Back to Agenda Button - Mobile Friendly Fixed Button */}
+          <div className="fixed bottom-6 right-6 md:hidden">
+            <Button 
+              onClick={handleBackToAgenda}
+              className="rounded-full shadow-lg flex items-center justify-center h-12 w-12"
+              aria-label="Voltar para agenda"
+            >
+              <ArrowLeft size={20} />
+            </Button>
           </div>
         </div>
       </div>
