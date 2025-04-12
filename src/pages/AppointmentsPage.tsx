@@ -2,26 +2,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft } from "lucide-react";
 import { Appointment, AppointmentStatus, PaymentStatus } from "@/types/appointment";
-import { AppointmentStatusBadge } from "@/components/admin/agenda/AppointmentStatusBadge";
-import { PaymentStatusBadge } from "@/components/admin/agenda/PaymentStatusBadge";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { 
-  ArrowLeft,
-  Search,
-  Calendar as CalendarIcon,
-  Filter,
-  Phone,
-  Clock,
-  X
-} from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { AdminProvider } from "@/contexts/AdminContext";
+import { AppointmentHeader } from "@/components/admin/appointments/AppointmentHeader";
+import { AppointmentFilters } from "@/components/admin/appointments/AppointmentFilters";
+import { AppointmentCard } from "@/components/admin/appointments/AppointmentCard";
 
 const AppointmentsPage = () => {
   const navigate = useNavigate();
@@ -139,182 +126,33 @@ const AppointmentsPage = () => {
     <AdminProvider>
       <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          {/* Header with Back Button */}
-          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center">
-              <Button 
-                variant="ghost" 
-                className="mr-4 p-2" 
-                onClick={handleBackToAgenda}
-                aria-label="Voltar para agenda"
-              >
-                <ArrowLeft size={20} />
-              </Button>
-              <h1 className="text-2xl font-bold">Todos os Agendamentos</h1>
-            </div>
-            
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <div className="relative flex-1 sm:w-64">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar por nome ou título..." 
-                  className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowFilters(!showFilters)}
-                className={showFilters ? "bg-primary/10" : ""}
-                aria-label="Mostrar filtros"
-              >
-                <Filter size={18} />
-              </Button>
-            </div>
-          </div>
+          <AppointmentHeader 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            handleBackToAgenda={handleBackToAgenda}
+          />
 
-          {/* Filters Section - Made More Responsive */}
-          {showFilters && (
-            <Card className="mb-6">
-              <CardHeader className="pb-2">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                  <CardTitle className="text-lg">Filtros</CardTitle>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handleClearFilters}
-                    className="h-8 gap-1 text-sm"
-                  >
-                    <X size={16} />
-                    <span className="hidden sm:inline">Limpar filtros</span>
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {/* Date Filter */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Data</label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal h-9"
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {filterDate ? (
-                            format(filterDate, "dd 'de' MMM, yyyy", { locale: ptBR })
-                          ) : (
-                            <span>Escolha uma data</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={filterDate}
-                          onSelect={setFilterDate}
-                          className="rounded-md pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+          <AppointmentFilters 
+            filterDate={filterDate}
+            setFilterDate={setFilterDate}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+            filterPayment={filterPayment}
+            setFilterPayment={setFilterPayment}
+            handleClearFilters={handleClearFilters}
+            showFilters={showFilters}
+          />
 
-                  {/* Status Filter */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Status</label>
-                    <Select 
-                      value={filterStatus}
-                      onValueChange={setFilterStatus}
-                    >
-                      <SelectTrigger className="h-9">
-                        <SelectValue placeholder="Todos os status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Todos os status</SelectItem>
-                        <SelectItem value="scheduled">Agendado</SelectItem>
-                        <SelectItem value="confirmed">Confirmado</SelectItem>
-                        <SelectItem value="pending">Pendente</SelectItem>
-                        <SelectItem value="completed">Finalizado</SelectItem>
-                        <SelectItem value="canceled">Cancelado</SelectItem>
-                        <SelectItem value="no_show">Não compareceu</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Payment Filter */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Pagamento</label>
-                    <Select 
-                      value={filterPayment}
-                      onValueChange={setFilterPayment}
-                    >
-                      <SelectTrigger className="h-9">
-                        <SelectValue placeholder="Todos os pagamentos" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Todos os pagamentos</SelectItem>
-                        <SelectItem value="paid">Pago</SelectItem>
-                        <SelectItem value="pending">Pendente</SelectItem>
-                        <SelectItem value="not_required">Não requer pagamento</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Appointments List - Made More Responsive */}
+          {/* Appointments List */}
           <div className="space-y-4">
             {filteredAppointments.length > 0 ? (
               filteredAppointments.map((appointment) => (
-                <Card key={appointment.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="flex flex-col sm:flex-row">
-                    {/* Date sidebar */}
-                    <div className="bg-primary/5 p-4 sm:w-48 flex flex-row sm:flex-col justify-between sm:justify-center items-center sm:items-start gap-2 border-b sm:border-b-0 sm:border-r border-gray-200">
-                      <div className="text-center sm:text-left">
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(appointment.date), "EEEE", { locale: ptBR })}
-                        </p>
-                        <p className="text-xl font-bold">
-                          {format(new Date(appointment.date), "dd 'de' MMM", { locale: ptBR })}
-                        </p>
-                      </div>
-                      <div className="flex items-center sm:mt-2">
-                        <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
-                        <span className="font-medium">{appointment.time}</span>
-                      </div>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="p-4 flex-1">
-                      <div className="flex flex-col sm:flex-row justify-between gap-2">
-                        <div>
-                          <h3 className="font-semibold text-lg">
-                            {appointment.title}
-                          </h3>
-                          <p className="text-muted-foreground">{appointment.clientName}</p>
-                          <div className="flex items-center mt-1">
-                            <Phone className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
-                            <span className="text-sm text-muted-foreground">
-                              {appointment.phoneNumber}
-                            </span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2 sm:justify-end mt-2 sm:mt-0">
-                          <AppointmentStatusBadge status={appointment.status} />
-                          {appointment.payment !== "not_required" && (
-                            <PaymentStatusBadge payment={appointment.payment} />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <AppointmentCard 
+                  key={appointment.id} 
+                  appointment={appointment} 
+                />
               ))
             ) : (
               <Card className="p-8 text-center">
