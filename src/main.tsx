@@ -2,7 +2,6 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { Toaster } from "sonner";
 
 // Add a listener to ensure proper viewport settings but preserve scrolling
 document.documentElement.style.overflowX = 'hidden';
@@ -29,8 +28,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const root = createRoot(document.getElementById("root")!);
 root.render(
-  <>
-    <Toaster position="top-center" richColors closeButton />
-    <App />
-  </>
+  <App />
 );
