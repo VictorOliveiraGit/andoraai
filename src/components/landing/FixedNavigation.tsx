@@ -107,6 +107,11 @@ const FixedNavigation = () => {
     setIsLoginOpen(true);
   };
 
+  // Text color classes based on scroll position
+  const textColor = isScrolled ? 'text-gray-700' : 'text-white';
+  const activeTextColor = isScrolled ? 'text-primary font-semibold' : 'text-white font-semibold';
+  const hoverTextColor = isScrolled ? 'hover:text-primary' : 'hover:text-white/80';
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 shadow-sm backdrop-blur-sm' : 'bg-transparent'}`}>
       <div className="container mx-auto px-6 md:px-8">
@@ -119,7 +124,7 @@ const FixedNavigation = () => {
             <button 
               onClick={() => scrollToSection('inicio')}
               className={`text-sm font-medium transition-colors ${
-                activeSection === 'inicio' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+                activeSection === 'inicio' ? activeTextColor : `${textColor} ${hoverTextColor}`
               }`}
             >
               Início
@@ -127,7 +132,7 @@ const FixedNavigation = () => {
             <button 
               onClick={() => scrollToSection('como-funciona')}
               className={`text-sm font-medium transition-colors ${
-                activeSection === 'como-funciona' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+                activeSection === 'como-funciona' ? activeTextColor : `${textColor} ${hoverTextColor}`
               }`}
             >
               Como Funciona
@@ -135,7 +140,7 @@ const FixedNavigation = () => {
             <button 
               onClick={() => scrollToSection('recursos')}
               className={`text-sm font-medium transition-colors ${
-                activeSection === 'recursos' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+                activeSection === 'recursos' ? activeTextColor : `${textColor} ${hoverTextColor}`
               }`}
             >
               Funcionalidades
@@ -143,7 +148,7 @@ const FixedNavigation = () => {
             <button 
               onClick={() => scrollToSection('depoimentos')}
               className={`text-sm font-medium transition-colors ${
-                activeSection === 'depoimentos' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+                activeSection === 'depoimentos' ? activeTextColor : `${textColor} ${hoverTextColor}`
               }`}
             >
               Depoimentos
@@ -151,7 +156,7 @@ const FixedNavigation = () => {
             <button 
               onClick={() => scrollToSection('precos')}
               className={`text-sm font-medium transition-colors ${
-                activeSection === 'precos' ? 'text-primary font-semibold' : 'text-gray-700 hover:text-primary'
+                activeSection === 'precos' ? activeTextColor : `${textColor} ${hoverTextColor}`
               }`}
             >
               Preços
@@ -162,12 +167,12 @@ const FixedNavigation = () => {
             <Button 
               variant="ghost" 
               onClick={() => setIsLoginOpen(true)}
-              className="text-gray-700 hover:bg-gray-100"
+              className={`${isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
             >
               Entrar
             </Button>
             <Button 
-              className="bg-primary text-white hover:bg-primary/90 mr-2"
+              className={`${isScrolled ? 'bg-primary text-white hover:bg-primary/90' : 'bg-white text-primary hover:bg-white/90'} mr-2`}
               onClick={() => setIsLoginOpen(true)}
             >
               Começar grátis
@@ -178,9 +183,9 @@ const FixedNavigation = () => {
             className="md:hidden p-2 mr-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <div className={`w-6 h-0.5 bg-gray-800 transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
-            <div className={`w-6 h-0.5 bg-gray-800 mt-1.5 transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`}></div>
-            <div className={`w-6 h-0.5 bg-gray-800 mt-1.5 transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
+            <div className={`w-6 h-0.5 ${isScrolled ? 'bg-gray-800' : 'bg-white'} transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
+            <div className={`w-6 h-0.5 ${isScrolled ? 'bg-gray-800' : 'bg-white'} mt-1.5 transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`}></div>
+            <div className={`w-6 h-0.5 ${isScrolled ? 'bg-gray-800' : 'bg-white'} mt-1.5 transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
           </button>
         </div>
       </div>
