@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Apple } from "lucide-react";
 import { toast } from "sonner";
+import { authApi } from "@/api/apiClient";
 
 const FixedNavigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,13 +19,16 @@ const FixedNavigation = () => {
   const [activeSection, setActiveSection] = useState('');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    login: "",
+    phone: ""
   });
 
   useEffect(() => {
@@ -73,39 +76,132 @@ const FixedNavigation = () => {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check user credentials
-    if (username === "admin" && password === "admin") {
-      setIsLoginOpen(false);
-      toast.success("Login realizado com sucesso! Redirecionando para Admin Andora.");
-      window.location.href = "/admin-andora";
-    } 
-    else if (username === "victor" && password === "victor") {
-      setIsLoginOpen(false);
-      toast.success("Login realizado com sucesso! Redirecionando para Admin Dashboard.");
-      window.location.href = "/admin";
+    if (!username || !password) {
+      toast.error("Por favor, preencha todos os campos");
+      return;
     }
-    else {
-      toast.error("Usuário ou senha inválidos");
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await authApi.login(username, password);
+      
+      toast.success(response.mensagem || "Login realizado com sucesso!");
+      
+      // Store user data in localStorage or context
+      localStorage.setItem("user", JSON.stringify(response.usuario));
+      
+      setIsLoginOpen(false);
+      
+      // Redirect based on user role or preferences
+      if (username === "admin") {
+        window.location.href = "/admin-andora";
+      } else {
+        window.location.href = "/admin";
+      }
+      
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Erro ao fazer login. Tente novamente.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSocialLogin = (provider: string) => {
-    toast.success(`Redirecionando para login com ${provider}...`);
-    // Implementação de integração de login social seria feita aqui
+  const handleSocialLogin = async (provider: string) => {
+    // For now, we'll implement Google login as an example
+    if (provider === "Google") {
+      try {
+        setIsLoading(true);
+        
+        // In a real implementation, you would use Google OAuth
+        // For this example, we'll simulate with fixed data
+        const mockGoogleData = {
+          email: "usuario.teste@gmail.com",
+          nome_completo: "Usuário Teste Google",
+        };
+        
+        const response = await authApi.loginWithGoogle(
+          mockGoogleData.email,
+          mockGoogleData.nome_completo
+        );
+        
+        toast.success(response.mensagem || "Login com Google realizado com sucesso!");
+        
+        // Store user data
+        localStorage.setItem("user", JSON.stringify(response.usuario));
+        
+        setIsLoginOpen(false);
+        window.location.href = "/admin";
+        
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Erro ao fazer login com Google. Tente novamente.");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      toast.info(`Login com ${provider} será implementado em breve.`);
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (registerData.password !== registerData.confirmPassword) {
       toast.error("As senhas não coincidem!");
       return;
     }
-    toast.success("Conta criada com sucesso! Faça login para continuar.");
-    setIsRegisterOpen(false);
-    setIsLoginOpen(true);
+    
+    if (!registerData.name || !registerData.email || !registerData.password || !registerData.login) {
+      toast.error("Por favor, preencha todos os campos obrigatórios");
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await authApi.register({
+        login: registerData.login,
+        senha: registerData.password,
+        nome_completo: registerData.name,
+        email: registerData.email,
+        telefone: registerData.phone || "",
+      });
+      
+      toast.success(response.mensagem || "Conta criada com sucesso! Faça login para continuar.");
+      
+      // Reset form and open login dialog
+      setRegisterData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        login: "",
+        phone: ""
+      });
+      
+      setIsRegisterOpen(false);
+      setIsLoginOpen(true);
+      
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Erro ao criar conta. Tente novamente.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Text color classes based on scroll position
@@ -263,12 +359,13 @@ const FixedNavigation = () => {
           </DialogHeader>
           
           <div className="space-y-4">
-            {/* Opções de Login Social */}
+            {/* Social Login Options */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Google")}
+                disabled={isLoading}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
                   <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.691 0 3.225.6 4.425 1.583l3.715-3.715A11.945 11.945 0 0 0 12 0C7.392 0 3.397 2.6 1.385 6.461l3.881 3.304z"/>
@@ -282,6 +379,7 @@ const FixedNavigation = () => {
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Apple")}
+                disabled={isLoading}
               >
                 <Apple className="w-5 h-5 text-black" />
                 Apple
@@ -306,6 +404,7 @@ const FixedNavigation = () => {
                   placeholder="Digite seu usuário"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -316,6 +415,7 @@ const FixedNavigation = () => {
                   placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
                 />
               </div>
               <div className="text-right">
@@ -327,8 +427,13 @@ const FixedNavigation = () => {
                   Esqueci minha senha
                 </Button>
               </div>
-              <Button className="w-full bg-secondary " type="submit" variant="secondary">
-                Entrar
+              <Button 
+                className="w-full bg-secondary" 
+                type="submit" 
+                variant="secondary"
+                disabled={isLoading}
+              >
+                {isLoading ? "Processando..." : "Entrar"}
               </Button>
             </form>
             
@@ -341,6 +446,7 @@ const FixedNavigation = () => {
                   setIsLoginOpen(false);
                   setIsRegisterOpen(true);
                 }}
+                disabled={isLoading}
               >
                 Registre-se
               </Button>
@@ -364,12 +470,13 @@ const FixedNavigation = () => {
           </DialogHeader>
           
           <div className="space-y-4">
-            {/* Opções de Registro Social */}
+            {/* Social Registration Options */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Google")}
+                disabled={isLoading}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5">
                   <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.691 0 3.225.6 4.425 1.583l3.715-3.715A11.945 11.945 0 0 0 12 0C7.392 0 3.397 2.6 1.385 6.461l3.881 3.304z"/>
@@ -383,6 +490,7 @@ const FixedNavigation = () => {
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2 bg-white text-black"
                 onClick={() => handleSocialLogin("Apple")}
+                disabled={isLoading}
               >
                 <Apple className="w-5 h-5 text-black" />
                 Apple
@@ -400,7 +508,7 @@ const FixedNavigation = () => {
             
             <form className="space-y-4" onSubmit={handleRegister}>
               <div>
-                <label className="block text-sm font-medium mb-1">Nome</label>
+                <label className="block text-sm font-medium mb-1">Nome completo</label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
@@ -408,6 +516,19 @@ const FixedNavigation = () => {
                   value={registerData.name}
                   onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
                   required
+                  disabled={isLoading}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Usuário</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
+                  placeholder="Escolha um nome de usuário"
+                  value={registerData.login}
+                  onChange={(e) => setRegisterData({...registerData, login: e.target.value})}
+                  required
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -419,6 +540,18 @@ const FixedNavigation = () => {
                   value={registerData.email}
                   onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
                   required
+                  disabled={isLoading}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Telefone</label>
+                <input
+                  type="tel"
+                  className="w-full p-2 border rounded-md bg-white text-black placeholder-primary"
+                  placeholder="(00) 00000-0000"
+                  value={registerData.phone}
+                  onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -430,6 +563,7 @@ const FixedNavigation = () => {
                   value={registerData.password}
                   onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
                   required
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -441,10 +575,16 @@ const FixedNavigation = () => {
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
                   required
+                  disabled={isLoading}
                 />
               </div>
-              <Button className="w-full bg-secondary" type="submit" variant="secondary">
-                Criar Conta
+              <Button 
+                className="w-full bg-secondary" 
+                type="submit" 
+                variant="secondary"
+                disabled={isLoading}
+              >
+                {isLoading ? "Processando..." : "Criar Conta"}
               </Button>
               <p className="text-center text-sm text-white">
                 Já tem uma conta?{" "}
@@ -455,6 +595,7 @@ const FixedNavigation = () => {
                     setIsRegisterOpen(false);
                     setIsLoginOpen(true);
                   }}
+                  disabled={isLoading}
                 >
                   Faça login
                 </Button>
