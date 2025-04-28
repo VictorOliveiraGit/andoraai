@@ -144,7 +144,7 @@ const PricingSection = () => {
             </div>
             
             <div className="space-y-1 mt-4">
-              <p className="text-4xl font-bold">R$ 1.200<span className="text-sm font-normal text-white/70">/mês</span></p>
+              <p className="text-4xl font-bold">R$ 1.200<span className="text-sm font-normal  text-white/70">/mês</span></p>
               <p className="text-sm text-white/70">Para negócios em crescimento</p>
             </div>
             
