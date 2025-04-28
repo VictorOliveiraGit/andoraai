@@ -87,7 +87,7 @@ const PricingSection = () => {
             </div>
             
             <div className="space-y-1 mt-4">
-              <p className="text-4xl font-bold text-primary">R$ 29<span className="text-sm font-normal text-gray-500">/mês</span></p>
+              <p className="text-4xl font-bold text-primary">R$ 500<span className="text-sm font-normal text-gray-500">/mês</span></p>
               <p className="text-sm text-gray-500">Ideal para pequenos negócios</p>
             </div>
             
@@ -144,7 +144,7 @@ const PricingSection = () => {
             </div>
             
             <div className="space-y-1 mt-4">
-              <p className="text-4xl font-bold">R$ 59<span className="text-sm font-normal text-white/70">/mês</span></p>
+              <p className="text-4xl font-bold">R$ 1.200<span className="text-sm font-normal  text-white/70">/mês</span></p>
               <p className="text-sm text-white/70">Para negócios em crescimento</p>
             </div>
             
@@ -206,7 +206,7 @@ const PricingSection = () => {
             </div>
             
             <div className="space-y-1 mt-4">
-              <p className="text-4xl font-bold text-primary">R$ 99<span className="text-sm font-normal text-gray-500">/mês</span></p>
+              <p className="text-4xl font-bold text-primary">R$ 2.000<span className="text-sm font-normal text-gray-500">/mês</span></p>
               <p className="text-sm text-gray-500">Para grandes empresas</p>
             </div>
             

@@ -89,7 +89,7 @@ export const Subscription = () => {
       basic: {
         type: 'basic' as PlanType,
         name: 'Básico',
-        price: 29,
+        price: 500,
         status: 'active' as const,
         startDate: '2023-11-15',
         nextBillingDate: '2024-01-15',
@@ -102,7 +102,7 @@ export const Subscription = () => {
       pro: {
         type: 'pro' as PlanType,
         name: 'Pro',
-        price: 59,
+        price: 1200,
         status: 'active' as const,
         startDate: '2023-11-15',
         nextBillingDate: '2024-01-15',
@@ -116,7 +116,7 @@ export const Subscription = () => {
       enterprise: {
         type: 'enterprise' as PlanType,
         name: 'Enterprise',
-        price: 99,
+        price: 2000,
         status: 'active' as const,
         startDate: '2023-11-15',
         nextBillingDate: '2024-01-15',
@@ -331,7 +331,7 @@ export const Subscription = () => {
           </div>
           
           <div className="space-y-1 mt-6">
-            <p className="text-4xl font-bold text-primary">R$ 29<span className="text-sm font-normal text-gray-500">/mês</span></p>
+            <p className="text-4xl font-bold text-primary">R$ 500<span className="text-sm font-normal text-gray-500">/mês</span></p>
             <p className="text-sm text-gray-500">Ideal para pequenos negócios</p>
           </div>
           
@@ -449,7 +449,7 @@ export const Subscription = () => {
           </div>
           
           <div className="space-y-1 mt-6">
-            <p className="text-4xl font-bold">R$ 59<span className="text-sm font-normal text-white/70">/mês</span></p>
+            <p className="text-4xl font-bold">R$ 1200<span className="text-sm font-normal text-white/70">/mês</span></p>
             <p className="text-sm text-white/70">Para negócios em crescimento</p>
           </div>
           
@@ -574,7 +574,7 @@ export const Subscription = () => {
           </div>
           
           <div className="space-y-1 mt-6">
-            <p className="text-4xl font-bold text-primary">R$ 99<span className="text-sm font-normal text-gray-500">/mês</span></p>
+            <p className="text-4xl font-bold text-primary">R$ 2000<span className="text-sm font-normal text-gray-500">/mês</span></p>
             <p className="text-sm text-gray-500">Para grandes empresas</p>
           </div>
           
